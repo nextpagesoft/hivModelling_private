@@ -1,0 +1,23 @@
+Package: hivModelling
+Type: Package
+Title: Evidence-Based Methods to Calculate HIV Incidence in a Given Population
+Version: 0.1.0
+Date: 2019-02-02
+Authors@R: c(person("Magdalena", "Rosinska", email = "mrosinska@pzh.gov.pl", role = c("aut", "cph")), 
+    person("Ard", "van Sighem", email = "a.i.vansighem@amc.uva.nl ", role = c("aut")), 
+    person("Nikos", "Pantazis", email = "npantaz@med.uoa.gr", role = c("aut")), 
+    person("Chantal", "Quinten", email = "chantal.quinten@ecdc.europa.eu", role = c("aut", "ctb")),
+    person("Daniel", "Lewandowski", email = "daniel@nextpagesoft.net", role = c("aut", "cre")),
+    person("Janusz", "Janiec", email = "jjaniec@pzh.gov.pl", role = c("aut", "ctb")))
+Maintainer: Daniel Lewandowski <daniel@nextpagesoft.net>
+Description: Implements evidence-based methods to calculate HIV incidence in a given population.
+    This tool you can estimate: the number of people living with HIV, including those not yet diagnosed;
+    the annual number of new HIV infections; the average time between infection and diagnosis; 
+    the number of people in need of treatment according to CD4 cell counts.
+License: file LICENSE
+Depends: R (>= 3.1.0)
+Imports: 
+Suggests:
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1

@@ -1,0 +1,18 @@
+PackratFormat: 1.4
+PackratVersion: 0.5.0.1
+RVersion: 3.5.2
+Repos: CRAN=https://cloud.r-project.org
+
+Package: packrat
+Source: github
+Version: 0.5.0-1
+GithubRepo: packrat
+GithubUsername: rstudio
+GithubRef: master
+GithubSha1: 90c7c752e7e2abcda7f469e732cef452db881dd0
+RemoteHost: api.github.com
+RemoteRepo: packrat
+RemoteUsername: rstudio
+RemoteRef: master
+RemoteSha: 90c7c752e7e2abcda7f469e732cef452db881dd0
+Hash: a7e72f7cb6032d242bb06ca39b662875
