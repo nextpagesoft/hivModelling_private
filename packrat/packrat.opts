@@ -9,7 +9,8 @@ external.packages:
     RCurl
     keyring
     miniCRAN
-local.repos:
+    rmarkdown
+local.repos: 
 load.external.packages.on.startup: TRUE
 ignored.packages: testthat
 ignored.directories:
