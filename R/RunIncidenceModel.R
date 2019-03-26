@@ -3,7 +3,7 @@
 #' Executes the incidence model
 #'
 #' @return
-#' NULL (invisibly)
+#' context list object
 #'
 #' @examples
 #' RunIncidenceModel()
@@ -11,17 +11,15 @@
 #' @export
 RunIncidenceModel <- function()
 {
-  context <- SetRunContex()
+  context <- GetDefaultRunContex()
 
-  InitializeDefaultParameters()
+  context <- SetParameters(context)
 
-  SetParameters()
+  context <- ReadInputData(context)
 
-  ReadInputData(context)
+  context <- PerformMainFit(context)
 
-  PerformMainFit(context)
+  context <- PerformBootstrapFits(context)
 
-  PerformBootstrapFits(context)
-
-  invisible(NULL)
+  return(context)
 }

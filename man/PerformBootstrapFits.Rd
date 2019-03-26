@@ -10,7 +10,7 @@ PerformBootstrapFits(context)
 \item{context}{List of parameters. Required.}
 }
 \value{
-NULL (invisibly)
+context list object
 }
 \description{
 Description

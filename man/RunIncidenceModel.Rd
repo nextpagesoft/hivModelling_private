@@ -7,7 +7,7 @@
 RunIncidenceModel()
 }
 \value{
-NULL (invisibly)
+context list object
 }
 \description{
 Executes the incidence model

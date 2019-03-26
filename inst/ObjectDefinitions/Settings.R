@@ -1,7 +1,7 @@
 list(
   Name = 'Settings',
 
-  Columns = list(
+  InputDataPath = NULL,
 
-  )
+  OutputResultsPath = NULL
 )

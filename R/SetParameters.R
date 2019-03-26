@@ -2,15 +2,19 @@
 #'
 #' Description
 #'
+#' @param context List of parameters. Required.
+#'
 #' @return
-#' NULL (invisibly)
+#' context list object
 #'
 #' @examples
-#' SetParameters()
+#' \dontrun{
+#' SetParameters(context)
+#' }
 #'
 #' @export
-SetParameters <- function() {
+SetParameters <- function(context) {
 
 
-  invisible(NULL)
+  return(context)
 }

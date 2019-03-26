@@ -4,15 +4,20 @@
 \alias{SetParameters}
 \title{SetParameters}
 \usage{
-SetParameters()
+SetParameters(context)
+}
+\arguments{
+\item{context}{List of parameters. Required.}
 }
 \value{
-NULL (invisibly)
+context list object
 }
 \description{
 Description
 }
 \examples{
-SetParameters()
+\dontrun{
+SetParameters(context)
+}
 
 }

@@ -5,7 +5,7 @@
 #' @param context List of parameters. Required.
 #'
 #' @return
-#' NULL (invisibly)
+#' context list object
 #'
 #' @examples
 #' \dontrun{
@@ -17,5 +17,5 @@ ReadInputData <- function(context)
 {
 
 
-  invisible(NULL)
+  return(context)
 }
