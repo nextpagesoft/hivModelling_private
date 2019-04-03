@@ -3,9 +3,10 @@
 #' Description
 #'
 #' @param context List of parameters. Required.
+#' @param data Input data as data.table. Required.
 #'
 #' @return
-#' context list object
+#' model data.table object
 #'
 #' @examples
 #' \dontrun{
@@ -13,9 +14,10 @@
 #' }
 #'
 #' @export
-PerformMainFit <- function(context)
+PerformMainFit <- function(context, data)
 {
+  model <- data.table()
 
 
-  return(context)
+  return(model)
 }

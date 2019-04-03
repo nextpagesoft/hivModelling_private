@@ -3,11 +3,48 @@ PackratVersion: 0.5.0.1
 RVersion: 3.5.3
 Repos: CRAN=https://cloud.r-project.org
 
+Package: Rcpp
+Source: CRAN
+Version: 1.0.1
+Hash: 390ed5b5da840cec3e6f5c90c6ab23f7
+
+Package: data.table
+Source: CRAN
+Version: 1.12.0
+Hash: d382bb97e2d9dd05ad8070e41513dcb1
+
+Package: digest
+Source: CRAN
+Version: 0.6.18
+Hash: 65f62365ec69ddd17230d2ffe891a6ab
+
+Package: future
+Source: CRAN
+Version: 1.12.0
+Hash: 7e40a80616e3e92d4819dfe6f39bf793
+Requires: digest, globals, listenv
+
+Package: globals
+Source: CRAN
+Version: 0.12.4
+Hash: 813a6280042ee82fa529833489333322
+
+Package: listenv
+Source: CRAN
+Version: 0.7.0
+Hash: f5e0d09f4e42d749ae0f893cff1817b6
+
 Package: packrat
 Source: github
 Version: 0.5.0-1
+Hash: a7e72f7cb6032d242bb06ca39b662875
 GithubRepo: packrat
 GithubUsername: rstudio
 GithubRef: master
 GithubSha1: 90c7c752e7e2abcda7f469e732cef452db881dd0
-Hash: a7e72f7cb6032d242bb06ca39b662875
+
+Package: xml2
+Source: CRAN
+Version: 1.2.0
+Hash: 6e643a368e9748966b96332eaa631411
+Requires: Rcpp

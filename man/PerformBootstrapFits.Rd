@@ -4,20 +4,24 @@
 \alias{PerformBootstrapFits}
 \title{PerformBootstrapFits}
 \usage{
-PerformBootstrapFits(context)
+PerformBootstrapFits(context, data, model)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
+
+\item{data}{Input data as data.table. Required.}
+
+\item{model}{Model data.table object. Required.}
 }
 \value{
-context list object
+model data.table object
 }
 \description{
 Description
 }
 \examples{
 \dontrun{
-PerformBootstrapFits(context)
+PerformBootstrapFits(context, data, model)
 }
 
 }

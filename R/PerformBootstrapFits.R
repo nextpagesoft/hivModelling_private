@@ -3,19 +3,21 @@
 #' Description
 #'
 #' @param context List of parameters. Required.
+#' @param data Input data as data.table. Required.
+#' @param model Model data.table object. Required.
 #'
 #' @return
-#' context list object
+#' model data.table object
 #'
 #' @examples
 #' \dontrun{
-#' PerformBootstrapFits(context)
+#' PerformBootstrapFits(context, data, model)
 #' }
 #'
 #' @export
-PerformBootstrapFits <- function(context)
+PerformBootstrapFits <- function(context, data, model)
 {
 
 
-  return(context)
+  return(model)
 }

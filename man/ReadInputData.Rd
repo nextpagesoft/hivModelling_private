@@ -10,7 +10,7 @@ ReadInputData(context)
 \item{context}{List of parameters. Required.}
 }
 \value{
-context list object
+Input data as data.table
 }
 \description{
 Description

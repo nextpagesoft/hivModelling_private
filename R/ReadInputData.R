@@ -5,7 +5,7 @@
 #' @param context List of parameters. Required.
 #'
 #' @return
-#' context list object
+#' Input data as data.table
 #'
 #' @examples
 #' \dontrun{
@@ -15,7 +15,9 @@
 #' @export
 ReadInputData <- function(context)
 {
+  # inputFile <- context[['InputDataPath']]
 
+  inputData <- data.table()
 
-  return(context)
+  return(inputData)
 }

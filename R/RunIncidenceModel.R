@@ -2,24 +2,30 @@
 #'
 #' Executes the incidence model
 #'
+#' @param ... Arguments to be passed to \code{\link{GetRunContext}}.
+#'
 #' @return
-#' context list object
+#' list object containing context, data and model objects
 #'
 #' @examples
 #' RunIncidenceModel()
 #'
 #' @export
-RunIncidenceModel <- function()
+RunIncidenceModel <- function(...)
 {
-  context <- GetDefaultRunContex()
+  context <- GetRunContext(...)
 
-  context <- SetParameters(context)
+  data <- ReadInputData(context)
 
-  context <- ReadInputData(context)
+  model <- PerformMainFit(context, data)
 
-  context <- PerformMainFit(context)
+  model <- PerformBootstrapFits(context, data, model)
 
-  context <- PerformBootstrapFits(context)
+  results <- list(
+    Context = context,
+    Data = data,
+    Model = model
+  )
 
-  return(context)
+  return(results)
 }

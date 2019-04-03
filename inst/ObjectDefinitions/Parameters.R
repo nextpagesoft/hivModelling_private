@@ -6,11 +6,21 @@ list(
       # Require incidence to be zero at start of epidemic
       StartIncZero = TRUE,
 
-      # Country specific parameters
+      # Set country for country specific parameters
       Country = NULL,
 
       # 'POISSON' or 'NEGATIVE BINOMIAL'
-      FitDistribution = 'POISSON'
+      FitDistribution = 'POISSON',
+
+      # Diagnosis rate
+      Delta = list(
+
+      ),
+
+      # Spline base
+      Theta = list(
+
+      )
     )
   )
 )

@@ -3,5 +3,9 @@ list(
 
   InputDataPath = NULL,
 
-  OutputResultsPath = NULL
+  OutputResultsPath = NULL,
+
+  RunInParallel = FALSE,
+
+  ModelsToRun = c()
 )

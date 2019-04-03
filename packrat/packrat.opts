@@ -10,8 +10,8 @@ external.packages:
     keyring
     miniCRAN
     rmarkdown
-local.repos: 
-load.external.packages.on.startup: TRUE
+local.repos:
+load.external.packages.on.startup: FALSE
 ignored.packages: testthat
 ignored.directories:
     data

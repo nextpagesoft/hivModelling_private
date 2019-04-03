@@ -4,13 +4,15 @@
 \alias{PerformMainFit}
 \title{PerformMainFit}
 \usage{
-PerformMainFit(context)
+PerformMainFit(context, data)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
+
+\item{data}{Input data as data.table. Required.}
 }
 \value{
-context list object
+model data.table object
 }
 \description{
 Description

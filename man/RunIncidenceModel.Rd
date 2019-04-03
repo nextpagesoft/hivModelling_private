@@ -4,10 +4,13 @@
 \alias{RunIncidenceModel}
 \title{Run incidence model}
 \usage{
-RunIncidenceModel()
+RunIncidenceModel(...)
+}
+\arguments{
+\item{...}{Arguments to be passed to \code{\link{GetRunContext}}.}
 }
 \value{
-context list object
+list object containing context, data and model objects
 }
 \description{
 Executes the incidence model

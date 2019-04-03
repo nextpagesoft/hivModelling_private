@@ -4,7 +4,7 @@ Title: Evidence-Based Methods to Calculate HIV Incidence in a Given Population
 Version: 0.1.0
 Date: 2019-02-02
 Authors@R: c(person("Magdalena", "Rosinska", email = "mrosinska@pzh.gov.pl", role = c("aut", "cph")), 
-    person("Ard", "van Sighem", email = "a.i.vansighem@amc.uva.nl ", role = c("aut")), 
+    person("Ard", "van Sighem", email = "a.i.vansighem@amc.uva.nl", role = c("aut")), 
     person("Nikos", "Pantazis", email = "npantaz@med.uoa.gr", role = c("aut")), 
     person("Chantal", "Quinten", email = "chantal.quinten@ecdc.europa.eu", role = c("aut", "ctb")),
     person("Daniel", "Lewandowski", email = "daniel@nextpagesoft.net", role = c("aut", "cre")),
@@ -17,6 +17,9 @@ Description: Implements evidence-based methods to calculate HIV incidence in a g
 License: file LICENSE
 Depends: R (>= 3.1.0)
 Imports: 
+    data.table (>= 1.12.0),
+    future (>= 1.12.0),
+    xml2 (>= 1.2.0)
 Suggests:
 Encoding: UTF-8
 LazyData: true
