@@ -9,7 +9,8 @@ args <- list(
   Run1 = list(
     Settings = list(
       RunInParallel = TRUE,
-      ModelsToRun = c('INCIDENCE')
+      ModelsToRun = c('INCIDENCE'),
+      InputDataPath = '~/share/HIV test files/Data/test NL'
     ),
     Parameters = list(
       Models = list(
@@ -55,7 +56,8 @@ results <- RunIncidenceModel(
 results <- RunIncidenceModel(
   settings = list(
     RunInParallel = TRUE,
-    ModelsToRun = c('INCIDENCE')
+    ModelsToRun = c('INCIDENCE'),
+    InputDataPath = '~/share/HIV test files/Data/test NL'
   ),
   parameters = list(
     Models = list(
@@ -69,3 +71,19 @@ results <- RunIncidenceModel(
 
 # 3. Create output artifacts (plots, reports, etc.) ----------------------------
 artifacts <- GetOutputArtifacts(results)
+
+
+context <- GetRunContext(
+  settings = list(
+    RunInParallel = TRUE,
+    ModelsToRun = c('INCIDENCE'),
+    InputDataPath = '~/share/HIV test files/Data/test NL'
+  ),
+  parameters = list(
+    Models = list(
+      INCIDENCE = list(
+        Country = 'NL'
+      )
+    )
+  )
+)

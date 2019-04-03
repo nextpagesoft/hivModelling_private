@@ -15,9 +15,15 @@
 #' @export
 ReadInputData <- function(context)
 {
-  # inputFile <- context[['InputDataPath']]
-
-  inputData <- data.table()
+  inputDataPath <- context$Settings$InputDataPath
+  if (!is.null(inputDataPath) && dir.exists(inputDataPath)) {
+    fileNames <- list.files(inputDataPath, pattern = '.csv', full.names = TRUE, ignore.case = FALSE)
+    inputData <- lapply(fileNames, fread)
+    names(inputData) <- tools::file_path_sans_ext(basename(fileNames))
+    message(sprintf('File %s read\n', fileNames))
+  } else {
+    inputData <- list()
+  }
 
   return(inputData)
 }
