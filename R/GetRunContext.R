@@ -28,5 +28,9 @@ GetRunContext <- function(...)
 
   context <- modifyList(defaultContext, args)
 
+  # Set dependent parameters
+  country <- context$Parameters$Models$INCIDENCE$Country
+  context$Parameters$Models$INCIDENCE$ModelPop <- GetModelPop(country)
+
   return(context)
 }

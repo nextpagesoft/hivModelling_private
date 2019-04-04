@@ -16,6 +16,8 @@ list object containing context, data and model objects
 Executes the incidence model
 }
 \examples{
+\dontrun{
 RunIncidenceModel()
+}
 
 }

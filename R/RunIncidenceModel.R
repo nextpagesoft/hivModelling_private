@@ -8,7 +8,9 @@
 #' list object containing context, data and model objects
 #'
 #' @examples
+#' \dontrun{
 #' RunIncidenceModel()
+#' }
 #'
 #' @export
 RunIncidenceModel <- function(...)

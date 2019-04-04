@@ -23,7 +23,8 @@ args <- list(
   Run2 = list(
     Settings = list(
       RunInParallel = TRUE,
-      ModelsToRun = c('INCIDENCE')
+      ModelsToRun = c('INCIDENCE'),
+      InputDataPath = '~/share/HIV test files/Data/test NL'
     ),
     Parameters = list(
       Models = list(
@@ -73,6 +74,7 @@ results <- RunIncidenceModel(
 artifacts <- GetOutputArtifacts(results)
 
 
+# 4. Testing -------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
     RunInParallel = TRUE,

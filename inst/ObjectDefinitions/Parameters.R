@@ -9,6 +9,9 @@ list(
       # Set country for country specific parameters
       Country = NULL,
 
+      # Country specific populations
+      ModelPop = c(),
+
       # 'POISSON' or 'NEGATIVE BINOMIAL'
       FitDistribution = 'POISSON',
 
