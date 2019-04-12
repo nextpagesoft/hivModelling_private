@@ -1,3 +1,5 @@
+library(hivModelling)
+
 # 1. Provide input settings and model parameters -------------------------------
 #
 # 1a. Read XML model file
