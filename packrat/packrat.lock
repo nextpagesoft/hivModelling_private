@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.5.0.1
-RVersion: 3.5.3
+RVersion: 3.6.0
 Repos: CRAN=https://cloud.r-project.org
 
 Package: Rcpp
@@ -10,8 +10,8 @@ Hash: 390ed5b5da840cec3e6f5c90c6ab23f7
 
 Package: data.table
 Source: CRAN
-Version: 1.12.0
-Hash: d382bb97e2d9dd05ad8070e41513dcb1
+Version: 1.12.2
+Hash: b1642cf2ee0ab1d1b152ffacdb4401f7
 
 Package: digest
 Source: CRAN
