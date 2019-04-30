@@ -6,7 +6,8 @@ rkqs <- function(
   x,
   htry,
   eps,
-  yscal
+  yscal,
+  param
 ) {
   SAFETY <- 0.9
   PSHRNK <- -0.25
@@ -16,19 +17,30 @@ rkqs <- function(
   h <- htry
 
   while (TRUE) {
-    res <- rkck(y, dydx, n, x, h)
+    res <- rkck(y, dydx, n, x, h, param)
 
-    errMax <- 0
-    for (i in seq_len(n)) {
-      errMax <- max(errMax, abs(res$YErr[i] / yscal[i]))
-    }
+    errMax <- max(abs(res$YErr / yscal), 0) / eps
 
-    errMax <- errMax / eps
-
-    if (TRUE) {
-
+    if (errMax > 1) {
+      hTemp <- SAFETY * h * errMax^PSHRNK
+      h <- ifelse(h >= 0, max(hTemp, 0.1 * h), min(hTemp, 0.1 * h))
+      xnew <- x + h
+      next
     } else {
-
+      hNext <- ifelse(errMax > ERRCON, SAFETY * h * errMax^PGROW, 5 * h)
+      hDid <- h
+      x <- x + hDid
+      y <- res$YOut
+      break
     }
   }
+
+  result <- list(
+    X = x,
+    Y = y,
+    hDid = hDid,
+    hNext = hNext
+  )
+
+  return(result)
 }

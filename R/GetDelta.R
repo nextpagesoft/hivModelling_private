@@ -14,12 +14,15 @@ GetDelta <- function(
   }
   iTime <- iTime - 1
 
+  # i <- 1
   for (i in seq_len(param$NoStage - 1)) {
     delta[i] <- 0
+    # j <- 2
     for (j in seq_len(iTime - 1)) {
       delta[i] <- delta[i] + param$DeltaM[i, j]
     }
     delta[i] <-
+      delta[i] +
       param$DeltaM[i, iTime] * (time - param$Tc[iTime]) /
       (param$Tc[iTime + 1] - param$Tc[iTime])
   }

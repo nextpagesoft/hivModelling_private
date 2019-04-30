@@ -1,6 +1,7 @@
 GetLambda <- function(
   time,
-  sumInf
+  sumInf,
+  info
 ) {
   lambda <- 0
 

@@ -10,7 +10,9 @@ external.packages:
     keyring
     miniCRAN
     rmarkdown
-local.repos:
+    profvis
+    microbenchmark
+local.repos: 
 load.external.packages.on.startup: FALSE
 ignored.packages: testthat
 ignored.directories:

@@ -6,7 +6,6 @@ odeint <- function(
   eps,
   h1,
   hMin,
-  derivsFunc,
   param,
   info
 ) {
@@ -22,27 +21,36 @@ odeint <- function(
   x <- x1
   h <- sign(h1, x2 - x1)
 
-  hDid <- 0
-  hNext <- 0
-
   y <- ystart
 
   # nstp <- 1
   for (nstp in seq_len(MAXSTP)) {
-    dydx <- derivsFunc(x, y, nVar)
+  # for (nstp in 1:71) {
+    dydx <- derivsFunc(x, y, nVar, param)
 
-    for (i in seq_len(nVar)) {
-      yscal[i] <- abs(y[i]) + abs(dydx[i] * h) + TINY
-    }
-
+    yscal <- abs(y) + abs(dydx * h) + TINY
 
     if ((x + h - x2) * (x + h - x1) > 0.0) {
       h <- x2 - x
     }
 
-    rkqs(y, dydx, n = nVar, x, htry = h, eps, yscal)
+    res <- rkqs(y, dydx, n = nVar, x, htry = h, eps, yscal, param)
+    x <- res$X
+    y <- res$Y
 
+    if (res$hDid == h) {
+      nOk <- nOk + 1
+    } else {
+      nBad <- nBad + 1
+    }
+
+    if ((x - x2) * (x2 - x1) >= 0) {
+      ystart <- y
+      break
+    }
+
+    h <- res$hNext
   }
 
-  return(list(NGood = nGood, NBad = nBad))
+  return(list(YStart = ystart, NGood = nOk, NBad = nBad))
 }

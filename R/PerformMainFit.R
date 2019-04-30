@@ -185,7 +185,18 @@ PerformMainFit <- function(context, data)
     SplineType = splineType,
     SplineOrder = 4,
     ModelSplineN = modelSplineN,
-    MyKnots = myKnots
+    MyKnots = myKnots,
+    FitPosMinYear = 1979,
+    FitPosMaxYear = 1979,
+    FitPosCD4MinYear = 1984,
+    FitPosCD4MaxYear = 2016,
+    ModelFitDist = 1 # Poisson
+  )
+
+  model <- list(
+    LambdaPenalty = 0,
+    LLTotal = 0,
+    LLPos = 0
   )
 
   # Step 1 : determine the scale of the parameters
@@ -217,7 +228,7 @@ PerformMainFit <- function(context, data)
       deltaM <- GetParamDeltaM(p, deltaP, deltaM)
       theta <- GetParamTheta(p, thetaP, theta, noDelta, modelSplineN)
 
-      lambdaPenalty <- 0
+      model$LambdaPenalty <- 0
 
       # Model_Calculate
       if (splineType == 2) {
@@ -231,22 +242,6 @@ PerformMainFit <- function(context, data)
 
       ystart <- rep(0, noEq)
 
-      primInf        <- rep(0, modelNoYears)
-      cInf           <- rep(0, modelNoYears)
-      cumuIncD2Total <- rep(0, modelNoYears)
-      cHIV           <- rep(0, modelNoYears)
-      nHIV           <- rep(0, modelNoYears)
-      cHIVS          <- rep(0, modelNoYears)
-      cAIDS          <- rep(0, modelNoYears)
-      nAIDS          <- rep(0, modelNoYears)
-      cDeadD         <- rep(0, modelNoYears)
-      cDeadU         <- rep(0, modelNoYears)
-      undiagnosed    <- matrix(0, modelNoYears, noStage)
-      diagnosed      <- matrix(0, modelNoYears, noStage)
-      cHIVStage      <- matrix(0, modelNoYears, noStage)
-      nHIVStage      <- matrix(0, modelNoYears, noStage)
-      nHIVStageS     <- matrix(0, modelNoYears, noStage)
-
       hMin <- 0
       h1 <- 0.02
       eps <- 0.0001
@@ -255,16 +250,44 @@ PerformMainFit <- function(context, data)
       param[['Theta']] <- theta
       param[['DeltaM']] <- deltaM
 
+      modelResults <- matrix(0, modelNoYears - 1, noEq)
       # year <- 1
       for (year in seq_len(modelNoYears - 1)) {
-        result <- odeint(ystart,
-                         nVar = noEq,
-                         x1 = modelYears[year] + bitSml,
-                         x2 = modelYears[year + 1] - bitSml,
-                         eps, h1, hMin, derivsFunc,
-                         param,
-                         info)
+        res <- odeint(ystart,
+                      nVar = noEq,
+                      x1 = modelYears[year] + bitSml,
+                      x2 = modelYears[year + 1] - bitSml,
+                      eps,
+                      h1,
+                      hMin,
+                      param,
+                      info)
+        ystart <- res$YStart
+
+        modelResults[year, ] <- ystart
       }
+
+      modelResults <- as.data.table(modelResults)
+      modelResults[, Year := modelYears[-length(modelYears)]]
+      setnames(modelResults,
+               c('Year',
+                 'PrimInf',
+                 paste0('Undiagnosed_', seq_len(noStage)),
+                 paste0('Diagnosed_', seq_len(noStage)),
+                 paste0('C_HIV_Stage_', seq_len(noStage)),
+                 'C_AIDS',
+                 'C_Dead_D',
+                 'C_Dead_U',
+                 'C_Inf',
+                 'CumulIncD2Total'))
+
+      ModelAnnualNumbers(modelResults, probSurv1996, data)
+
+      model$LLTotal <- model$LambdaPenalty
+
+      model$LLPos <- FitLLPos(modelResults, data, info)
+
+      # TO BE CONTINUED...
     }
   }
 
