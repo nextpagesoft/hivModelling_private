@@ -16,6 +16,8 @@
 #' @export
 PerformMainFit <- function(context, data)
 {
+  VERY_LRG <- 1e+10
+
   GetVector <- function(beta, thetaF, noDelta, noTheta) {
     p <- rep(0, noDelta + noTheta)
     p[seq(noDelta)] <- beta[seq(noDelta)]
@@ -42,8 +44,6 @@ PerformMainFit <- function(context, data)
 
 
   VERY_SML <- 1e-20
-
-  model <- data.table()
 
   country <- context$Parameters$Models$INCIDENCE$Country
 
@@ -160,12 +160,15 @@ PerformMainFit <- function(context, data)
   #  param->NoTheta : number of spline parameters
   nParam <- noDelta + noTheta
 
-  pParam <- rep(1, nParam)
+  pParam <- rep(0, nParam)
 
   # Fit_Initialise
   p <- rep(0, nParam)
 
-  llMin <- 1.0e10
+  llMin <- 1.0e+10
+
+  nIterMax <- 30
+  iter <- 1
 
   param <- list(
     NoStage = noStage,
@@ -176,7 +179,9 @@ PerformMainFit <- function(context, data)
     AlphaP = alphaP,
     Mu = mu,
     FInit = fInit,
-    Qoppa = qoppa
+    Qoppa = qoppa,
+    Smoothing1 = 0,
+    Smoothing2 = 0
   )
 
   info <- list(
@@ -190,20 +195,41 @@ PerformMainFit <- function(context, data)
     FitPosMaxYear = 1979,
     FitPosCD4MinYear = 1984,
     FitPosCD4MaxYear = 2016,
+    FitAIDSPosMinYear = 1996,
+    FitAIDSPosMaxYear = 2016,
+    FitAIDSMinYear = 1980,
+    FitAIDSMaxYear = 1995,
     ModelFitDist = 1 # Poisson
   )
 
   model <- list(
     LambdaPenalty = 0,
     LLTotal = 0,
-    LLPos = 0
+    LLPos = 0,
+    LLPosCD4_1 = 0,
+    LLPosCD4_2 = 0,
+    LLPosCD4_3 = 0,
+    LLPosCD4_4 = 0,
+    LLAIDSPos = 0,
+    LLAIDS = 0,
+    Smooth1 = 0,
+    Smooth2 = 0
+  )
+
+  extraResults <- data.table(
+    Year = modelMinYear:modelMaxYear,
+    LL_PosCD4_Year_1 = 0,
+    LL_PosCD4_Year_2 = 0,
+    LL_PosCD4_Year_3 = 0,
+    LL_PosCD4_Year_4 = 0,
+    LL_AIDSPos_Year = 0
   )
 
   # Step 1 : determine the scale of the parameters
   noCD4 <- 4
   iMax <- 5
   jMax <- 10
-  # i <- 1
+  # i <- 5
   for (i in seq(iMax)) {
     # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*i_max)
     beta <- rep(i * 0.05, noCD4)
@@ -270,8 +296,7 @@ PerformMainFit <- function(context, data)
       modelResults <- as.data.table(modelResults)
       modelResults[, Year := modelYears[-length(modelYears)]]
       setnames(modelResults,
-               c('Year',
-                 'PrimInf',
+               c('PrimInf',
                  paste0('Undiagnosed_', seq_len(noStage)),
                  paste0('Diagnosed_', seq_len(noStage)),
                  paste0('C_HIV_Stage_', seq_len(noStage)),
@@ -279,7 +304,8 @@ PerformMainFit <- function(context, data)
                  'C_Dead_D',
                  'C_Dead_U',
                  'C_Inf',
-                 'CumulIncD2Total'))
+                 'CumulIncD2Total',
+                 'Year'))
 
       ModelAnnualNumbers(modelResults, probSurv1996, data)
 
@@ -287,8 +313,53 @@ PerformMainFit <- function(context, data)
 
       model$LLPos <- FitLLPos(modelResults, data, info)
 
-      # TO BE CONTINUED...
+      model$LLPosCD4_1 <- FitLLPosCD4(modelResults, 1, info, extraResults)
+      model$LLPosCD4_2 <- FitLLPosCD4(modelResults, 2, info, extraResults)
+      model$LLPosCD4_3 <- FitLLPosCD4(modelResults, 3, info, extraResults)
+      model$LLPosCD4_4 <- FitLLPosCD4(modelResults, 4, info, extraResults)
+
+      model$LLTotal <- model$LLTotal +
+        model$LLPosCD4_1 + model$LLPosCD4_2 + model$LLPosCD4_3 + model$LLPosCD4_4
+
+      model$LLAIDSPos <- FitLLAIDSPos(modelResults, info, extraResults)
+      model$LLAIDS <- FitLLAIDS(modelResults, info, extraResults)
+
+      # Smoothness omitted
+      model$Smooth1 <- 0
+      model$Smooth2 <- 0
+
+      model$LLTotal <- model$LLTotal +
+        model$LLAIDSPos + model$LLAIDS + model$LLPos
+
+      model$LLTotal <- model$LLTotal +
+        param$Smoothing1 * model$Smooth1 + param$Smoothing2 * model$Smooth2
+
+      # SplineType == 1 not supported
+
+      # Severely punish clearly wrong beta's
+      model$LLTotal <- model$LLTotal + sum(p[1:3] > 2) * VERY_LRG
+
+      ll <- model$LLTotal
+      if (ll < llMin) {
+        llMin <- ll
+        pParam <- p
+      }
     }
+
+    # Fill beta and theta_f with the best fitting parameters
+    beta[seq_len(noDelta)] <- pParam[seq_len(noDelta)]
+    thetaF <- pParam[noDelta + seq_len(noTheta)]
+  }
+
+  llFinal[iter] <- llMin
+
+  # Stop fitting when the change in deviance is smaller than ctol.
+  j <- 0
+  ctol <- 1e-6
+  llOld <- 0
+  while (abs(llFinal[iter] - llOld) > ctol &&
+         iter < nIterMax) {
+
   }
 
   return(model)

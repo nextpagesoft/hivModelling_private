@@ -12,6 +12,7 @@ external.packages:
     rmarkdown
     profvis
     microbenchmark
+    lintr
 local.repos: 
 load.external.packages.on.startup: FALSE
 ignored.packages: testthat
