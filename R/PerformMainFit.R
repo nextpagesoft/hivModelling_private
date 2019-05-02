@@ -181,7 +181,9 @@ PerformMainFit <- function(context, data)
     FInit = fInit,
     Qoppa = qoppa,
     Smoothing1 = 0,
-    Smoothing2 = 0
+    Smoothing2 = 0,
+    NoDelta = noDelta,
+    NoTheta = noTheta
   )
 
   info <- list(
@@ -357,9 +359,16 @@ PerformMainFit <- function(context, data)
   j <- 0
   ctol <- 1e-6
   llOld <- 0
-  while (abs(llFinal[iter] - llOld) > ctol &&
-         iter < nIterMax) {
+  while (
+    abs(llFinal[iter] - llOld) > ctol &&
+    iter < nIterMax
+  ) {
+    j <- j + 1
+    iter <- iter + 1
 
+    ftol <- 1e-5
+
+    FitAmoeba(ifit = iter, ftol, nParam, pParam, param)
   }
 
   return(model)
