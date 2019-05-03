@@ -8,7 +8,11 @@ FitAmoeba <- function(
   pFit <- c(rep(0.1, param$NoDelta),
             rep(200, param$NoTheta))
 
-  amoebaP <- matrix(0, nParam + 1, nParam)
+  amoebaP <- matrix(rep(pParam, nParam + 1),
+                    nParam + 1,
+                    nParam,
+                    byrow = TRUE)
   amoebaY <- rep(0, nParam + 1)
   amoebaX <- rep(0, nParam)
+
 }
