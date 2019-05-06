@@ -1,12 +1,49 @@
 FitLLTotal <- function(
-
+  p,
+  deltaP,
+  deltaM,
+  theta,
+  thetaP,
+  noThetaFix,
+  noDelta,
+  modelSplineN,
+  modelNoYears,
+  modelYears,
+  splineType,
+  maxIncCorr,
+  noEq,
+  noStage,
+  probSurv1996,
+  model,
+  param,
+  info,
+  data,
+  extraResults
 ) {
+  VERY_LRG <- 1e+10
+
+  GetParamDeltaM <- function(p, deltaP, deltaM) {
+    deltaM[as.logical(deltaP)] <- p[deltaP]
+    return(deltaM)
+  }
+
+  GetParamTheta <- function(p, thetaP, theta, noDelta, modelSplineN) {
+    k <- noDelta
+    # i <- 1
+    for (i in seq(modelSplineN)) {
+      if (thetaP[i] != 0) {
+        k <- k + 1
+        theta[i] = p[k]
+      }
+    }
+    return(theta)
+  }
 
   # Fit_StuffParamWithVector
   deltaM <- GetParamDeltaM(p, deltaP, deltaM)
   theta <- GetParamTheta(p, thetaP, theta, noDelta, modelSplineN)
 
-  model$LambdaPenalty <- 0
+  model$LambdaPenalty <<- 0
 
   # Model_Calculate
   if (splineType == 2) {
@@ -25,8 +62,8 @@ FitLLTotal <- function(
   eps <- 0.0001
   bitSml <- 1e-6
 
-  param[['Theta']] <- theta
-  param[['DeltaM']] <- deltaM
+  param[['Theta']] <<- theta
+  param[['DeltaM']] <<- deltaM
 
   modelResults <- matrix(0, modelNoYears - 1, noEq)
   # year <- 1
@@ -90,4 +127,6 @@ FitLLTotal <- function(
 
   # Severely punish clearly wrong beta's
   model$LLTotal <- model$LLTotal + sum(p[1:3] > 2) * VERY_LRG
+
+  return(model$LLTotal)
 }

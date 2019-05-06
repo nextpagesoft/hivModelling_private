@@ -3,7 +3,26 @@ FitAmoeba <- function(
   ftol,
   nParam,
   pParam,
-  param
+  param,
+  deltaP,
+  deltaM,
+  theta,
+  thetaP,
+  noThetaFix,
+  noDelta,
+  modelSplineN,
+  modelNoYears,
+  modelYears,
+  splineType,
+  maxIncCorr,
+  noEq,
+  noStage,
+  probSurv1996,
+  model,
+  info,
+  data,
+  extraResults
+
 ) {
   pFit <- c(rep(0.1, param$NoDelta),
             rep(200, param$NoTheta))
@@ -12,14 +31,35 @@ FitAmoeba <- function(
                     nParam + 1,
                     nParam,
                     byrow = TRUE)
-  # amoebaY <- rep(0, nParam + 1)
+  amoebaY <- rep(0, nParam + 1)
   # amoebaX <- rep(0, nParam)
 
-  for (i in seq_len(nParam)) {
-    amoebaP[i + 1, i] <- amoebaP[i + 1, i] + pFit[i] * 2
+  # i <- 1
+  for (i in seq_len(nParam + 1)) {
+    if (i > 1) {
+      amoebaP[i, i - 1] <- amoebaP[i, i - 1] + pFit[i - 1] * 2
+    }
 
-    amoebaX <- amoebaP[i,]
-
-    amoebaY <- FitLLTotal()
+    amoebaX <- amoebaP[i, ]
+    amoebaY[i] <- FitLLTotal(amoebaX,
+                             deltaP,
+                             deltaM,
+                             theta,
+                             thetaP,
+                             noThetaFix,
+                             noDelta,
+                             modelSplineN,
+                             modelNoYears,
+                             modelYears,
+                             splineType,
+                             maxIncCorr,
+                             noEq,
+                             noStage,
+                             probSurv1996,
+                             model,
+                             param,
+                             info,
+                             data,
+                             extraResults)
   }
 }
