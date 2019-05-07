@@ -261,7 +261,6 @@ PerformMainFit <- function(context, data)
   ) {
     j <- j + 1
     iter <- iter + 1
-
     ftol <- 1e-5
 
     FitAmoeba(ifit = iter, ftol, nParam, pParam, param,

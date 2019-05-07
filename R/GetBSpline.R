@@ -1,6 +1,8 @@
 GetBSpline <- function(
   time,
-  kOrder
+  kOrder,
+  param,
+  info
 ) {
   bSpline <- matrix(0, info$ModelSplineN, kOrder)
 

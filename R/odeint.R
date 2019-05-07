@@ -26,7 +26,7 @@ odeint <- function(
   # nstp <- 1
   for (nstp in seq_len(MAXSTP)) {
   # for (nstp in 1:71) {
-    dydx <- derivsFunc(x, y, nVar, param)
+    dydx <- derivsFunc(x, y, nVar, param, info)
 
     yscal <- abs(y) + abs(dydx * h) + TINY
 
@@ -34,7 +34,7 @@ odeint <- function(
       h <- x2 - x
     }
 
-    res <- rkqs(y, dydx, n = nVar, x, htry = h, eps, yscal, param)
+    res <- rkqs(y, dydx, n = nVar, x, htry = h, eps, yscal, param, info)
     x <- res$X
     y <- res$Y
 

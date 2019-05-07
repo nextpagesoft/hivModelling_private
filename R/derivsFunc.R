@@ -2,7 +2,8 @@ derivsFunc <- function(
   x,
   y,
   nVar,
-  param
+  param,
+  info
 ) {
   VERY_LRG <- 1.0e10
 
@@ -10,7 +11,7 @@ derivsFunc <- function(
 
   sumInf <- sum(y[seq_len(2 * param$NoStage + 1)])
 
-  lambda <- GetLambda(time = x, sumInf, info)
+  lambda <- GetLambda(time = x, sumInf, param, info)
 
   if (lambda < 0) {
     model$LambdaPenalty <<- VERY_LRG

@@ -7,7 +7,8 @@ rkqs <- function(
   htry,
   eps,
   yscal,
-  param
+  param,
+  info
 ) {
   SAFETY <- 0.9
   PSHRNK <- -0.25
@@ -17,7 +18,7 @@ rkqs <- function(
   h <- htry
 
   while (TRUE) {
-    res <- rkck(y, dydx, n, x, h, param)
+    res <- rkck(y, dydx, n, x, h, param, info)
 
     errMax <- max(abs(res$YErr / yscal), 0) / eps
 

@@ -1,6 +1,7 @@
 GetLambda <- function(
   time,
   sumInf,
+  param,
   info
 ) {
   lambda <- 0
@@ -9,7 +10,7 @@ GetLambda <- function(
     if (info$SplineType == 1) {
       stop('GetLambda for info$SplineType == 1 to be implemented')
     } else if (info$SplineType == 2) {
-      lambda <- GetBSpline(time, kOrder = info$SplineOrder)
+      lambda <- GetBSpline(time, kOrder = info$SplineOrder, param, info)
     } else if (info$SplineType == 3) {
       stop('GetLambda for info$SplineType == 3 to be implemented')
     }
