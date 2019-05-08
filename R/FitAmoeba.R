@@ -64,28 +64,6 @@ FitAmoeba <- function(
 
   pParam <- amoebaP[1, ]
 
-  funkArgs <- list(
-    deltaP = deltaP,
-    deltaM = deltaM,
-    theta = theta,
-    thetaP = thetaP,
-    noThetaFix = noThetaFix,
-    noDelta = noDelta,
-    modelSplineN = modelSplineN,
-    modelNoYears = modelNoYears,
-    modelYears = modelYears,
-    splineType = splineType,
-    maxIncCorr = maxIncCorr,
-    noEq = noEq,
-    noStage = noStage,
-    probSurv1996 = probSurv1996,
-    model = model,
-    param = param,
-    info = info,
-    data = data,
-    extraResults = extraResults
-  )
-
   amoeba(p = amoebaP, y = amoebaY, ndim = nParam, ftol = ftol, funk = FitLLTotal,
          deltaP,
          deltaM,
