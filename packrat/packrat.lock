@@ -20,8 +20,8 @@ Hash: 65f62365ec69ddd17230d2ffe891a6ab
 
 Package: future
 Source: CRAN
-Version: 1.12.0
-Hash: 7e40a80616e3e92d4819dfe6f39bf793
+Version: 1.13.0
+Hash: 580a9f286535b0306b5a1ab6759f1eba
 Requires: digest, globals, listenv
 
 Package: globals
