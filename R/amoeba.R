@@ -93,13 +93,14 @@ amoeba <- function(
       y[ihi] <- ytry
       psum <- psum + ptry - p[ihi, ]
       p[ihi, ] <- ptry
-      # for (j in seq_len(ndim)) {
-      #   psum[j] <- psum[j] + ptry[j] - p[ihi][j]
-      #   p[ihi, j] <- ptry[j]
-      # }
     }
 
-    return(ytry)
+    return(list(
+      Ytry = ytry,
+      Y = y,
+      Psum = psum,
+      P = p
+    ))
   }
 
   NMAX <- 50000
@@ -109,6 +110,7 @@ amoeba <- function(
   while (
     nfunk < NMAX
   ) {
+    inhi <- 0
     ilo <- 1
     if (y[1] > y[2]) {
       inhi <- 2
@@ -134,14 +136,12 @@ amoeba <- function(
 
     rtol <- 2.0 * abs(y[ihi] - y[ilo]) / (abs(y[ihi]) + abs(y[ilo]))
 
-    print(rtol)
     if (rtol < ftol) {
       y <- swap1D(y, 1, ilo)
       for (i in seq_len(ndim)) {
         p <- swap2D(p, 1, i, ilo, i)
       }
 
-      print('here')
       break
     }
 
@@ -153,84 +153,100 @@ amoeba <- function(
 
     # Begin a new iteration. First extrapolate by a factor -1 through the face of the
     # simplex across from the high points, i.e., reflect the simplex from the high point.
-    ytry <- amotry(p, y, psum, ndim, funk, ihi, fac = -1.0,
-                   deltaP,
-                   deltaM,
-                   theta,
-                   thetaP,
-                   noThetaFix,
-                   noDelta,
-                   modelSplineN,
-                   modelNoYears,
-                   modelYears,
-                   splineType,
-                   maxIncCorr,
-                   noEq,
-                   noStage,
-                   probSurv1996,
-                   model,
-                   param,
-                   info,
-                   data,
-                   extraResults)
+    res <- amotry(p, y, psum, ndim, funk, ihi, fac = -1,
+                  deltaP,
+                  deltaM,
+                  theta,
+                  thetaP,
+                  noThetaFix,
+                  noDelta,
+                  modelSplineN,
+                  modelNoYears,
+                  modelYears,
+                  splineType,
+                  maxIncCorr,
+                  noEq,
+                  noStage,
+                  probSurv1996,
+                  model,
+                  param,
+                  info,
+                  data,
+                  extraResults)
+    ytry <- res$Ytry
+    y <- res$Y
+    psum <- res$Psum
+    p <- res$P
 
-    if (ytry <= y[ilo]) {
+    message('rtol = ', rtol, ' nfunk = ', nfunk, ' ytry = ', ytry, ' fac = ', -1)
+
+    if (
+      ytry <= y[ilo]
+    ) {
       # Gives a result better than the best point, so try an additional extrapolation by a factor 2.
-      ytry <- amotry(p, y, psum, ndim, funk, ihi, 2.0,
-                     deltaP,
-                     deltaM,
-                     theta,
-                     thetaP,
-                     noThetaFix,
-                     noDelta,
-                     modelSplineN,
-                     modelNoYears,
-                     modelYears,
-                     splineType,
-                     maxIncCorr,
-                     noEq,
-                     noStage,
-                     probSurv1996,
-                     model,
-                     param,
-                     info,
-                     data,
-                     extraResults)
+      res <- amotry(p, y, psum, ndim, funk, ihi, 2.0,
+                    deltaP,
+                    deltaM,
+                    theta,
+                    thetaP,
+                    noThetaFix,
+                    noDelta,
+                    modelSplineN,
+                    modelNoYears,
+                    modelYears,
+                    splineType,
+                    maxIncCorr,
+                    noEq,
+                    noStage,
+                    probSurv1996,
+                    model,
+                    param,
+                    info,
+                    data,
+                    extraResults)
+      ytry <- res$Ytry
+      y <- res$Y
+      psum <- res$Psum
+      p <- res$P
+
+      message('rtol = ', rtol, ' nfunk = ', nfunk, ' ytry = ', ytry, ' fac = ', 2)
     } else if (
       ytry >= y[inhi]
     ) {
       ysave <- y[ihi]
-      ytry <- amotry(p, y, psum, ndim, funk, ihi, 0.5,
-                     deltaP,
-                     deltaM,
-                     theta,
-                     thetaP,
-                     noThetaFix,
-                     noDelta,
-                     modelSplineN,
-                     modelNoYears,
-                     modelYears,
-                     splineType,
-                     maxIncCorr,
-                     noEq,
-                     noStage,
-                     probSurv1996,
-                     model,
-                     param,
-                     info,
-                     data,
-                     extraResults)
+      res <- amotry(p, y, psum, ndim, funk, ihi, 0.5,
+                    deltaP,
+                    deltaM,
+                    theta,
+                    thetaP,
+                    noThetaFix,
+                    noDelta,
+                    modelSplineN,
+                    modelNoYears,
+                    modelYears,
+                    splineType,
+                    maxIncCorr,
+                    noEq,
+                    noStage,
+                    probSurv1996,
+                    model,
+                    param,
+                    info,
+                    data,
+                    extraResults)
+      ytry <- res$Ytry
+      y <- res$Y
+      psum <- res$Psum
+      p <- res$P
+
+      message('rtol = ', rtol, ' nfunk = ', nfunk, ' ytry = ', ytry, ' fac = ', 0.5)
       if (ytry >= ysave) {
         # Can't seem to get rid of that high point. Better contract around the lowest (best) point.
-        # i <- 10
+        # i <- 1
 				for (i in seq_len(mpts)) {
 					if (i != ilo) {
 					  psum <- 0.5*(p[i, ] + p[ilo, ])
 					  p[i, ] <- psum
-#             for (j in seq_len(ndim)) {
-# 						  psum[j] <- 0.5*(p[i, j] + p[ilo, j])
-# 						  p[i, j] <- psum[j]
-# 						}
 						y[i] <- funk(psum,
 						             deltaP,
 						             deltaM,

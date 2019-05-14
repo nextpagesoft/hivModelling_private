@@ -43,8 +43,6 @@ FitLLTotal <- function(
   deltaM <- GetParamDeltaM(p, deltaP, deltaM)
   theta <- GetParamTheta(p, thetaP, theta, noDelta, modelSplineN)
 
-  model$LambdaPenalty <<- 0
-
   # Model_Calculate
   if (splineType == 2) {
     if (maxIncCorr) {
@@ -55,15 +53,16 @@ FitLLTotal <- function(
     theta[seq_len(noThetaFix)] <- 0
   }
 
+  param[['Theta']] <<- theta
+  param[['DeltaM']] <<- deltaM
+  model$LambdaPenalty <<- 0
+
   ystart <- rep(0, noEq)
 
   hMin <- 0
   h1 <- 0.02
   eps <- 0.0001
   bitSml <- 1e-6
-
-  param[['Theta']] <<- theta
-  param[['DeltaM']] <<- deltaM
 
   modelResults <- matrix(0, modelNoYears - 1, noEq)
   # year <- 1
@@ -102,10 +101,10 @@ FitLLTotal <- function(
 
   model$LLPos <- FitLLPos(modelResults, data, info)
 
-  model$LLPosCD4_1 <- FitLLPosCD4(modelResults, 1, info, extraResults)
-  model$LLPosCD4_2 <- FitLLPosCD4(modelResults, 2, info, extraResults)
-  model$LLPosCD4_3 <- FitLLPosCD4(modelResults, 3, info, extraResults)
-  model$LLPosCD4_4 <- FitLLPosCD4(modelResults, 4, info, extraResults)
+  model$LLPosCD4_1 <- FitLLPosCD4(modelResults, group = 1, info, extraResults)
+  model$LLPosCD4_2 <- FitLLPosCD4(modelResults, group = 2, info, extraResults)
+  model$LLPosCD4_3 <- FitLLPosCD4(modelResults, group = 3, info, extraResults)
+  model$LLPosCD4_4 <- FitLLPosCD4(modelResults, group = 4, info, extraResults)
 
   model$LLTotal <- model$LLTotal +
     model$LLPosCD4_1 + model$LLPosCD4_2 + model$LLPosCD4_3 + model$LLPosCD4_4

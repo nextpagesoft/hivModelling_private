@@ -158,6 +158,8 @@ PerformMainFit <- function(context, data)
     Tc = tc,
     DeltaAIDS = deltaAIDS,
     Delta4Fac = delta4Fac,
+    Theta = theta,
+    DeltaM = deltaM,
     AlphaP = alphaP,
     Mu = mu,
     FInit = fInit,
@@ -224,7 +226,7 @@ PerformMainFit <- function(context, data)
       beta[(noCD4 + 1):noDelta] <- 0
     }
 
-    # j <- 0
+    # j <- 3
     for (j in seq(jMax + 1) - 1) {
       # Assume all theta's the same (range: 1 to 10^j_max)
       thetaF <- rep((j + 1) * 10^j, noTheta)

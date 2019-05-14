@@ -31,7 +31,6 @@ FitAmoeba <- function(
                     nParam,
                     byrow = TRUE)
   amoebaY <- rep(0, nParam + 1)
-  # amoebaX <- rep(0, nParam)
 
   # i <- 1
   for (i in seq_len(nParam + 1)) {
