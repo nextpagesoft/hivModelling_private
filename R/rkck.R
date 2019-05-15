@@ -48,32 +48,34 @@ rkck <- function(
   dc4 <- c4 - 13525.0 / 55296.0
   dc6 <- c6 - 0.25
 
-  for (i in seq_len(n)) {
+  indices <- seq_len(n)
+
+  for (i in indices) {
     ytemp[i] <- y[i] + b21 * h * dydx[i]
   }
-  ak2 <- derivsFunc(x + a2 * h, ytemp, nVar = n, param, info)
+  ak2 <- derivsFunc(x = x + a2 * h, y = ytemp, nVar = n, param, info)
 
-  for (i in seq_len(n)) {
+  for (i in indices) {
     ytemp[i] <- y[i] + h * (b31 * dydx[i] + b32 * ak2[i])
   }
-  ak3 <- derivsFunc(x + a3 * h, ytemp, nVar = n, param, info)
+  ak3 <- derivsFunc(x = x + a3 * h, y = ytemp, nVar = n, param, info)
 
-  for (i in seq_len(n)) {
+  for (i in indices) {
     ytemp[i] <- y[i] + h * (b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
   }
-  ak4 <- derivsFunc(x + a4 * h, ytemp, nVar = n, param, info)
+  ak4 <- derivsFunc(x = x + a4 * h, y = ytemp, nVar = n, param, info)
 
-  for (i in seq_len(n)) {
+  for (i in indices) {
     ytemp[i] <- y[i] + h * (b51 * dydx[i] + b52 * ak2[i] + b53 * ak3[i] + b54 * ak4[i])
   }
-  ak5 <- derivsFunc(x + a5 * h, ytemp, nVar = n, param, info)
+  ak5 <- derivsFunc(x = x + a5 * h, y = ytemp, nVar = n, param, info)
 
-  for (i in seq_len(n)) {
+  for (i in indices) {
     ytemp[i] <- y[i] + h * (b61 * dydx[i] + b62 * ak2[i] + b63 * ak3[i] + b64 * ak4[i] + b65 * ak5[i])
   }
-  ak6 <- derivsFunc(x + a6 * h, ytemp, nVar = n, param, info)
+  ak6 <- derivsFunc(x = x + a6 * h, y = ytemp, nVar = n, param, info)
 
-  for (i in seq_len(n)) {
+  for (i in indices) {
     yout[i] <- y[i] + h * (c1 * dydx[i] + c3 * ak3[i] + c4 * ak4[i] + c6 * ak6[i]);
     yerr[i] <- h * (dc1 * dydx[i] + dc3 * ak3[i] + dc4 * ak4[i] + dc5 * ak5[i] + dc6 * ak6[i]);
   }

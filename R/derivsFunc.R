@@ -5,24 +5,15 @@ derivsFunc <- function(
   param,
   info
 ) {
-  VERY_LRG <- 1.0e10
-
   dydx <- rep(0, nVar)
 
-  sumInf <- sum(y[seq_len(2 * param$NoStage + 1)])
-
-  lambda <- GetLambda(time = x, sumInf, param, info)
-
-  if (lambda < 0) {
-    model$LambdaPenalty <<- VERY_LRG
-  }
+  lambda <- GetLambda(x, param, info)
+  delta <- GetDelta(x, param)
 
   dlambdad2x <- 0.0
   # if (param->Smoothing2 > 0.0  &&  info->SplineType == 1  &&  x > 2009.0) {
   #   dlambdad2x = Model_GetLambda_d2x(x);
   # }
-
-  delta <- GetDelta(x, param)
 
   # if (param->exclude_pi == 1)
   # {
@@ -103,7 +94,7 @@ derivsFunc <- function(
   iEq <- iEq + 1
 
   j <- iEq + 1
-  dydx[j] = dlambdad2x * dlambdad2x
+  dydx[j] <- dlambdad2x * dlambdad2x
 
   return(dydx)
 }

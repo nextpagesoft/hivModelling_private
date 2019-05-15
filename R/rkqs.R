@@ -19,19 +19,20 @@ rkqs <- function(
 
   while (TRUE) {
     res <- rkck(y, dydx, n, x, h, param, info)
+    yout <- res$YOut
+    yerr <- res$YErr
 
-    errMax <- max(abs(res$YErr / yscal), 0) / eps
+    errMax <- max(abs(yerr / yscal), 0) / eps
 
     if (errMax > 1) {
       hTemp <- SAFETY * h * errMax^PSHRNK
       h <- ifelse(h >= 0, max(hTemp, 0.1 * h), min(hTemp, 0.1 * h))
-      xnew <- x + h
       next
     } else {
       hNext <- ifelse(errMax > ERRCON, SAFETY * h * errMax^PGROW, 5 * h)
       hDid <- h
       x <- x + hDid
-      y <- res$YOut
+      y <- yout
       break
     }
   }

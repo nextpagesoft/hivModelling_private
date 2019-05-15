@@ -25,7 +25,6 @@ odeint <- function(
 
   # nstp <- 1
   for (nstp in seq_len(MAXSTP)) {
-  # for (nstp in 1:71) {
     dydx <- derivsFunc(x, y, nVar, param, info)
 
     yscal <- abs(y) + abs(dydx * h) + TINY
@@ -52,5 +51,5 @@ odeint <- function(
     h <- res$hNext
   }
 
-  return(list(YStart = ystart, NGood = nOk, NBad = nBad))
+  return(list(YStart = ystart, X = x, NGood = nOk, NBad = nBad))
 }

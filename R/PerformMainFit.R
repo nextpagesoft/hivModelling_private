@@ -16,229 +16,184 @@
 #' @export
 PerformMainFit <- function(context, data)
 {
-  VERY_LRG <- 1e+10
+  # Constants ------------------------------------------------------------------
+  VERY_SML <- 1e-20
 
-  GetVector <- function(beta, thetaF, noDelta, noTheta) {
-    p <- rep(0, noDelta + noTheta)
-    p[seq(noDelta)] <- beta[seq(noDelta)]
-    p[noDelta + seq(noTheta)] <- thetaF[seq(noTheta)]
+  # Helper functions -----------------------------------------------------------
+  GetParameterVector <- function(beta, thetaF, param) {
+    p <- rep(0, param$NoDelta + param$NoTheta)
+    p[seq(param$NoDelta)] <- beta[seq(param$NoDelta)]
+    p[param$NoDelta + seq(param$NoTheta)] <- thetaF[seq(param$NoTheta)]
     return(p)
   }
 
-  VERY_SML <- 1e-20
+  GetParamList <- function(context) {
+    param <- list(
+      # Number of disease stages
+      NoStage = 5,
+      # Number of time intervals diagnosis matrix
+      NoTime = 8,
+      # Background mortality
+      Mu = 0,
+      AlphaP = 1.0/(2.90/12),
+      Qoppa = c(1/6.37, 1/2.86, 1/3.54, 1/2.3, 0.529101),
+      Delta4Fac = 0,
+      DeltaAIDS = 12,
+      # Time intervals
+      Tc = c(1980, 1984, 1984, 1996, 2000, 2005, 2010, 2017),
+      NoDelta = 1,
+      NoTheta = 8,
+      NoThetaFix = 0,
+      Smoothing1 = 0,
+      Smoothing2 = 0
+    )
 
-  country <- context$Parameters$Models$INCIDENCE$Country
+    fInit <- c(0.58, 0.23, 0.16, 0.03, 0)
+    fInit[1] <- 1 - sum(fInit[-1])
+    param[['FInit']] <- fInit
+    param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
 
-  # DEBUG
+    deltaM <- matrix(0, param$NoStage, param$NoTime)
+    deltaM[param$NoStage, ] <- param$DeltaAIDS
+    deltaM[1:4, 2] <- 0.2
 
-  # Number of disease stages
-  noStage <- 5
+    theta <- rep(0, param$NoTheta + 2)
 
-  # Number of time intervals diagnosis matrix
-  noTime <- 8
+    deltaP <- matrix(0, param$NoStage, param$NoTime)
+    deltaP[1:4, 2] <- 1
 
-  # Rate of progression to AIDS through stages of CD4
-  #   type = 2 : Lodi et al, CID 2011, 53:817-825
-  #   CASCADE Lancet 2000, 355:1131-37, Table 2.
-  #   Cori et al, PLoS One 2014, 9(1):e84511, supplement
-  modelCD4Rate <- 2
+    thetaP <- rep(0, param$NoTheta + 2)
+    thetaP[2:(param$NoTheta + 1)] <- 1
 
-  # Maximum number of iterations
-  maxNoFit <- 100
+    param[['DeltaP']] <- deltaP
+    param[['ThetaP']] <- thetaP
+    param[['DeltaM']] <- deltaM
+    param[['Theta']] <- theta
 
-  # Number of time intervals diagnosis matrix
-  modelNoTime <- 7
+    param[['NoStageTot']] <- param$NoStage + 1
 
-  modelMinYear <- 1980
-  modelMaxYear <- 2017
-  modelYears <- modelMinYear:modelMaxYear
-
-  modelNoYears <- modelMaxYear - modelMinYear + 1
-
-
-  modelNoKnots <- 6
-  modelSplOrder <- 4
-  modelSplineN <- modelNoKnots + modelSplOrder
-
-  # B-splines : smooth incidence curve at the end of the observation interval
-  splineType <- 2
-
-  # Param_Knots
-  if (splineType != 3) {
-    knotsDistance <- (modelMaxYear - modelMinYear) / (modelNoKnots + 1)
-  } else {
-    knotsDistance <- (modelMaxYear + 5 - modelMinYear) / (modelNoKnots + 2 * modelSplOrder - 1)
+    return(param)
   }
 
-  knots <- matrix(0, modelSplOrder + 1, modelNoKnots + 2 * (modelSplOrder + 1))
-  # k <- 1
-  for (k in seq_len(modelSplOrder + 1)) {
-    if (splineType != 3) {
-      knots[k, 1:k] <- modelMinYear
-      knots[k, (k + 1):(k + modelNoKnots)] <- modelMinYear + ((k + 1):(k + modelNoKnots) - k) * knotsDistance
-      knots[k, (k + modelNoKnots + 1):(modelNoKnots + 2 * k)] <- modelMaxYear + VERY_SML
+  GetInfoList <- function(context) {
+    info <- list(
+      Country = context$Parameters$Models$INCIDENCE$Country,
+      # Rate of progression to AIDS through stages of CD4
+      #   type = 2 : Lodi et al, CID 2011, 53:817-825
+      #   CASCADE Lancet 2000, 355:1131-37, Table 2.
+      #   Cori et al, PLoS One 2014, 9(1):e84511, supplement
+      ModelCD4Rate = 2,
+      # Number of time intervals diagnosis matrix
+      ModelNoTime = 7,
+      ModelMinYear = 1980,
+      ModelMaxYear = 2017,
+      FitPosMinYear = 1979,
+      FitPosMaxYear = 1979,
+      FitPosCD4MinYear = 1984,
+      FitPosCD4MaxYear = 2016,
+      FitAIDSPosMinYear = 1996,
+      FitAIDSPosMaxYear = 2016,
+      FitAIDSMinYear = 1980,
+      FitAIDSMaxYear = 1995,
+      ModelFitDist = 1, # Poisson
+      ModelNoKnots = 6,
+      # B-splines : smooth incidence curve at the end of the observation interval
+      SplineType = 2,
+      ModelSplOrder = 4,
+      # Correction for incidence at end of observation interval (1=yes; 0=no) by
+      # extending spline base beyond the maximum year and fixing the parameter
+      # associated with the last spline function to 0
+      MaxIncCorr = TRUE,
+      StartRandom = FALSE
+    )
+
+    info[['TmpMinYear']] <- info$ModelMinYear
+    info[['TmpMaxYear']] <- info$ModelMaxYear
+    info[['ModelYears']] <- info$ModelMinYear:info$ModelMaxYear
+    info[['ModelNoYears']] <- info$ModelMaxYear - info$ModelMinYear + 1
+    info[['ModelSplineN']] <- info$ModelNoKnots + info$ModelSplOrder
+
+    # Param_Knots
+    if (info$SplineType != 3) {
+      info[['KnotsDistance']] <- (info$ModelMaxYear - info$ModelMinYear) / (info$ModelNoKnots + 1)
     } else {
-      stop('Param_Knots for splineType == 3 not implemented')
+      info[['KnotsDistance']] <- (info$ModelMaxYear + 5 - info$ModelMinYear) / (info$ModelNoKnots + 2 * info$ModelSplOrder - 1)
     }
 
-    if (k == modelSplOrder) {
-      myKnots <- knots[k, seq_len(2 * modelSplOrder + modelNoKnots)]
+    knots <- matrix(0, info$ModelSplOrder + 1, info$ModelNoKnots + 2 * (info$ModelSplOrder + 1))
+    myKnots <- NULL
+    for (k in seq_len(info$ModelSplOrder + 1)) {
+      if (info$SplineType != 3) {
+        knots[k, 1:k] <- info$ModelMinYear
+        knots[k, (k + 1):(k + info$ModelNoKnots)] <- info$ModelMinYear + ((k + 1):(k + info$ModelNoKnots) - k) * info$KnotsDistance
+        knots[k, (k + info$ModelNoKnots + 1):(info$ModelNoKnots + 2 * k)] <- info$ModelMaxYear + VERY_SML
+      } else {
+        stop('Param_Knots for splineType == 3 not implemented')
+      }
+
+      if (k == info$ModelSplOrder) {
+        myKnots <- knots[k, seq_len(2 * info$ModelSplOrder + info$ModelNoKnots)]
+      }
     }
+
+    info[['Knots']] <- knots
+    info[['MyKnots']] <- myKnots
+
+    return(info)
   }
 
-  # Correction for incidence at end of observation interval (1=yes; 0=no) by
-  # extending spline base beyond the maximum year and fixing the parameter
-  # associated with the last spline function to 0
-  maxIncCorr <- TRUE
+  # Code -----------------------------------------------------------------------
 
-  # Background mortality
-  mu <- 0
+  param <- GetParamList(context)
+  info <- GetInfoList(context)
 
-  alphaP <- 1.0/(2.90/12)
+  probSurv1996 <- GetProvSurv96(
+    info$Country,
+    param$NoStage,
+    param$Qoppa,
+    info$ModelMinYear,
+    info$ModelNoYears)
 
-  fInit <- c(0.58, 0.23, 0.16, 0.03, 0)
-  fInit[1] <- 1 - sum(fInit[-1])
-  qoppa <- c(1/6.37, 1/2.86, 1/3.54, 1/2.3, 0.529101)
-  delta4Fac <- 0
-  deltaAIDS <- 12
-
-  # Time intervals
-  tc <- c(1980, 1984, 1984, 1996, 2000, 2005, 2010, 2017)
-
-
-  # Model_GetNoEquation();
-  noEq <- 1 + noStage + noStage + noStage + 1 + 1 + 1 + 1 + 1
-  modelNoIter <- maxNoFit
-  startRandom <- FALSE
-  iRun <- 0
-
-  # Param_Prob_Surv
-  probSurv1996 <- GetProvSurv96(country, noStage, qoppa, modelMinYear, modelNoYears)
-
-  # Number of parameters?
-  noDelta <- 1
-  noTheta <- 8
-  nTheta <- noTheta
-  noThetaFix <- 0
-
-  # Param_Delta
-  deltaM <- matrix(0, noStage, noTime)
-  deltaP <- matrix(0, noStage, noTime)
-
-  deltaP[1:4, 2] <- 1
-
-  deltaM[noStage, ] <- deltaAIDS
-  deltaM[1:4, 2] <- 0.2
-
-  theta <- rep(0, noTheta + 2)
-  thetaP <- rep(0, noTheta + 2)
-  thetaP[2:(noTheta + 1)] <- 1
-
-  # Fit_EstimateParameters
-  llFinal <- rep(0, maxNoFit)
-
-  # number of parameters in the fit:
-  # param->NoDelta : number of diagnosis rates
-  #  param->NoTheta : number of spline parameters
-  nParam <- noDelta + noTheta
-
+  # Number of parameters in the fit:
+  #  param$NoDelta - number of diagnosis rates
+  #  param$NoTheta - number of spline parameters
+  nParam <- param$NoDelta + param$NoTheta
   pParam <- rep(0, nParam)
-
-  # Fit_Initialise
   p <- rep(0, nParam)
 
+  # Maximum number of iterations
+  maxNoFit <- 30
+  llFinal <- rep(0, maxNoFit)
   llMin <- 1.0e+10
-
-  nIterMax <- 30
   iter <- 1
 
-  param <- list(
-    NoStage = noStage,
-    NoStageTot = noStage + 1,
-    Tc = tc,
-    DeltaAIDS = deltaAIDS,
-    Delta4Fac = delta4Fac,
-    Theta = theta,
-    DeltaM = deltaM,
-    AlphaP = alphaP,
-    Mu = mu,
-    FInit = fInit,
-    Qoppa = qoppa,
-    Smoothing1 = 0,
-    Smoothing2 = 0,
-    NoDelta = noDelta,
-    NoTheta = noTheta
-  )
-
-  info <- list(
-    TmpMinYear = modelMinYear,
-    TmpMaxYear = modelMaxYear,
-    SplineType = splineType,
-    SplineOrder = 4,
-    ModelSplineN = modelSplineN,
-    MyKnots = myKnots,
-    FitPosMinYear = 1979,
-    FitPosMaxYear = 1979,
-    FitPosCD4MinYear = 1984,
-    FitPosCD4MaxYear = 2016,
-    FitAIDSPosMinYear = 1996,
-    FitAIDSPosMaxYear = 2016,
-    FitAIDSMinYear = 1980,
-    FitAIDSMaxYear = 1995,
-    ModelFitDist = 1 # Poisson
-  )
-
-  model <- list(
-    LambdaPenalty = 0,
-    LLTotal = 0,
-    LLPos = 0,
-    LLPosCD4_1 = 0,
-    LLPosCD4_2 = 0,
-    LLPosCD4_3 = 0,
-    LLPosCD4_4 = 0,
-    LLAIDSPos = 0,
-    LLAIDS = 0,
-    Smooth1 = 0,
-    Smooth2 = 0
-  )
-
-  extraResults <- data.table(
-    Year = modelMinYear:modelMaxYear,
-    LL_PosCD4_Year_1 = 0,
-    LL_PosCD4_Year_2 = 0,
-    LL_PosCD4_Year_3 = 0,
-    LL_PosCD4_Year_4 = 0,
-    LL_AIDSPos_Year = 0
-  )
-
   # Step 1 : determine the scale of the parameters
-  noCD4 <- 4
+  defNoCD4 <- 4
   iMax <- 5
   jMax <- 10
   # i <- 1
-  for (i in seq(iMax)) {
-    # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*i_max)
-    beta <- rep(i * 0.05, noCD4)
+  for (i in seq_len(iMax)) {
+    # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
+    beta <- rep(i * 0.05, defNoCD4)
     # Extra contribution to delta4
-    beta[noCD4] <- beta[noCD4] + 0.4
+    beta[defNoCD4] <- beta[defNoCD4] + 0.4
     # Keep delta's constant over time
-    if (noDelta > noCD4) {
-      beta[(noCD4 + 1):noDelta] <- 0
+    if (param$NoDelta > defNoCD4) {
+      beta[(defNoCD4 + 1):param$NoDelta] <- 0
     }
 
-    # j <- 3
+    # j <- 0
     for (j in seq(jMax + 1) - 1) {
       # Assume all theta's the same (range: 1 to 10^j_max)
-      thetaF <- rep((j + 1) * 10^j, noTheta)
+      thetaF <- rep((j + 1) * 10^j, param$NoTheta)
 
-      # Fit_StuffVectorWithParam
-      p <- GetVector(beta, thetaF, noDelta, noTheta)
+      p <- GetParameterVector(beta, thetaF, param)
 
-      # Fit_LL_Total
-      ll <- FitLLTotal(p, deltaP, deltaM, theta, thetaP, noThetaFix, noDelta,
-                       modelSplineN, modelNoYears, modelYears, splineType,
-                       maxIncCorr, noEq, noStage, probSurv1996, model, param,
-                       info, data, extraResults)
+      param$DeltaM <- GetParamDeltaM(p, param)
+      param$Theta <- GetParamTheta(p, param, info)
+
+      res <- FitLLTotal(p, probSurv1996, param, info, data)
+      ll <- res$LLTotal
 
       if (ll < llMin) {
         llMin <- ll
@@ -247,44 +202,44 @@ PerformMainFit <- function(context, data)
     }
 
     # Fill beta and theta_f with the best fitting parameters
-    beta[seq_len(noDelta)] <- pParam[seq_len(noDelta)]
-    thetaF <- pParam[noDelta + seq_len(noTheta)]
+    beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
+    thetaF <- pParam[param$NoDelta + seq_len(param$NoTheta)]
   }
 
   llFinal[iter] <- llMin
 
-  # Stop fitting when the change in deviance is smaller than ctol.
-  j <- 0
-  ctol <- 1e-6
-  llOld <- 0
-  while (
-    abs(llFinal[iter] - llOld) > ctol &&
-    iter < nIterMax
-  ) {
-    j <- j + 1
-    iter <- iter + 1
-    ftol <- 1e-5
+  # # Stop fitting when the change in deviance is smaller than ctol.
+  # j <- 0
+  # ctol <- 1e-6
+  # llOld <- 0
+  # while (
+  #   abs(llFinal[iter] - llOld) > ctol &&
+  #   iter < maxNoFit
+  # ) {
+  #   j <- j + 1
+  #   iter <- iter + 1
+  #   ftol <- 1e-5
+  #
+  #   FitAmoeba(ifit = iter, ftol, nParam, pParam, param,
+  #             deltaP,
+  #             deltaM,
+  #             theta,
+  #             thetaP,
+  #             noThetaFix,
+  #             noDelta,
+  #             modelSplineN,
+  #             modelNoYears,
+  #             modelYears,
+  #             splineType,
+  #             maxIncCorr,
+  #             noEq,
+  #             noStage,
+  #             probSurv1996,
+  #             model,
+  #             info,
+  #             data,
+  #             extraResults)
+  # }
 
-    FitAmoeba(ifit = iter, ftol, nParam, pParam, param,
-              deltaP,
-              deltaM,
-              theta,
-              thetaP,
-              noThetaFix,
-              noDelta,
-              modelSplineN,
-              modelNoYears,
-              modelYears,
-              splineType,
-              maxIncCorr,
-              noEq,
-              noStage,
-              probSurv1996,
-              model,
-              info,
-              data,
-              extraResults)
-  }
-
-  return(model)
+  return(invisible(NULL))
 }

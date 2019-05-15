@@ -1,9 +1,12 @@
 FitLLAIDS <- function(
   modelResults,
-  info,
-  extraResults
+  info
 ) {
+  N_AIDS <- NULL
+
   L_AIDS <- 0.0
+
+  modelResults[, LL_AIDS_Year := 0]
 
   for (year in seq_len(nrow(modelResults))) {
     TotModel <- modelResults[year, N_AIDS]
@@ -14,12 +17,12 @@ FitLLAIDS <- function(
         modelResults$Year[year] <= info$FitAIDSMaxYear)
     {
       if (info$ModelFitDist == 1) {
-        extraResults[year, LL_AIDS_Year := FitLLPoisson(TotModel, TotData)]
+        modelResults[year, LL_AIDS_Year := FitLLPoisson(TotModel, TotData)]
       } else {
         stop('info$ModelFitDist != 1 not supported')
       }
 
-      L_AIDS <- L_AIDS + extraResults[year, LL_AIDS_Year]
+      L_AIDS <- L_AIDS + modelResults[year, LL_AIDS_Year]
     }
   }
 
