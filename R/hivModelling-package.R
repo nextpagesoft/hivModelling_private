@@ -19,5 +19,6 @@
 #' @import data.table
 #' @import xml2
 #' @importFrom utils modifyList
+#' @importFrom stats setNames
 #'
 NULL

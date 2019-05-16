@@ -91,3 +91,7 @@ context <- GetRunContext(
     )
   )
 )
+
+data <- ReadInputData(context)
+
+model <- PerformMainFit(context, data)

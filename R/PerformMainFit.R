@@ -213,6 +213,8 @@ PerformMainFit <- function(context, data)
   ) {
     iter <- iter + 1
 
+    message('--- Iteration ', iter)
+
     res <- FitAmoeba(ifit = iter, ftol = 1e-5, nParam, pParam,
                      probSurv1996,
                      param,

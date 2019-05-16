@@ -15,6 +15,22 @@
 #' @export
 ReadInputData <- function(context)
 {
+  # CRAN checks
+  Year <- NULL
+  Count <- NULL
+  N_HIV <- NULL
+  N_HIV_Stage_1 <- NULL
+  N_HIV_Stage_2 <- NULL
+  N_HIV_Stage_3 <- NULL
+  N_HIV_Stage_4 <- NULL
+  N_HIV_Stage_5 <- NULL
+  N_AIDS <- NULL
+  N_Dead <- NULL
+  N_Inf <- NULL
+  N_Emig <- NULL
+  N_Dead_U <- NULL
+  . <- NULL
+
   inputDataPath <- context$Settings$InputDataPath
   if (!is.null(inputDataPath) && dir.exists(inputDataPath)) {
     fileNames <- list.files(inputDataPath, pattern = '.csv', full.names = TRUE, ignore.case = FALSE)

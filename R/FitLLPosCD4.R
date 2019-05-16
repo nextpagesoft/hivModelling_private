@@ -1,7 +1,8 @@
 FitLLPosCD4 <- function(
   modelResults,
   group,
-  info
+  info,
+  data
 ) {
   VERY_LRG <- 1.0e10
   L_PosCD4 <- 0.0
@@ -12,25 +13,28 @@ FitLLPosCD4 <- function(
 
   modelResults[, (LL_PosCD4_Year) := 0]
 
-  # year <- 29
+  totModels <- modelResults[[N_HIV_Stage_S_Obs]]
+  totDatas <- data[[N_HIV_Stage]]
+
   for (year in seq_len(nrow(modelResults))) {
-    TotModel <- modelResults[year, get(N_HIV_Stage_S_Obs)]
-    TotData <- data[year, get(N_HIV_Stage)]
 
     if (
-      TotModel > 0 &&
+      totModels[year] > 0 &&
       modelResults$Year[year] >= info$FitPosCD4MinYear &&
       modelResults$Year[year] <= info$FitPosCD4MaxYear
     ) {
       if (info$ModelFitDist == 1) {
-        modelResults[year, (LL_PosCD4_Year) := FitLLPoisson(TotModel, TotData)]
+        set(x = modelResults,
+            i = year,
+            j = LL_PosCD4_Year,
+            value = FitLLPoisson(totModels[year], totDatas[year]))
       } else {
         stop('info$ModelFitDist != 1 not supported')
       }
     }
 
-    L_PosCD4 <- L_PosCD4 + modelResults[year, get(LL_PosCD4_Year)]
-    if (TotModel < 0) {
+    L_PosCD4 <- L_PosCD4 + modelResults[[LL_PosCD4_Year]][year]
+    if (totModels[year] < 0) {
       L_PosCD4 <- L_PosCD4 + VERY_LRG
     }
   }

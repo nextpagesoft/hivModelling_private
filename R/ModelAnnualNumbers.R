@@ -4,6 +4,29 @@ ModelAnnualNumbers <- function(
   data
 ) {
 
+  # CRAN checks
+  C_HIV_Stage_1 <- NULL
+  C_HIV_Stage_2 <- NULL
+  C_HIV_Stage_3 <- NULL
+  C_HIV_Stage_4 <- NULL
+  C_HIV_Stage_5 <- NULL
+  N_HIV_Stage_1 <- NULL
+  N_HIV_Stage_2 <- NULL
+  N_HIV_Stage_3 <- NULL
+  N_HIV_Stage_4 <- NULL
+  N_HIV_Stage_5 <- NULL
+  N_HIV_Stage_S_1 <- NULL
+  N_HIV_Stage_S_2 <- NULL
+  N_HIV_Stage_S_3 <- NULL
+  N_HIV_Stage_S_4 <- NULL
+  N_HIV_Stage_S_5 <- NULL
+  N_HIV_S <- NULL
+  C_AIDS <- NULL
+  C_Inf <- NULL
+  C_Dead_U <- NULL
+  C_Dead_D <- NULL
+
+
   # Implement computation
   data <- list(
     Prob_CD4 = c(

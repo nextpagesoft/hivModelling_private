@@ -1,28 +1,33 @@
 FitLLAIDSPos <- function(
   modelResults,
-  info
+  info,
+  data
 ) {
-  N_HIV_Stage_S_Obs_5 <- NULL
+  LL_AIDSPos_Year <- NULL
 
   L_AIDSPos <- 0.0
 
   modelResults[, LL_AIDSPos_Year := 0]
 
-  for (year in seq_len(nrow(modelResults))) {
-    TotModel <- modelResults[year, N_HIV_Stage_S_Obs_5]
-    TotData <- data[year, N_HIV_Stage_5]
+  totModels <- modelResults[['N_HIV_Stage_S_Obs_5']]
+  totDatas <- data[['N_HIV_Stage_5']]
 
-    if (TotModel > 0 &&
+  for (year in seq_len(nrow(modelResults))) {
+
+    if (totModels[year] > 0 &&
         modelResults$Year[year] >= info$FitAIDSPosMinYear &&
         modelResults$Year[year] <= info$FitAIDSPosMaxYear)
     {
       if (info$ModelFitDist == 1) {
-        modelResults[year, LL_AIDSPos_Year := FitLLPoisson(TotModel, TotData)]
+        set(x = modelResults,
+            i = year,
+            j = 'LL_AIDSPos_Year',
+            value = FitLLPoisson(totModels[year], totDatas[year]))
       } else {
         stop('info$ModelFitDist != 1 not supported')
       }
 
-      L_AIDSPos <- L_AIDSPos + modelResults[year, LL_AIDSPos_Year]
+      L_AIDSPos <- L_AIDSPos + modelResults[['LL_AIDSPos_Year']][year]
     }
   }
 
