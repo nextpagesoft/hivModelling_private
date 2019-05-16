@@ -17,9 +17,14 @@ FitLLTotal <- function(
   smooth1 <- 0
   smooth2 <- 0
 
+  param$DeltaM <- GetParamDeltaM(p, param)
+  param$Theta <- GetParamTheta(p, param, info)
+
   ystart <- rep(0, param$NoEq)
 
   modelResults <- matrix(0, info$ModelNoYears - 1, param$NoEq)
+
+  minLambda <- VERY_LRG
 
   # i <- 1
   for (i in seq_len(info$ModelNoYears - 1)) {
@@ -33,6 +38,8 @@ FitLLTotal <- function(
                   param,
                   info)
     ystart <- res$YStart
+    minLambda <- min(minLambda,
+                     res$MinLambda)
     modelResults[i, ] <- ystart
   }
 
@@ -53,7 +60,7 @@ FitLLTotal <- function(
   # Changes made by reference
   ModelAnnualNumbers(modelResults, probSurv1996, data)
 
-  lambdaPenalty <- ifelse(GetLambda(res$X, param, info) < 0,
+  lambdaPenalty <- ifelse(minLambda < 0,
                           VERY_LRG,
                           0)
   llTotal <-

@@ -183,14 +183,11 @@ PerformMainFit <- function(context, data)
     }
 
     # j <- 0
-    for (j in seq(jMax + 1) - 1) {
+    for (j in seq_len(jMax + 1) - 1) {
       # Assume all theta's the same (range: 1 to 10^j_max)
       thetaF <- rep((j + 1) * 10^j, param$NoTheta)
 
       p <- GetParameterVector(beta, thetaF, param)
-
-      param$DeltaM <- GetParamDeltaM(p, param)
-      param$Theta <- GetParamTheta(p, param, info)
 
       res <- FitLLTotal(p, probSurv1996, param, info, data)
       ll <- res$LLTotal
@@ -200,46 +197,28 @@ PerformMainFit <- function(context, data)
         pParam <- p
       }
     }
-
-    # Fill beta and theta_f with the best fitting parameters
-    beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
-    thetaF <- pParam[param$NoDelta + seq_len(param$NoTheta)]
   }
-
   llFinal[iter] <- llMin
 
-  # # Stop fitting when the change in deviance is smaller than ctol.
-  # j <- 0
-  # ctol <- 1e-6
-  # llOld <- 0
-  # while (
-  #   abs(llFinal[iter] - llOld) > ctol &&
-  #   iter < maxNoFit
-  # ) {
-  #   j <- j + 1
-  #   iter <- iter + 1
-  #   ftol <- 1e-5
-  #
-  #   FitAmoeba(ifit = iter, ftol, nParam, pParam, param,
-  #             deltaP,
-  #             deltaM,
-  #             theta,
-  #             thetaP,
-  #             noThetaFix,
-  #             noDelta,
-  #             modelSplineN,
-  #             modelNoYears,
-  #             modelYears,
-  #             splineType,
-  #             maxIncCorr,
-  #             noEq,
-  #             noStage,
-  #             probSurv1996,
-  #             model,
-  #             info,
-  #             data,
-  #             extraResults)
-  # }
+  # Fill beta and thetaF with the best fitting parameters
+  beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
+  thetaF <- pParam[param$NoDelta + seq_len(param$NoTheta)]
+
+  # Stop fitting when the change in deviance is smaller than ctol.
+  ctol <- 1e-6
+  llOld <- 0
+  while (
+    abs(llFinal[iter] - llOld) > ctol &&
+    iter < maxNoFit
+  ) {
+    iter <- iter + 1
+
+    res <- FitAmoeba(ifit = iter, ftol = 1e-5, nParam, pParam,
+                     probSurv1996,
+                     param,
+                     info,
+                     data)
+  }
 
   return(invisible(NULL))
 }

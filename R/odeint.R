@@ -9,6 +9,7 @@ odeint <- function(
   param,
   info
 ) {
+  VERY_LRG <- 1e+10
   nBad <- 0
   nOk <- 0
 
@@ -23,9 +24,13 @@ odeint <- function(
 
   y <- ystart
 
+  minLambda <- VERY_LRG
+
   # nstp <- 1
   for (nstp in seq_len(MAXSTP)) {
-    dydx <- derivsFunc(x, y, nVar, param, info)
+    derivLambda <- GetLambda(time = x, param, info)
+
+    dydx <- derivsFunc(x, y, lambda = derivLambda, nVar, param, info)
 
     yscal <- abs(y) + abs(dydx * h) + TINY
 
@@ -33,9 +38,14 @@ odeint <- function(
       h <- x2 - x
     }
 
-    res <- rkqs(y, dydx, n = nVar, x, htry = h, eps, yscal, param, info)
+    res <- rkqs(x, y, dydx, n = nVar, htry = h, eps, yscal, param, info)
     x <- res$X
     y <- res$Y
+    rkqsLambda <- res$MinLambda
+
+    minLambda <- min(minLambda,
+                     derivLambda,
+                     rkqsLambda)
 
     if (res$hDid == h) {
       nOk <- nOk + 1
@@ -51,5 +61,5 @@ odeint <- function(
     h <- res$hNext
   }
 
-  return(list(YStart = ystart, X = x, NGood = nOk, NBad = nBad))
+  return(list(YStart = ystart, X = x, NGood = nOk, NBad = nBad, MinLambda = minLambda))
 }

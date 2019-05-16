@@ -1,28 +1,17 @@
 derivsFunc <- function(
   x,
   y,
+  lambda,
   nVar,
   param,
   info
 ) {
   dydx <- rep(0, nVar)
 
-  lambda <- GetLambda(x, param, info)
   delta <- GetDelta(x, param)
 
   dlambdad2x <- 0.0
-  # if (param->Smoothing2 > 0.0  &&  info->SplineType == 1  &&  x > 2009.0) {
-  #   dlambdad2x = Model_GetLambda_d2x(x);
-  # }
 
-  # if (param->exclude_pi == 1)
-  # {
-  #   dydx[1] = 0.0;
-  # }
-  # else
-  # {
-  #   dydx[1] = lambda - param->alphaP.val * y[1] - param->mu.val * y[1];
-  # }
   dydx[1] <- lambda - param$AlphaP * y[1] - param$Mu * y[1]
 
   iEq <- 1
@@ -30,7 +19,6 @@ derivsFunc <- function(
   # Undiagnosed cases progressing through stages of infection
   j <- iEq + 1
   dydx[j] <- param$FInit[1] * param$AlphaP * y[1] - (param$Qoppa[1] + delta[1] + param$Mu) * y[j]
-  # i <- 2
   for (i in seq_len(param$NoStage - 1) + 1) {
     j <- iEq + i
     dydx[j] <- param$FInit[i] * param$AlphaP * y[1] + param$Qoppa[i - 1] * y[j - 1] - (param$Qoppa[i] + delta[i] + param$Mu) * y[j]

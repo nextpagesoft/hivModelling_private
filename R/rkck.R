@@ -1,9 +1,9 @@
 # Take a Cash-Karp Runge-Kutta step
 rkck <- function(
+  x,
   y,
   dydx,
   n,
-  x,
   h,
   param,
   info
@@ -53,36 +53,44 @@ rkck <- function(
   for (i in indices) {
     ytemp[i] <- y[i] + b21 * h * dydx[i]
   }
-  ak2 <- derivsFunc(x = x + a2 * h, y = ytemp, nVar = n, param, info)
+  lambda2 <- GetLambda(x + a2 * h, param, info)
+  ak2 <- derivsFunc(x = x + a2 * h, y = ytemp, lambda = lambda2, nVar = n, param, info)
 
   for (i in indices) {
     ytemp[i] <- y[i] + h * (b31 * dydx[i] + b32 * ak2[i])
   }
-  ak3 <- derivsFunc(x = x + a3 * h, y = ytemp, nVar = n, param, info)
+  lambda3 <- GetLambda(x + a3 * h, param, info)
+  ak3 <- derivsFunc(x = x + a3 * h, y = ytemp, lambda = lambda3, nVar = n, param, info)
 
   for (i in indices) {
     ytemp[i] <- y[i] + h * (b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
   }
-  ak4 <- derivsFunc(x = x + a4 * h, y = ytemp, nVar = n, param, info)
+  lambda4 <- GetLambda(x + a4 * h, param, info)
+  ak4 <- derivsFunc(x = x + a4 * h, y = ytemp, lambda = lambda4, nVar = n, param, info)
 
   for (i in indices) {
     ytemp[i] <- y[i] + h * (b51 * dydx[i] + b52 * ak2[i] + b53 * ak3[i] + b54 * ak4[i])
   }
-  ak5 <- derivsFunc(x = x + a5 * h, y = ytemp, nVar = n, param, info)
+  lambda5 <- GetLambda(x + a5 * h, param, info)
+  ak5 <- derivsFunc(x = x + a5 * h, y = ytemp, lambda = lambda5, nVar = n, param, info)
 
   for (i in indices) {
     ytemp[i] <- y[i] + h * (b61 * dydx[i] + b62 * ak2[i] + b63 * ak3[i] + b64 * ak4[i] + b65 * ak5[i])
   }
-  ak6 <- derivsFunc(x = x + a6 * h, y = ytemp, nVar = n, param, info)
+  lambda6 <- GetLambda(x + a6 * h, param, info)
+  ak6 <- derivsFunc(x = x + a6 * h, y = ytemp, lambda = lambda6, nVar = n, param, info)
 
   for (i in indices) {
     yout[i] <- y[i] + h * (c1 * dydx[i] + c3 * ak3[i] + c4 * ak4[i] + c6 * ak6[i]);
     yerr[i] <- h * (dc1 * dydx[i] + dc3 * ak3[i] + dc4 * ak4[i] + dc5 * ak5[i] + dc6 * ak6[i]);
   }
 
+  minLambda <- min(lambda2, lambda3, lambda4, lambda5, lambda6)
+
   result <- list(
     YOut = yout,
-    YErr = yerr
+    YErr = yerr,
+    MinLambda = minLambda
   )
 
   return(result)

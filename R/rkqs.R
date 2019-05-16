@@ -1,15 +1,16 @@
 # Takes one "quality-controlled" Runge-Kutta step
 rkqs <- function(
+  x,
   y,
   dydx,
   n,
-  x,
   htry,
   eps,
   yscal,
   param,
   info
 ) {
+  VERY_LRG <- 1e+10
   SAFETY <- 0.9
   PSHRNK <- -0.25
   ERRCON <- 1.89e-4
@@ -17,10 +18,14 @@ rkqs <- function(
 
   h <- htry
 
+  minLambda <- VERY_LRG
+
   while (TRUE) {
-    res <- rkck(y, dydx, n, x, h, param, info)
+    res <- rkck(x, y, dydx, n, h, param, info)
     yout <- res$YOut
     yerr <- res$YErr
+    minLambda <- min(minLambda,
+                     res$MinLambda)
 
     errMax <- max(abs(yerr / yscal), 0) / eps
 
@@ -41,7 +46,8 @@ rkqs <- function(
     X = x,
     Y = y,
     hDid = hDid,
-    hNext = hNext
+    hNext = hNext,
+    MinLambda = minLambda
   )
 
   return(result)
