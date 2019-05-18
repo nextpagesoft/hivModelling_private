@@ -20,5 +20,6 @@
 #' @import xml2
 #' @importFrom utils modifyList
 #' @importFrom stats setNames
-#'
+#' @useDynLib hivModelling, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
 NULL

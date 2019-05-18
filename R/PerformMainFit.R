@@ -4,6 +4,7 @@
 #'
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
+#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
 #'
 #' @return
 #' model data.table object
@@ -14,7 +15,7 @@
 #' }
 #'
 #' @export
-PerformMainFit <- function(context, data)
+PerformMainFit <- function(context, data, maxNoFit = 2)
 {
   # Constants ------------------------------------------------------------------
   VERY_SML <- 1e-20
@@ -162,7 +163,6 @@ PerformMainFit <- function(context, data)
   p <- rep(0, nParam)
 
   # Maximum number of iterations
-  maxNoFit <- 30
   llFinal <- rep(0, maxNoFit)
   llMin <- 1.0e+10
   iter <- 1
@@ -172,6 +172,7 @@ PerformMainFit <- function(context, data)
   iMax <- 5
   jMax <- 10
   # i <- 1
+  startTime <- Sys.time()
   for (i in seq_len(iMax)) {
     # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
     beta <- rep(i * 0.05, defNoCD4)
@@ -199,6 +200,7 @@ PerformMainFit <- function(context, data)
     }
   }
   llFinal[iter] <- llMin
+  message('Iteration ', iter, ' run time: ', format(Sys.time() - startTime))
 
   # Fill beta and thetaF with the best fitting parameters
   beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
@@ -214,12 +216,13 @@ PerformMainFit <- function(context, data)
     iter <- iter + 1
 
     message('--- Iteration ', iter)
-
+    startTime <- Sys.time()
     res <- FitAmoeba(ifit = iter, ftol = 1e-5, nParam, pParam,
                      probSurv1996,
                      param,
                      info,
                      data)
+    message('Iteration ', iter, ' run time: ', format(Sys.time() - startTime))
   }
 
   return(invisible(NULL))

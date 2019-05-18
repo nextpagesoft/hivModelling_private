@@ -4,12 +4,14 @@
 \alias{PerformMainFit}
 \title{PerformMainFit}
 \usage{
-PerformMainFit(context, data)
+PerformMainFit(context, data, maxNoFit = 2)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
 
 \item{data}{Input data as data.table. Required.}
+
+\item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
 }
 \value{
 model data.table object

@@ -30,7 +30,9 @@ odeint <- function(
   for (nstp in seq_len(MAXSTP)) {
     derivLambda <- GetLambda(time = x, param, info)
 
-    dydx <- derivsFunc(x, y, lambda = derivLambda, nVar, param, info)
+    dydx <- derivsFunc_c(x, y, lambda = derivLambda, nVar, param)
+
+    # message(identical(dydx, dydx2))
 
     yscal <- abs(y) + abs(dydx * h) + TINY
 
