@@ -5,6 +5,19 @@
 
 using namespace Rcpp;
 
+// GetBSpline_c
+double GetBSpline_c(double time, List param, List info);
+RcppExport SEXP _hivModelling_GetBSpline_c(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< List >::type info(infoSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetBSpline_c(time, param, info));
+    return rcpp_result_gen;
+END_RCPP
+}
 // GetDelta_c
 NumericVector GetDelta_c(double time, List param);
 RcppExport SEXP _hivModelling_GetDelta_c(SEXP timeSEXP, SEXP paramSEXP) {
@@ -34,6 +47,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hivModelling_GetBSpline_c", (DL_FUNC) &_hivModelling_GetBSpline_c, 3},
     {"_hivModelling_GetDelta_c", (DL_FUNC) &_hivModelling_GetDelta_c, 2},
     {"_hivModelling_derivsFunc_c", (DL_FUNC) &_hivModelling_derivsFunc_c, 5},
     {NULL, NULL, 0}

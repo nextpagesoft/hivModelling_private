@@ -8,16 +8,11 @@ GetBSpline <- function(
 
   bSpline <- matrix(0, info$ModelSplineN, info$ModelSplOrder)
 
-  # k <- 1
-  # for (i in seq_len(info$ModelSplineN)) {
-  #   if (time >= myKnots[i] && time < myKnots[i + k]) {
-  #     bSpline[i, k] <- 1
-  #   }
-  # }
   bSpline[time >= myKnots[seq_len(info$ModelSplineN)] & time < myKnots[seq_len(info$ModelSplineN) + 1], 1] <- 1
 
   for (k in seq_len(kOrder - 1) + 1) {
     for (i in seq_len(info$ModelSplineN)) {
+      # message(myKnots[i], " : ", myKnots[i + k])
       if (time >= myKnots[i] && time < myKnots[i + k]) {
         if (myKnots[i + k] != myKnots[i + 1]) {
           bSpline[i, k] <-
@@ -35,6 +30,8 @@ GetBSpline <- function(
       }
     }
   }
+
+  print(bSpline)
 
   val <- sum(param$Theta * bSpline[, kOrder])
 
