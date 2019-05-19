@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' PerformMainFit(context)
+#' PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5)
 #' }
 #'
 #' @export
