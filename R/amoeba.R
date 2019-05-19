@@ -9,6 +9,11 @@ amoeba <- function(
   data
 ) {
 
+  DisplayMessage <- function(rtol, nfunk, ytry) {
+    strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
+    message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
+  }
+
   Swap1D <- function(y, a, b) {
     s <- y[a]
     y[a] <- y[b]
@@ -118,8 +123,6 @@ amoeba <- function(
     psum <- res$Psum
     p <- res$P
 
-    message('rtol = ', rtol, ' | nfunk = ', nfunk, ' | ytry = ', ytry, ' | fac = ', -1)
-
     if (
       ytry <= y[ilo]
     ) {
@@ -134,7 +137,6 @@ amoeba <- function(
       psum <- res$Psum
       p <- res$P
 
-      message('rtol = ', rtol, ' | nfunk = ', nfunk, ' | ytry = ', ytry, ' | fac = ', 2)
     } else if (
       ytry >= y[inhi]
     ) {
@@ -149,7 +151,6 @@ amoeba <- function(
       psum <- res$Psum
       p <- res$P
 
-      message('rtol = ', rtol, ' | nfunk = ', nfunk, ' | ytry = ', ytry, ' | fac = ', 0.5)
       if (
         ytry >= ysave
       ) {
@@ -178,8 +179,15 @@ amoeba <- function(
 			# Correct the evaluation count
 		  nfunk <- nfunk - 1
 		}
-    # Go back for the test of doneness and the next iteration.
+
+    DisplayMessage(rtol, nfunk, ytry)
   }
 
-  return(p)
+  finalResults <- FitLLTotal(p, probSurv1996, param, info, data)
+
+  return(list(
+    P = p,
+    LLTotal = finalResults$LLTotal,
+    ModelResults = finalResults$ModelResults
+  ))
 }

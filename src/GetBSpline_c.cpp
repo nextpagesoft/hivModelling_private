@@ -23,28 +23,25 @@ double GetBSpline_c(
 
   for(int k = 1; k < kOrder; ++k) {
      for (int i = 0; i < modelSplineN; ++i) {
-       // Rcout << myKnots[i] << " : " << myKnots[i + k + 1] << std::endl;
        if (time >= myKnots[i] && time < myKnots[i + k + 1]) {
          if (myKnots[i + k + 1] != myKnots[i + 1]) {
-           bSpline(i, k + 1) +=
-             (myKnots[i + k + 1] - time) * bSpline(i + 1, k) /
+           bSpline(i, k) +=
+             (myKnots[i + k + 1] - time) * bSpline(i + 1, k - 1) /
                (myKnots[i + k + 1] - myKnots[i + 1]);
         }
 
         if (myKnots[i + k] != myKnots[i]) {
-          bSpline(i, k + 1) +=
-            (time - myKnots[i]) * bSpline(i, k) /
+          bSpline(i, k) +=
+            (time - myKnots[i]) * bSpline(i, k - 1) /
               (myKnots[i + k] - myKnots[i]);
         }
       }
     }
   }
 
-  Rcout << bSpline << std::endl;
-
   double val = 0;
   for(int i = 0; i < modelSplineN; ++i) {
-    val += theta[i] * bSpline(i, kOrder);
+    val += theta[i] * bSpline(i, kOrder - 1);
   }
 
   return val;
@@ -52,5 +49,5 @@ double GetBSpline_c(
 
 
 /*** R
-GetBSpline(time, param, info)
+GetBSpline_c(time, param, info)
 */

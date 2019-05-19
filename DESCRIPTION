@@ -1,8 +1,8 @@
 Package: hivModelling
 Type: Package
 Title: Evidence-Based Methods to Calculate HIV Incidence in a Given Population
-Version: 0.3.0
-Date: 2019-05-16
+Version: 0.4.0
+Date: 2019-05-19
 Authors@R: c(person("Magdalena", "Rosinska", email = "mrosinska@pzh.gov.pl", role = c("aut", "cph")), 
     person("Ard", "van Sighem", email = "a.i.vansighem@amc.uva.nl", role = c("aut")), 
     person("Nikos", "Pantazis", email = "npantaz@med.uoa.gr", role = c("aut")), 
@@ -20,9 +20,9 @@ Imports:
     data.table (>= 1.12.0),
     future (>= 1.12.0),
     xml2 (>= 1.2.0),
+    Rcpp (>= 1.0.1),
     utils (>= 3.5.0),
-    stats (>= 3.5.0),
-    Rcpp (>= 1.0.1)
+    stats (>= 3.5.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

@@ -26,7 +26,6 @@ FitLLTotal <- function(
 
   minLambda <- VERY_LRG
 
-  # i <- 10
   for (i in seq_len(info$ModelNoYears - 1)) {
     res <- odeint(ystart,
                   nVar = param$NoEq,
@@ -78,6 +77,6 @@ FitLLTotal <- function(
 
   return(list(
     LLTotal = llTotal,
-    Model = modelResults
+    ModelResults = modelResults
   ))
 }

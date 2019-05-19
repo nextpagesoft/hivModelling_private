@@ -4,7 +4,11 @@
 #'
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
-#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
+#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 2.
+#' @param ctol Minium required deviance in consecutive lambda estimations.
+#'   Optional. Default = 1e-6.
+#' @param ftol Minium required deviance in amoeba calculations. Optional.
+#'   Default = 1e-5.
 #'
 #' @return
 #' model data.table object
@@ -15,8 +19,13 @@
 #' }
 #'
 #' @export
-PerformMainFit <- function(context, data, maxNoFit = 2)
-{
+PerformMainFit <- function(
+  context,
+  data,
+  maxNoFit = 2,
+  ctol = 1e-6,
+  ftol = 1e-5
+) {
   # Constants ------------------------------------------------------------------
   VERY_SML <- 1e-20
 
@@ -163,7 +172,7 @@ PerformMainFit <- function(context, data, maxNoFit = 2)
   p <- rep(0, nParam)
 
   # Maximum number of iterations
-  llFinal <- rep(0, maxNoFit)
+  allResults <- list()
   llMin <- 1.0e+10
   iter <- 1
 
@@ -173,6 +182,7 @@ PerformMainFit <- function(context, data, maxNoFit = 2)
   jMax <- 10
   # i <- 1
   startTime <- Sys.time()
+  message('--- Iteration ', iter, ': Scale')
   for (i in seq_len(iMax)) {
     # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
     beta <- rep(i * 0.05, defNoCD4)
@@ -196,34 +206,39 @@ PerformMainFit <- function(context, data, maxNoFit = 2)
       if (ll < llMin) {
         llMin <- ll
         pParam <- p
+        allResults[[iter]] <- list(
+          P = p,
+          LLTotal = res$LLTotal,
+          ModelResults = res$ModelResults
+        )
       }
     }
   }
-  llFinal[iter] <- llMin
-  message('Iteration ', iter, ' run time: ', format(Sys.time() - startTime))
+  message('  Run time: ', format(Sys.time() - startTime))
 
   # Fill beta and thetaF with the best fitting parameters
   beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
   thetaF <- pParam[param$NoDelta + seq_len(param$NoTheta)]
 
   # Stop fitting when the change in deviance is smaller than ctol.
-  ctol <- 1e-6
   llOld <- 0
   while (
-    abs(llFinal[iter] - llOld) > ctol &&
+    abs(allResults[[iter]]$LLTotal - llOld) > ctol &&
     iter < maxNoFit
   ) {
     iter <- iter + 1
 
-    message('--- Iteration ', iter)
+    message('--- Iteration ', iter, ': Amoeba')
     startTime <- Sys.time()
-    res <- FitAmoeba(ifit = iter, ftol = 1e-5, nParam, pParam,
+    res <- FitAmoeba(ifit = iter, ftol = ftol, nParam, pParam,
                      probSurv1996,
                      param,
                      info,
                      data)
-    message('Iteration ', iter, ' run time: ', format(Sys.time() - startTime))
+
+    allResults[[iter]] <- res
+    message('  Run time: ', format(Sys.time() - startTime))
   }
 
-  return(invisible(NULL))
+  return(invisible(allResults))
 }

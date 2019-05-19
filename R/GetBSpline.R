@@ -12,7 +12,6 @@ GetBSpline <- function(
 
   for (k in seq_len(kOrder - 1) + 1) {
     for (i in seq_len(info$ModelSplineN)) {
-      # message(myKnots[i], " : ", myKnots[i + k])
       if (time >= myKnots[i] && time < myKnots[i + k]) {
         if (myKnots[i + k] != myKnots[i + 1]) {
           bSpline[i, k] <-
@@ -30,8 +29,6 @@ GetBSpline <- function(
       }
     }
   }
-
-  print(bSpline)
 
   val <- sum(param$Theta * bSpline[, kOrder])
 

@@ -17,7 +17,6 @@ FitAmoeba <- function(
                     byrow = TRUE)
   amoebaY <- rep(0, nParam + 1)
 
-  # i <- 1
   for (i in seq_len(nParam + 1)) {
     if (i > 1) {
       amoebaP[i, i - 1] <- amoebaP[i, i - 1] + pFit[i - 1] * 2
@@ -33,8 +32,6 @@ FitAmoeba <- function(
     amoebaY[i] <- res$LLTotal
   }
 
-  pParam <- amoebaP[1, ]
-
   res <- amoeba(p = amoebaP,
                 y = amoebaY,
                 ndim = nParam,
@@ -45,5 +42,4 @@ FitAmoeba <- function(
                 data)
 
   return(res)
-
 }

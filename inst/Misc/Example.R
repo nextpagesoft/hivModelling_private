@@ -94,4 +94,12 @@ context <- GetRunContext(
 
 data <- ReadInputData(context)
 
-model <- PerformMainFit(context, data)
+results <- PerformMainFit(context, data, maxNoFit = 2)
+
+length(results)
+results[[1]]$LLTotal
+results[[1]]$P
+results[[1]]$ModelResults
+results[[2]]$LLTotal
+results[[2]]$P
+results[[2]]$ModelResults
