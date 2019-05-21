@@ -15,8 +15,8 @@ Hash: b1642cf2ee0ab1d1b152ffacdb4401f7
 
 Package: digest
 Source: CRAN
-Version: 0.6.18
-Hash: 65f62365ec69ddd17230d2ffe891a6ab
+Version: 0.6.19
+Hash: 99a5cdd9144b03b7a2ddbbef862fb07f
 
 Package: future
 Source: CRAN
