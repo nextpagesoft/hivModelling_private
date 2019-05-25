@@ -4,24 +4,26 @@
 \alias{PerformMainFit}
 \title{PerformMainFit}
 \usage{
-PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-06,
-  ftol = 1e-05)
+PerformMainFit(context, data, maxNoFit = 30, ctol = 1e-06,
+  ftol = 1e-05, ...)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
 
 \item{data}{Input data as data.table. Required.}
 
-\item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 2.}
+\item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
 
 \item{ctol}{Minium required deviance in consecutive lambda estimations.
 Optional. Default = 1e-6.}
 
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
+
+\item{...}{Additional arguments passed to amoeba function. Optional.}
 }
 \value{
-model data.table object
+List of amoeba results
 }
 \description{
 Description
