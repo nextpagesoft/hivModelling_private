@@ -186,7 +186,8 @@ amoeba <- function(
   finalResults <- FitLLTotal(p, probSurv1996, param, info, data)
 
   return(list(
-    P = p,
+    P = p[1,],
+    AmoebaP = p,
     LLTotal = finalResults$LLTotal,
     ModelResults = finalResults$ModelResults
   ))

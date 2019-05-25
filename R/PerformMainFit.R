@@ -236,7 +236,10 @@ PerformMainFit <- function(
                      info,
                      data)
 
+    pParam <- res$P
+
     allResults[[iter]] <- res
+
     message('  Run time: ', format(Sys.time() - startTime))
   }
 
