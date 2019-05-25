@@ -6,13 +6,19 @@ amoeba <- function(
   probSurv1996,
   param,
   info,
-  data
+  data,
+  verbose = FALSE
 ) {
 
-  DisplayMessage <- function(rtol, nfunk, ytry) {
-    strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
-    message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
+  if (verbose) {
+    DisplayMessage <- function(rtol, nfunk, ytry) {
+      strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
+      message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
+    }
+  } else {
+    DisplayMessage <- function(...) NULL
   }
+
 
   Swap1D <- function(y, a, b) {
     s <- y[a]
@@ -183,11 +189,11 @@ amoeba <- function(
     DisplayMessage(rtol, nfunk, ytry)
   }
 
-  finalResults <- FitLLTotal(p, probSurv1996, param, info, data)
+  pParam <- p[1, ]
+  finalResults <- FitLLTotal(pParam, probSurv1996, param, info, data)
 
   return(list(
-    P = p[1,],
-    AmoebaP = p,
+    P = pParam,
     LLTotal = finalResults$LLTotal,
     ModelResults = finalResults$ModelResults
   ))

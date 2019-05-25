@@ -4,14 +4,15 @@
 #'
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
-#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 2.
+#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
+#' @param ... Additional arguments passed to amoeba function. Optional.
 #'
 #' @return
-#' model data.table object
+#' List of amoeba results
 #'
 #' @examples
 #' \dontrun{
@@ -22,9 +23,10 @@
 PerformMainFit <- function(
   context,
   data,
-  maxNoFit = 2,
+  maxNoFit = 30,
   ctol = 1e-6,
-  ftol = 1e-5
+  ftol = 1e-5,
+  ...
 ) {
   # Constants ------------------------------------------------------------------
   VERY_SML <- 1e-20
@@ -234,14 +236,14 @@ PerformMainFit <- function(
                      probSurv1996,
                      param,
                      info,
-                     data)
+                     data,
+                     ...)
+    message('  Run time: ', format(Sys.time() - startTime))
 
     pParam <- res$P
-
     allResults[[iter]] <- res
-
-    message('  Run time: ', format(Sys.time() - startTime))
+    llOld <- allResults[[iter - 1]]$LLTotal
   }
 
-  return(invisible(allResults))
+  return(allResults)
 }

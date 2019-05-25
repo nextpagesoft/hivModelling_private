@@ -94,7 +94,7 @@ context <- GetRunContext(
 
 data <- ReadInputData(context)
 
-results <- PerformMainFit(context, data, maxNoFit = 10)
+results <- PerformMainFit(context, data)
 
 length(results)
 results[[1]]$LLTotal

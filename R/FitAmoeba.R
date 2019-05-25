@@ -6,7 +6,8 @@ FitAmoeba <- function(
   probSurv1996,
   param,
   info,
-  data
+  data,
+  ...
 ) {
   pFit <- c(rep(0.1, param$NoDelta),
             rep(200, param$NoTheta))
@@ -39,7 +40,8 @@ FitAmoeba <- function(
                 probSurv1996,
                 param,
                 info,
-                data)
+                data,
+                ...)
 
   return(res)
 }
