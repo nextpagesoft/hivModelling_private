@@ -11,9 +11,6 @@ NumericVector derivsFunc_c(
     int nVar,
     List param
 ) {
-  // Get handle to R function 'GetDelta_c'
-  // Function getDelta("GetDelta_c");
-
   NumericVector dydx(nVar);
   NumericVector delta = GetDelta_c(x, param);
   NumericVector qoppa = param["Qoppa"];
@@ -80,7 +77,6 @@ NumericVector derivsFunc_c(
 
   return dydx;
 }
-
 
 /*** R
 # derivsFunc_c(x, y, lambda, nVar, param)

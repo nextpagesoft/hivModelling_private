@@ -9,6 +9,14 @@ odeint <- function(
   param,
   info
 ) {
+  if (info$SplineType == 1) {
+    stop('GetLambda for info$SplineType == 1 to be implemented')
+  } else if (info$SplineType == 2) {
+    GetLambda <- GetBSpline_c
+  } else if (info$SplineType == 3) {
+    stop('GetLambda for info$SplineType == 3 to be implemented')
+  }
+
   VERY_LRG <- 1e+10
   nBad <- 0
   nOk <- 0
@@ -40,7 +48,8 @@ odeint <- function(
       h <- x2 - x
     }
 
-    res <- rkqs(x, y, dydx, n = nVar, htry = h, eps, yscal, param, info)
+    res <- rkqs(x, y, dydx, n = nVar, htry = h, eps, yscal, param, info,
+                GetLambda)
     x <- res$X
     y <- res$Y
     rkqsLambda <- res$MinLambda
@@ -63,5 +72,11 @@ odeint <- function(
     h <- res$hNext
   }
 
-  return(list(YStart = ystart, X = x, NGood = nOk, NBad = nBad, MinLambda = minLambda))
+  return(list(
+    YStart = ystart,
+    X = x,
+    NGood = nOk,
+    NBad = nBad,
+    MinLambda = minLambda
+  ))
 }

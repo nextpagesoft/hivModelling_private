@@ -1,12 +1,19 @@
 #include <Rcpp.h>
+
 using namespace Rcpp;
 
 // [[Rcpp::export]]
 double GetBSpline_c(
-    double time,
-    List param,
-    List info
+  double time,
+  List param,
+  List info
 ) {
+  int tmpMinYear = info["TmpMinYear"];
+  int tmpMaxYear = info["TmpMaxYear"];
+  if (time <= tmpMinYear || time > tmpMaxYear + 1e-7) {
+    return 0;
+  }
+
   int kOrder = info["ModelSplOrder"];
   int modelSplineN = info["ModelSplineN"];
   int modelSplOrder = info["ModelSplOrder"];
@@ -15,13 +22,13 @@ double GetBSpline_c(
 
   NumericMatrix bSpline(modelSplineN, modelSplOrder);
 
-  for(int i = 0; i < modelSplineN; ++i) {
+  for (int i = 0; i < modelSplineN; ++i) {
     if (time >= myKnots[i] && time < myKnots[i + 1]) {
       bSpline(i, 0) = 1.0;
     }
   }
 
-  for(int k = 1; k < kOrder; ++k) {
+  for (int k = 1; k < kOrder; ++k) {
      for (int i = 0; i < modelSplineN; ++i) {
        if (time >= myKnots[i] && time < myKnots[i + k + 1]) {
          if (myKnots[i + k + 1] != myKnots[i + 1]) {
@@ -40,13 +47,12 @@ double GetBSpline_c(
   }
 
   double val = 0;
-  for(int i = 0; i < modelSplineN; ++i) {
+  for (int i = 0; i < modelSplineN; ++i) {
     val += theta[i] * bSpline(i, kOrder - 1);
   }
 
   return val;
 }
-
 
 /*** R
 GetBSpline_c(time, param, info)

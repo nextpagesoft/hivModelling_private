@@ -185,6 +185,7 @@ PerformMainFit <- function(
   # i <- 1
   startTime <- Sys.time()
   message('--- Iteration ', iter, ': Scale')
+  # i <- 1
   for (i in seq_len(iMax)) {
     # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
     beta <- rep(i * 0.05, defNoCD4)
