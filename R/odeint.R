@@ -40,8 +40,6 @@ odeint <- function(
 
     dydx <- derivsFunc_c(x, y, lambda = derivLambda, nVar, param)
 
-    # message(identical(dydx, dydx2))
-
     yscal <- abs(y) + abs(dydx * h) + TINY
 
     if ((x + h - x2) * (x + h - x1) > 0.0) {

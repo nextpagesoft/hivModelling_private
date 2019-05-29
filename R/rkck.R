@@ -69,42 +69,28 @@ rkck <- function(
   # dc6 <- c6 - 0.25
   dc6 <- 0.0391022
 
-  indices <- seq_len(n)
-
-  for (i in indices) {
-    ytemp[i] <- y[i] + b21 * h * dydx[i]
-  }
+  ytemp <- y + b21 * h * dydx
   lambda2 <- GetLambda(x + a2 * h, param, info)
   ak2 <- derivsFunc_c(x = x + a2 * h, y = ytemp, lambda = lambda2, nVar = n, param)
 
-  for (i in indices) {
-    ytemp[i] <- y[i] + h * (b31 * dydx[i] + b32 * ak2[i])
-  }
+  ytemp <- y + h * (b31 * dydx + b32 * ak2)
   lambda3 <- GetLambda(x + a3 * h, param, info)
   ak3 <- derivsFunc_c(x = x + a3 * h, y = ytemp, lambda = lambda3, nVar = n, param)
 
-  for (i in indices) {
-    ytemp[i] <- y[i] + h * (b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
-  }
+  ytemp <- y + h * (b41 * dydx + b42 * ak2 + b43 * ak3)
   lambda4 <- GetLambda(x + a4 * h, param, info)
   ak4 <- derivsFunc_c(x = x + a4 * h, y = ytemp, lambda = lambda4, nVar = n, param)
 
-  for (i in indices) {
-    ytemp[i] <- y[i] + h * (b51 * dydx[i] + b52 * ak2[i] + b53 * ak3[i] + b54 * ak4[i])
-  }
+  ytemp <- y + h * (b51 * dydx + b52 * ak2 + b53 * ak3 + b54 * ak4)
   lambda5 <- GetLambda(x + a5 * h, param, info)
   ak5 <- derivsFunc_c(x = x + a5 * h, y = ytemp, lambda = lambda5, nVar = n, param)
 
-  for (i in indices) {
-    ytemp[i] <- y[i] + h * (b61 * dydx[i] + b62 * ak2[i] + b63 * ak3[i] + b64 * ak4[i] + b65 * ak5[i])
-  }
+  ytemp <- y + h * (b61 * dydx + b62 * ak2 + b63 * ak3 + b64 * ak4 + b65 * ak5)
   lambda6 <- GetLambda(x + a6 * h, param, info)
   ak6 <- derivsFunc_c(x = x + a6 * h, y = ytemp, lambda = lambda6, nVar = n, param)
 
-  for (i in indices) {
-    yout[i] <- y[i] + h * (c1 * dydx[i] + c3 * ak3[i] + c4 * ak4[i] + c6 * ak6[i]);
-    yerr[i] <- h * (dc1 * dydx[i] + dc3 * ak3[i] + dc4 * ak4[i] + dc5 * ak5[i] + dc6 * ak6[i]);
-  }
+  yout <- y + h * (c1 * dydx + c3 * ak3 + c4 * ak4 + c6 * ak6)
+  yerr <- h * (dc1 * dydx + dc3 * ak3 + dc4 * ak4 + dc5 * ak5 + dc6 * ak6)
 
   minLambda <- min(lambda2, lambda3, lambda4, lambda5, lambda6)
 
