@@ -16,7 +16,7 @@ amoeba <- function(
       message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
     }
   } else {
-    DisplayMessage <- function(...) NULL
+    DisplayMessage <- function(rtol, nfunk, ytry) NULL
   }
 
 

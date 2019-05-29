@@ -94,6 +94,7 @@ context <- GetRunContext(
 
 data <- ReadInputData(context)
 
+results <- PerformMainFit(context, data)
 results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
 length(results)
