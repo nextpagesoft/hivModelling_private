@@ -23,13 +23,13 @@ FitLLPosCD4 <- function(
       modelResults$Year[year] >= info$FitPosCD4MinYear &&
       modelResults$Year[year] <= info$FitPosCD4MaxYear
     ) {
-      if (info$ModelFitDist == 1) {
+      if (info$ModelFitDist == 'POISSON') {
         set(x = modelResults,
             i = year,
             j = LL_PosCD4_Year,
             value = FitLLPoisson(totModels[year], totDatas[year]))
       } else {
-        stop('info$ModelFitDist != 1 not supported')
+        stop('info$ModelFitDist different than "POISSON" is not yet supported')
       }
     }
 

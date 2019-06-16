@@ -18,13 +18,13 @@ FitLLAIDSPos <- function(
         modelResults$Year[year] >= info$FitAIDSPosMinYear &&
         modelResults$Year[year] <= info$FitAIDSPosMaxYear)
     {
-      if (info$ModelFitDist == 1) {
+      if (info$ModelFitDist == 'POISSON') {
         set(x = modelResults,
             i = year,
             j = 'LL_AIDSPos_Year',
             value = FitLLPoisson(totModels[year], totDatas[year]))
       } else {
-        stop('info$ModelFitDist != 1 not supported')
+        stop('info$ModelFitDist different then "POISSON" is not yet supported')
       }
 
       L_AIDSPos <- L_AIDSPos + modelResults[['LL_AIDSPos_Year']][year]

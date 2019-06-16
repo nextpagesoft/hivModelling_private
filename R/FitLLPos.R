@@ -17,11 +17,11 @@ FitLLPos <- function(
         modelResults$Year[year] <= info$FitPosMaxYear &&
         (modelResults$Year[year] < info$FitPosCD4MinYear || modelResults$Year[year] > info$FitPosCD4MaxYear)
     ) {
-      if (info$ModelFitDist == 1) {
+      if (info$ModelFitDist == 'POISSON') {
         llPosYear <- FitLLPoisson(totModel, totData)
       } else {
         # llPosYear <- FitLLBinomial(totModel, totData)
-        stop('info$ModelFitDist != 1 not supported')
+        stop('info$ModelFitDist different than "POISSON" is not yet supported')
       }
 
       lPos <- lPos + llPosYear

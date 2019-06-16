@@ -17,6 +17,8 @@ FitLLTotal <- function(
   smooth1 <- 0
   smooth2 <- 0
 
+  modelYears <- info$ModelMinYear:info$ModelMaxYear
+
   param$DeltaM <- GetParamDeltaM(p, param)
   param$Theta <- GetParamTheta(p, param, info)
 
@@ -30,8 +32,8 @@ FitLLTotal <- function(
   for (i in seq_len(info$ModelNoYears - 1)) {
     res <- odeint(ystart,
                   nVar = param$NoEq,
-                  x1 = info$ModelYears[i] + bitSml,
-                  x2 = info$ModelYears[i + 1] - bitSml,
+                  x1 = modelYears[i] + bitSml,
+                  x2 = modelYears[i + 1] - bitSml,
                   eps,
                   h1,
                   hMin,
@@ -44,7 +46,7 @@ FitLLTotal <- function(
   }
 
   modelResults <- as.data.table(modelResults)
-  modelResults[, Year := info$ModelYears[-length(info$ModelYears)]]
+  modelResults[, Year := modelYears[-length(modelYears)]]
   setnames(modelResults,
            c('PrimInf',
              paste0('Undiagnosed_', seq_len(param$NoStage)),

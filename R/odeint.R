@@ -9,12 +9,12 @@ odeint <- function(
   param,
   info
 ) {
-  if (info$SplineType == 1) {
-    stop('GetLambda for info$SplineType == 1 to be implemented')
-  } else if (info$SplineType == 2) {
+  if (info$SplineType == 'B-SPLINE') {
     GetLambda <- GetBSpline_c
-  } else if (info$SplineType == 3) {
-    stop('GetLambda for info$SplineType == 3 to be implemented')
+  } else if (info$SplineType == 'M-SPLINE') {
+    stop('GetLambda for info$SplineType == "M-SPLINE" is not yet implemented')
+  } else {
+    stop('GetLambda for info$SplineType different than "B-SPLINE" or "M-SPLINE" is not supported')
   }
 
   VERY_LRG <- 1e+10

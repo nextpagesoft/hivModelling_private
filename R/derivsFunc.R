@@ -27,7 +27,6 @@ derivsFunc <- function(
   for (i in seq_len(noStage - 1) + 1) {
     j <- iEq + i
     dydx[j] <- fInit[i] * alphaP * y[1] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j]
-    # message(i, j)
   }
 
   iEq <- iEq + noStage

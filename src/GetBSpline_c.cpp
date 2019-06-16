@@ -8,19 +8,18 @@ double GetBSpline_c(
   List param,
   List info
 ) {
-  int tmpMinYear = info["TmpMinYear"];
-  int tmpMaxYear = info["TmpMaxYear"];
+  int tmpMinYear = info["ModelMinYear"];
+  int tmpMaxYear = info["ModelMaxYear"];
   if (time <= tmpMinYear || time > tmpMaxYear + 1e-7) {
     return 0;
   }
 
-  int kOrder = info["ModelSplOrder"];
+  int kOrder = info["SplineOrder"];
   int modelSplineN = info["ModelSplineN"];
-  int modelSplOrder = info["ModelSplOrder"];
   NumericVector myKnots = info["MyKnots"];
   NumericVector theta = param["Theta"];
 
-  NumericMatrix bSpline(modelSplineN, modelSplOrder);
+  NumericMatrix bSpline(modelSplineN, kOrder);
 
   for (int i = 0; i < modelSplineN; ++i) {
     if (time >= myKnots[i] && time < myKnots[i + 1]) {

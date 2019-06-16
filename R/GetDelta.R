@@ -18,10 +18,6 @@ GetDelta <- function(
   }
   iTime <- iTime - 1
 
-  print(iTime)
-
-  # Position2 <- function() Position(function(x) x > time, param$Tc) - 1
-
   # i <- 2
   for (i in seq_len(noStage - 1)) {
     delta[i] <- 0

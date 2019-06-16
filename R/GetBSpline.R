@@ -3,10 +3,10 @@ GetBSpline <- function(
   param,
   info
 ) {
-  kOrder <- info$ModelSplOrder
+  kOrder <- info$SplineOrder
   myKnots <- info$MyKnots
 
-  bSpline <- matrix(0, info$ModelSplineN, info$ModelSplOrder)
+  bSpline <- matrix(0, info$ModelSplineN, kOrder)
 
   bSpline[time >= myKnots[seq_len(info$ModelSplineN)] & time < myKnots[seq_len(info$ModelSplineN) + 1], 1] <- 1
 
