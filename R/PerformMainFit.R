@@ -46,12 +46,12 @@ PerformMainFit <- function(
   p <- rep(0, nParam)
 
   # Maximum number of iterations
-  allResults <- list()
+  iterResults <- list()
   llMin <- 1.0e+10
   iter <- 1
 
   # Step 1 : determine the scale of the parameters
-  defNoCD4 <- 4
+  defNoCD4 <- param$NoStage - 1
   iMax <- 5
   jMax <- 10
   startTime <- Sys.time()
@@ -78,7 +78,7 @@ PerformMainFit <- function(
       if (ll < llMin) {
         llMin <- ll
         pParam <- p
-        allResults[[iter]] <- list(
+        iterResults[[iter]] <- list(
           P = p,
           LLTotal = res$LLTotal,
           ModelResults = res$ModelResults
@@ -88,14 +88,10 @@ PerformMainFit <- function(
   }
   message('  Run time: ', format(Sys.time() - startTime))
 
-  # Fill beta and thetaF with the best fitting parameters
-  beta[seq_len(param$NoDelta)] <- pParam[seq_len(param$NoDelta)]
-  thetaF <- pParam[param$NoDelta + seq_len(param$NoTheta)]
-
   # Stop fitting when the change in deviance is smaller than ctol.
   llOld <- 0
   while (
-    abs(allResults[[iter]]$LLTotal - llOld) > ctol &&
+    abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&
     iter < maxNoFit
   ) {
     iter <- iter + 1
@@ -111,9 +107,31 @@ PerformMainFit <- function(
     message('  Run time: ', format(Sys.time() - startTime))
 
     pParam <- res$P
-    allResults[[iter]] <- res
-    llOld <- allResults[[iter - 1]]$LLTotal
+    iterResults[[iter]] <- res
+    llOld <- iterResults[[iter - 1]]$LLTotal
   }
 
-  return(allResults)
+  lastResults <- iterResults[[iter]]
+
+  # Fill beta and thetaF with the best fitting parameters
+  beta[seq_len(param$NoDelta)] <- lastResults$P[seq_len(param$NoDelta)]
+  thetaF <- lastResults$P[param$NoDelta + seq_len(param$NoTheta)]
+  converged <- abs(lastResults$LLTotal - llOld) <= ctol
+  statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
+  theta <- GetParamTheta(lastResults$P, param, info)
+  deltaM <- GetParamDeltaM(lastResults$P, param)
+
+  # ------------------------------------------------------------------------------------------------
+  # Implement FitCheckTheta here...
+  # ------------------------------------------------------------------------------------------------
+
+  return(list(
+    Converged = converged,
+    Beta = beta,
+    Theta = theta,
+    ThetaF = thetaF,
+    DeltaM = deltaM,
+    Statistics = statRes,
+    IterResults = iterResults
+  ))
 }

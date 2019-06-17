@@ -7,7 +7,7 @@ GetParamTheta <- function(
 
   theta <- param$Theta
 
-  for (i in seq(info$ModelSplineN)) {
+  for (i in seq_len(info$ModelSplineN)) {
     if (param$ThetaP[i] != 0) {
       k <- k + 1
       theta[i] <- p[k]

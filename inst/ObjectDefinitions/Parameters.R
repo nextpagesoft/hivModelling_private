@@ -33,8 +33,11 @@ list(
 
       Tc = c(1980, 1984, 1984, 1996, 2000, 2005, 2010, 2017),
 
-      # 'POISSON' or 'NEGATIVE BINOMIAL'
-      FitDistribution = 'POISSON',
+      # 'POISSON' or 'NEGATIVE_BINOMIAL'
+      FitDistribution = 'NEGATIVE_BINOMIAL',
+
+      # Overdispersion
+      RDisp = 50,
 
       # Incidence curve --------------------------------------------------------
 
