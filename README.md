@@ -1,3 +1,7 @@
+# Status
+
+[![Travis-CI Build Status](https://travis-ci.org/nextpagesoft/hivModelling.svg?branch=master)](https://travis-ci.org/nextpagesoft/hivModelling.svg?branch=master)
+
 # License
 
 See the [LICENSE](https://github.com/nextpagesoft/hivModelling/blob/master/LICENSE) file for
