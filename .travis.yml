@@ -1,0 +1,25 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: false
+cache: packages
+# r_build_args: "--no-build-vignettes"
+# r_check_args: "--as-cran --no-vignettes"
+
+env:
+  - _R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE _R_CHECK_LICENSE_=FALSE _R_CHECK_CODETOOLS_PROFILE_="suppressUndefined=TRUE" NOT_CRAN=TRUE
+
+# env:
+#  matrix:
+#  - r: release
+#    not_cran: true
+#    r_check_args: "--no-manual"
+#  - r: release
+#    not_cran: false
+#    r_check_args: "--no-manual --as--cran"
+#  - r: devel
+#    not_cran: true
+#    r_check_args: "--no-manual"
+#  - r: devel
+#    not_cran: false
+#    r_check_args: "--no-manual --as--cran"
