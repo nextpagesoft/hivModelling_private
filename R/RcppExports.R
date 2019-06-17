@@ -12,3 +12,4 @@ GetDelta_c <- function(time, param) {
 derivsFunc_c <- function(x, y, lambda, nVar, param) {
     .Call(`_hivModelling_derivsFunc_c`, x, y, lambda, nVar, param)
 }
+
