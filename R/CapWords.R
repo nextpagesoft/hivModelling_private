@@ -23,7 +23,8 @@ CapWords <- function(s, strict = FALSE)
           {s <- substring(s, 2); if (strict) tolower(s) else s},
           sep = '', collapse = ' ')
   }
-  result <- sapply(strsplit(s, split = ' '), cap, USE.NAMES = !is.null(names(s)))
+  result <- sapply(strsplit(s, split = ' '), cap,
+                   USE.NAMES = !is.null(names(s)))
 
   return(result)
 }

@@ -12,8 +12,10 @@ amoeba <- function(
 
   if (verbose) {
     DisplayMessage <- function(rtol, nfunk, ytry) {
-      strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
-      message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
+      strs <- formatC(c(rtol, nfunk, ytry), width = 10,
+                      preserve.width = 'common')
+      message(sprintf('rtol = %s | nfunk = %s | ytry = %s',
+                      strs[1], strs[2], strs[3]))
     }
   } else {
     DisplayMessage <- function(rtol, nfunk, ytry) NULL
@@ -86,7 +88,6 @@ amoeba <- function(
       ihi <- 2
     }
 
-    # i <- 1
     for (i in seq_len(mpts)) {
       if (y[i] <= y[ilo]) {
         ilo <- i
@@ -117,8 +118,9 @@ amoeba <- function(
 
     nfunk <- nfunk + 2
 
-    # Begin a new iteration. First extrapolate by a factor -1 through the face of the
-    # simplex across from the high points, i.e., reflect the simplex from the high point.
+    # Begin a new iteration. First extrapolate by a factor -1 through the face
+    # of the simplex across from the high points, i.e., reflect the simplex from
+    # the high point.
     res <- AmoebaTry(p, y, psum, ndim, ihi, fac = -1,
                      probSurv1996,
                      param,
@@ -132,7 +134,8 @@ amoeba <- function(
     if (
       ytry <= y[ilo]
     ) {
-      # Gives a result better than the best point, so try an additional extrapolation by a factor 2.
+      # Gives a result better than the best point, so try an additional
+      # extrapolation by a factor 2.
       res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 2.0,
                        probSurv1996,
                        param,
@@ -160,31 +163,31 @@ amoeba <- function(
       if (
         ytry >= ysave
       ) {
-        # Can't seem to get rid of that high point. Better contract around the lowest (best) point.
-        # i <- 1
-				for (i in seq_len(mpts)) {
-					if (i != ilo) {
-					  psum <- 0.5 * (p[i, ] + p[ilo, ])
-					  p[i, ] <- psum
+        # Can't seem to get rid of that high point. Better contract around the
+        # lowest (best) point.
+        for (i in seq_len(mpts)) {
+          if (i != ilo) {
+            psum <- 0.5 * (p[i, ] + p[ilo, ])
+            p[i, ] <- psum
 
-						res <- FitLLTotal(psum,
-						                  probSurv1996,
-						                  param,
-						                  info,
-						                  data)
-						y[i] <- res$LLTotal
-					}
-				}
-				# Keep track of function evaluations
-				nfunk <- nfunk + ndim
+            res <- FitLLTotal(psum,
+                              probSurv1996,
+                              param,
+                              info,
+                              data)
+            y[i] <- res$LLTotal
+          }
+        }
+        # Keep track of function evaluations
+        nfunk <- nfunk + ndim
 
-				# Recompute psum
-				psum <- colSums(p)
-			}
-		} else {
-			# Correct the evaluation count
-		  nfunk <- nfunk - 1
-		}
+        # Recompute psum
+        psum <- colSums(p)
+      }
+    } else {
+      # Correct the evaluation count
+      nfunk <- nfunk - 1
+    }
 
     DisplayMessage(rtol, nfunk, ytry)
   }

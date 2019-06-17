@@ -57,12 +57,12 @@ list(
       # Rates of progression to AIDS through stages of CD4
       FInit = c(0.58, 0.23, 0.16, 0.03, 0),
 
-      Qoppa = c(1/6.37, 1/2.86, 1/3.54, 1/2.3, 0.529101),
+      Qoppa = c(1 / 6.37, 1 / 2.86, 1 / 3.54, 1 / 2.3, 0.529101),
 
       # Background mortality
       Mu = 0,
 
-      AlphaP = 1.0/(2.90/12),
+      AlphaP = 1.0 / (2.90 / 12),
 
       Delta4Fac = 0,
 

@@ -25,7 +25,7 @@ GetProvSurv96 <- function(country, noStage, qoppa, modelMinYear, modelNoYears)
     qbar <- matrix(0, noStage, noStage)
     for (i in seq(noStage)) {
       for (j in seq(noStage)) {
-        qbar[i, j] <- -qoppa[i]/(qoppa[j] - qoppa[i])
+        qbar[i, j] <- -qoppa[i] / (qoppa[j] - qoppa[i])
       }
     }
     qbar[is.infinite(qbar)] <- 1

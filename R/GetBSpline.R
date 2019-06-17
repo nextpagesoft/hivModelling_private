@@ -8,7 +8,8 @@ GetBSpline <- function(
 
   bSpline <- matrix(0, info$ModelSplineN, kOrder)
 
-  bSpline[time >= myKnots[seq_len(info$ModelSplineN)] & time < myKnots[seq_len(info$ModelSplineN) + 1], 1] <- 1
+  bSpline[time >= myKnots[seq_len(info$ModelSplineN)] &
+            time < myKnots[seq_len(info$ModelSplineN) + 1], 1] <- 1
 
   for (k in seq_len(kOrder - 1) + 1) {
     for (i in seq_len(info$ModelSplineN)) {

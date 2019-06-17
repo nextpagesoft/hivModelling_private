@@ -31,11 +31,11 @@ rkqs <- function(
     errMax <- max(abs(yerr / yscal), 0) / eps
 
     if (errMax > 1) {
-      hTemp <- SAFETY * h * errMax^PSHRNK
+      hTemp <- SAFETY * h * errMax ^ PSHRNK
       h <- ifelse(h >= 0, max(hTemp, 0.1 * h), min(hTemp, 0.1 * h))
       next
     } else {
-      hNext <- ifelse(errMax > ERRCON, SAFETY * h * errMax^PGROW, 5 * h)
+      hNext <- ifelse(errMax > ERRCON, SAFETY * h * errMax ^ PGROW, 5 * h)
       hDid <- h
       x <- x + hDid
       y <- yout

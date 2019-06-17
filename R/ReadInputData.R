@@ -29,11 +29,12 @@ ReadInputData <- function(context)
   N_Inf <- NULL
   N_Emig <- NULL
   N_Dead_U <- NULL
-  . <- NULL
+  `.` <- NULL
 
   inputDataPath <- context$Settings$InputDataPath
   if (!is.null(inputDataPath) && dir.exists(inputDataPath)) {
-    fileNames <- list.files(inputDataPath, pattern = '.csv', full.names = TRUE, ignore.case = FALSE)
+    fileNames <- list.files(inputDataPath, pattern = '.csv', full.names = TRUE,
+                            ignore.case = FALSE)
     inputData <- setNames(
       lapply(fileNames, fread),
       tools::file_path_sans_ext(basename(fileNames))

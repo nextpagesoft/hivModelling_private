@@ -26,7 +26,9 @@ derivsFunc <- function(
   dydx[j] <- fInit[1] * alphaP * y[1] - (qoppa[1] + delta[1] + mu) * y[j]
   for (i in seq_len(noStage - 1) + 1) {
     j <- iEq + i
-    dydx[j] <- fInit[i] * alphaP * y[1] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j]
+    dydx[j] <-
+      fInit[i] * alphaP * y[1] + qoppa[i - 1] * y[j - 1] -
+      (qoppa[i] + delta[i] + mu) * y[j]
   }
 
   iEq <- iEq + noStage
@@ -34,17 +36,19 @@ derivsFunc <- function(
   # Diagnosed cases progressing through stages of infection i
   j <- iEq + 1
   dydx[j] <- delta[1] * y[1 + 1] - qoppa[1] * y[j] - mu * y[j]
-  # i <- 3
   for (i in seq_len(noStage - 1) + 1) {
     j <- iEq + i
-    dydx[j] <- delta[i] * y[1 + i] + qoppa[i - 1] * y[j - 1] - qoppa[i] * y[j] - mu * y[j]
+    dydx[j] <-
+      delta[i] * y[1 + i] +
+      qoppa[i - 1] * y[j - 1] -
+      qoppa[i] * y[j] - mu * y[j]
   }
 
   # After diagnosed infection (param->NoStage compartments) reset base counter
   iEq <- iEq + noStage
   for (i in seq_len(noStage)) {
     j <- iEq + i
-    dydx[j] = delta[i] * y[1 + i]
+    dydx[j] <- delta[i] * y[1 + i]
   }
 
   # Reset base counter

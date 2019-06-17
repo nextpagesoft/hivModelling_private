@@ -42,7 +42,8 @@ GetInfoList <- function(
     MaxIncCorr = incidenceParams$MaxIncCorr
   )
 
-  message('Input distribution was set to "', incidenceParams$FitDistribution, '".\n',
+  message('Input distribution was set to "', incidenceParams$FitDistribution,
+          '".\n',
           'This is overridden to "POISSON".')
 
   info[['ModelNoYears']] <- info$ModelMaxYear - info$ModelMinYear + 1

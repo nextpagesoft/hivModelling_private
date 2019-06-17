@@ -54,10 +54,8 @@ PerformMainFit <- function(
   defNoCD4 <- 4
   iMax <- 5
   jMax <- 10
-  # i <- 1
   startTime <- Sys.time()
   message('--- Iteration ', iter, ': Scale')
-  # i <- 1
   for (i in seq_len(iMax)) {
     # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
     beta <- rep(i * 0.05, defNoCD4)
@@ -68,10 +66,9 @@ PerformMainFit <- function(
       beta[(defNoCD4 + 1):param$NoDelta] <- 0
     }
 
-    # j <- 0
     for (j in seq_len(jMax + 1) - 1) {
       # Assume all theta's the same (range: 1 to 10^j_max)
-      thetaF <- rep((j + 1) * 10^j, param$NoTheta)
+      thetaF <- rep((j + 1) * 10 ^ j, param$NoTheta)
 
       p <- GetParameterVector(beta, thetaF, param)
 

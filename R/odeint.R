@@ -14,7 +14,10 @@ odeint <- function(
   } else if (info$SplineType == 'M-SPLINE') {
     stop('GetLambda for info$SplineType == "M-SPLINE" is not yet implemented')
   } else {
-    stop('GetLambda for info$SplineType different than "B-SPLINE" or "M-SPLINE" is not supported')
+    stop(
+      'GetLambda for info$SplineType different than "B-SPLINE" ',
+      'or "M-SPLINE" is not supported'
+    )
   }
 
   VERY_LRG <- 1e+10
@@ -28,13 +31,12 @@ odeint <- function(
   y <- rep(0, nVar)
 
   x <- x1
-  h <- sign(h1, x2 - x1)
+  h <- Sign(h1, x2 - x1)
 
   y <- ystart
 
   minLambda <- VERY_LRG
 
-  # nstp <- 1
   for (nstp in seq_len(MAXSTP)) {
     derivLambda <- GetLambda(time = x, param, info)
 
