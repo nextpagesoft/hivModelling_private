@@ -30,7 +30,7 @@ FitStatistics <- function(
 
   for (year in seq_len(nrow(modelResults))) {
 
-    # HIV/AIDS
+    # Category HIV/AIDS
     if (
       totModelsHIVAIDS[year] > 0 &&
       modelResults$Year[year] >= info$FitAIDSPosMinYear &&

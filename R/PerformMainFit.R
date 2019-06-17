@@ -113,11 +113,10 @@ PerformMainFit <- function(
 
   lastResults <- iterResults[[iter]]
 
-  # Fill beta and thetaF with the best fitting parameters
-  beta[seq_len(param$NoDelta)] <- lastResults$P[seq_len(param$NoDelta)]
-  thetaF <- lastResults$P[param$NoDelta + seq_len(param$NoTheta)]
   converged <- abs(lastResults$LLTotal - llOld) <= ctol
   statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
+  beta[seq_len(param$NoDelta)] <- lastResults$P[seq_len(param$NoDelta)]
+  thetaF <- lastResults$P[param$NoDelta + seq_len(param$NoTheta)]
   theta <- GetParamTheta(lastResults$P, param, info)
   deltaM <- GetParamDeltaM(lastResults$P, param)
 
