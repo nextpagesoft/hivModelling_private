@@ -10,8 +10,8 @@ RunModels(argsList = NULL, executionPlan = future::sequential)
 \item{argsList}{List of arguments to be passed to context (one per model
 run). Default = \code{NULL}}
 
-\item{executionPlan}{Execution plan for the job planner (see package \pkg{future}).
-Default = \code{\link[future]{sequential}}}
+\item{executionPlan}{Execution plan for the job planner (see package
+\pkg{future}). Default = \code{\link[future]{sequential}}}
 }
 \value{
 list object containing context, data and model objects

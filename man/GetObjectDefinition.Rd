@@ -11,7 +11,8 @@ GetObjectDefinition(objectName, path = system.file("ObjectDefinitions",
 \item{objectName}{Name of the object. Required.}
 
 \item{path}{Path to the object definition file. Optional.
-Default = \code{\link{system.file}('ObjectDefinitions', package = 'hivModelling')}.}
+Default = \code{\link{system.file}('ObjectDefinitions',
+package = 'hivModelling')}.}
 
 \item{section}{Name of section of the list to return. If not specified, then
 the whole specification is returned, otherwise only the specified section.

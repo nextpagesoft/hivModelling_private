@@ -4,7 +4,8 @@
 #'
 #' @param objectName Name of the object. Required.
 #' @param path Path to the object definition file. Optional.
-#'   Default = \code{\link{system.file}('ObjectDefinitions', package = 'hivModelling')}.
+#'   Default = \code{\link{system.file}('ObjectDefinitions',
+#'   package = 'hivModelling')}.
 #' @param section Name of section of the list to return. If not specified, then
 #'   the whole specification is returned, otherwise only the specified section.
 #'   Optional. Default = \code{NULL}.
