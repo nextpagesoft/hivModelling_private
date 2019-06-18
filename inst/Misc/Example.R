@@ -97,10 +97,5 @@ data <- ReadInputData(context)
 results <- PerformMainFit(context, data)
 results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
-length(results)
-results[[1]]$LLTotal
-results[[1]]$P
-results[[1]]$ModelResults
-results[[2]]$LLTotal
-results[[2]]$P
-results[[2]]$ModelResults
+results$Converged
+results$ModelOutputs
