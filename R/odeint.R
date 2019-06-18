@@ -7,17 +7,16 @@ odeint <- function(
   h1,
   hMin,
   param,
-  info
+  info,
+  minYear,
+  maxYear
 ) {
   if (info$SplineType == 'B-SPLINE') {
     GetLambda <- GetBSpline_c
   } else if (info$SplineType == 'M-SPLINE') {
     stop('GetLambda for info$SplineType == "M-SPLINE" is not yet implemented')
   } else {
-    stop(
-      'GetLambda for info$SplineType different than "B-SPLINE" ',
-      'or "M-SPLINE" is not supported'
-    )
+    stop(sprintf('info$SplineType equal "%s" is not supported', info$SplineType))
   }
 
   VERY_LRG <- 1e+10
@@ -38,7 +37,7 @@ odeint <- function(
   minLambda <- VERY_LRG
 
   for (nstp in seq_len(MAXSTP)) {
-    derivLambda <- GetLambda(time = x, param, info)
+    derivLambda <- GetLambda(time = x, param, info, minYear, maxYear)
 
     dydx <- derivsFunc_c(x, y, lambda = derivLambda, nVar, param)
 
@@ -49,7 +48,7 @@ odeint <- function(
     }
 
     res <- rkqs(x, y, dydx, n = nVar, htry = h, eps, yscal, param, info,
-                GetLambda)
+                GetLambda, minYear, maxYear)
     x <- res$X
     y <- res$Y
     rkqsLambda <- res$MinLambda

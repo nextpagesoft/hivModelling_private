@@ -6,15 +6,17 @@
 using namespace Rcpp;
 
 // GetBSpline_c
-double GetBSpline_c(double time, List param, List info);
-RcppExport SEXP _hivModelling_GetBSpline_c(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP) {
+double GetBSpline_c(double time, List param, List info, double minYear, double maxYear);
+RcppExport SEXP _hivModelling_GetBSpline_c(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type time(timeSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< List >::type info(infoSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetBSpline_c(time, param, info));
+    Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
+    Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetBSpline_c(time, param, info, minYear, maxYear));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -27,6 +29,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type time(timeSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     rcpp_result_gen = Rcpp::wrap(GetDelta_c(time, param));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Sign_c
+double Sign_c(double a, double b);
+RcppExport SEXP _hivModelling_Sign_c(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(Sign_c(a, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -45,11 +59,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// zbrent_c
+double zbrent_c(Function func, double x1, double x2, double tol, List extraArgs);
+RcppExport SEXP _hivModelling_zbrent_c(SEXP funcSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP tolSEXP, SEXP extraArgsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Function >::type func(funcSEXP);
+    Rcpp::traits::input_parameter< double >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< double >::type x2(x2SEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< List >::type extraArgs(extraArgsSEXP);
+    rcpp_result_gen = Rcpp::wrap(zbrent_c(func, x1, x2, tol, extraArgs));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_hivModelling_GetBSpline_c", (DL_FUNC) &_hivModelling_GetBSpline_c, 3},
+    {"_hivModelling_GetBSpline_c", (DL_FUNC) &_hivModelling_GetBSpline_c, 5},
     {"_hivModelling_GetDelta_c", (DL_FUNC) &_hivModelling_GetDelta_c, 2},
+    {"_hivModelling_Sign_c", (DL_FUNC) &_hivModelling_Sign_c, 2},
     {"_hivModelling_derivsFunc_c", (DL_FUNC) &_hivModelling_derivsFunc_c, 5},
+    {"_hivModelling_zbrent_c", (DL_FUNC) &_hivModelling_zbrent_c, 5},
     {NULL, NULL, 0}
 };
 

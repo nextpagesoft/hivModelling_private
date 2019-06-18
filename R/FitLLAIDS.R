@@ -1,7 +1,8 @@
 FitLLAIDS <- function(
   modelResults,
   info,
-  data
+  data,
+  param
 ) {
   # CRAN checks
   LL_AIDS_Year <- NULL
@@ -24,8 +25,13 @@ FitLLAIDS <- function(
             i = year,
             j = 'LL_AIDS_Year',
             value = FitLLPoisson(totModels[year], totDatas[year]))
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        set(x = modelResults,
+            i = year,
+            j = 'LL_AIDS_Year',
+            value = FitLLNegBin(totModels[year], totDatas[year], param$RDispAIDS))
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
 
       L_AIDS <- L_AIDS + modelResults[['LL_AIDS_Year']][year]

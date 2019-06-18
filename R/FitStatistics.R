@@ -37,19 +37,21 @@ FitStatistics <- function(
       modelResults$Year[year] <= info$FitAIDSPosMaxYear
     ) {
       N_LL_AIDSPos <- N_LL_AIDSPos + 1
-
       if (info$ModelFitDist == 'POISSON') {
         PearsonX2 <- PearsonX2 +
           (totDatasHIVAIDS[year] - totModelsHIVAIDS[year]) ^ 2 /
           totModelsHIVAIDS[year]
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        PearsonX2 <- PearsonX2 +
+          (totDatasHIVAIDS[year] - totModelsHIVAIDS[year]) ^ 2 /
+          (totModelsHIVAIDS[year] + totModelsHIVAIDS[year] ^ 2 / param$RDispRest)
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
       LL_Poisson <- LL_Poisson +
         FitLLPoisson(totModelsHIVAIDS[year], totDatasHIVAIDS[year])
       LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsHIVAIDS[year], totDatasHIVAIDS[year], param$RDisp)
-
+        FitLLNegBin(totModelsHIVAIDS[year], totDatasHIVAIDS[year], param$RDispRest)
     }
 
     # AIDS
@@ -62,13 +64,17 @@ FitStatistics <- function(
       if (info$ModelFitDist == 'POISSON') {
         PearsonX2 <- PearsonX2 +
           (totDatasAIDS[year] - totModelsAIDS[year]) ^ 2 / totModelsAIDS[year]
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        PearsonX2 <- PearsonX2 +
+          (totDatasAIDS[year] - totModelsAIDS[year]) ^ 2 /
+          (totModelsAIDS[year] + totModelsAIDS[year] ^ 2 / param$RDispAIDS)
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
       LL_Poisson <- LL_Poisson +
         FitLLPoisson(totModelsAIDS[year], totDatasAIDS[year])
       LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsAIDS[year], totDatasAIDS[year], param$RDisp)
+        FitLLNegBin(totModelsAIDS[year], totDatasAIDS[year], param$RDispAIDS)
     }
 
     # HIV
@@ -83,13 +89,17 @@ FitStatistics <- function(
       if (info$ModelFitDist == 'POISSON') {
         PearsonX2 <- PearsonX2 +
           (totDatasHIV[year] - totModelsHIV[year]) ^ 2 / totModelsHIV[year]
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        PearsonX2 <- PearsonX2 +
+          (totDatasHIV[year] - totModelsHIV[year]) ^ 2 /
+          (totModelsHIV[year] + totModelsHIV[year] ^ 2 / param$RDispRest)
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
       LL_Poisson <- LL_Poisson +
         FitLLPoisson(totModelsHIV[year], totDatasHIV[year])
       LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsHIV[year], totDatasHIV[year], param$RDisp)
+        FitLLNegBin(totModelsHIV[year], totDatasHIV[year], param$RDispRest)
     }
 
     # HIV by CD4
@@ -104,14 +114,17 @@ FitStatistics <- function(
           PearsonX2 <- PearsonX2 +
             (totDatasCD4[[j]][year] -
                totModelsCD4[[j]][year]) ^ 2 / totModelsCD4[[j]][year]
+        } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+          PearsonX2 <- PearsonX2 +
+            (totDatasCD4[[j]][year] - totModelsCD4[[j]][year]) ^ 2 /
+            (totModelsCD4[[j]][year] + totModelsCD4[[j]][year] ^ 2 / param$RDispRest)
         } else {
-          stop('info$ModelFitDist different than "POISSON" ',
-               'is not yet supported')
+          stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
         }
         LL_Poisson <- LL_Poisson +
           FitLLPoisson(totModelsCD4[[j]][year], totDatasCD4[[j]][year])
         LL_NegBin <- LL_NegBin +
-          FitLLNegBin(totModelsCD4[[j]][year], totDatasCD4[[j]][year], param$RDisp)
+          FitLLNegBin(totModelsCD4[[j]][year], totDatasCD4[[j]][year], param$RDispRest)
       }
     }
   }

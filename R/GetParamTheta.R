@@ -4,7 +4,6 @@ GetParamTheta <- function(
   info
 ) {
   k <- param$NoDelta
-
   theta <- param$Theta
 
   for (i in seq_len(info$ModelSplineN)) {

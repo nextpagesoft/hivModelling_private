@@ -84,7 +84,10 @@ list(
 
       Smoothing1 = 0,
 
-      Smoothing2 = 0
+      Smoothing2 = 0,
+
+      # Annual intervals time diagnosis
+      DefNoDiagTime = 15
     )
   )
 )

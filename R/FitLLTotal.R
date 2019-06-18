@@ -37,7 +37,9 @@ FitLLTotal <- function(
                   h1,
                   hMin,
                   param,
-                  info)
+                  info,
+                  minYear = info$ModelMinYear,
+                  maxYear = info$ModelMaxYear)
     ystart <- res$YStart
     minLambda <- min(minLambda,
                      res$MinLambda)
@@ -66,13 +68,13 @@ FitLLTotal <- function(
                           0)
   llTotal <-
     lambdaPenalty +
-    FitLLPosCD4(modelResults, group = 1, info, data) +
-    FitLLPosCD4(modelResults, group = 2, info, data) +
-    FitLLPosCD4(modelResults, group = 3, info, data) +
-    FitLLPosCD4(modelResults, group = 4, info, data) +
-    FitLLPos(modelResults, data, info) +
-    FitLLAIDSPos(modelResults, info, data) +
-    FitLLAIDS(modelResults, info, data) +
+    FitLLPosCD4(modelResults, group = 1, info, data, param) +
+    FitLLPosCD4(modelResults, group = 2, info, data, param) +
+    FitLLPosCD4(modelResults, group = 3, info, data, param) +
+    FitLLPosCD4(modelResults, group = 4, info, data, param) +
+    FitLLPos(modelResults, data, info, param) +
+    FitLLAIDSPos(modelResults, info, data, param) +
+    FitLLAIDS(modelResults, info, data, param) +
     param$Smoothing1 * smooth1 +
     param$Smoothing2 * smooth2 +
     sum(p[1:3] > 2) * VERY_LRG

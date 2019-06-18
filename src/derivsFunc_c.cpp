@@ -5,11 +5,11 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 NumericVector derivsFunc_c(
-    double x,
-    NumericVector y,
-    double lambda,
-    int nVar,
-    List param
+  double x,
+  NumericVector y,
+  double lambda,
+  int nVar,
+  List param
 ) {
   NumericVector dydx(nVar);
   NumericVector delta = GetDelta_c(x, param);

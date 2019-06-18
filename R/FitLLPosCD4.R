@@ -2,7 +2,8 @@ FitLLPosCD4 <- function(
   modelResults,
   group,
   info,
-  data
+  data,
+  param
 ) {
   VERY_LRG <- 1.0e10
   L_PosCD4 <- 0.0
@@ -28,8 +29,13 @@ FitLLPosCD4 <- function(
             i = year,
             j = LL_PosCD4_Year,
             value = FitLLPoisson(totModels[year], totDatas[year]))
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        set(x = modelResults,
+            i = year,
+            j = LL_PosCD4_Year,
+            value = FitLLNegBin(totModels[year], totDatas[year], param$RDispRest))
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
     }
 

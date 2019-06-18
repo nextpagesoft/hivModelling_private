@@ -1,7 +1,8 @@
 FitLLPos <- function(
   modelResults,
   data,
-  info
+  info,
+  param
 ) {
   VERY_LRG <- 1.0e10
 
@@ -19,8 +20,10 @@ FitLLPos <- function(
     ) {
       if (info$ModelFitDist == 'POISSON') {
         llPosYear <- FitLLPoisson(totModel, totData)
+      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+        llPosYear <- FitLLNegBin(totModel, totData, param$RDispRest)
       } else {
-        stop('info$ModelFitDist different than "POISSON" is not yet supported')
+        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
 
       lPos <- lPos + llPosYear

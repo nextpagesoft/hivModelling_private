@@ -7,7 +7,9 @@ rkck <- function(
   h,
   param,
   info,
-  GetLambda
+  GetLambda,
+  minYear,
+  maxYear
 ) {
   ak2 <- rep(0, n)
   ak3 <- rep(0, n)
@@ -51,27 +53,27 @@ rkck <- function(
   dc6 <- 0.03910220214568038699099
 
   ytemp <- y + b21 * h * dydx
-  lambda2 <- GetLambda(x + a2 * h, param, info)
+  lambda2 <- GetLambda(x + a2 * h, param, info, minYear, maxYear)
   ak2 <-
     derivsFunc_c(x = x + a2 * h, y = ytemp, lambda = lambda2, nVar = n, param)
 
   ytemp <- y + h * (b31 * dydx + b32 * ak2)
-  lambda3 <- GetLambda(x + a3 * h, param, info)
+  lambda3 <- GetLambda(x + a3 * h, param, info, minYear, maxYear)
   ak3 <-
     derivsFunc_c(x = x + a3 * h, y = ytemp, lambda = lambda3, nVar = n, param)
 
   ytemp <- y + h * (b41 * dydx + b42 * ak2 + b43 * ak3)
-  lambda4 <- GetLambda(x + a4 * h, param, info)
+  lambda4 <- GetLambda(x + a4 * h, param, info, minYear, maxYear)
   ak4 <-
     derivsFunc_c(x = x + a4 * h, y = ytemp, lambda = lambda4, nVar = n, param)
 
   ytemp <- y + h * (b51 * dydx + b52 * ak2 + b53 * ak3 + b54 * ak4)
-  lambda5 <- GetLambda(x + a5 * h, param, info)
+  lambda5 <- GetLambda(x + a5 * h, param, info, minYear, maxYear)
   ak5 <-
     derivsFunc_c(x = x + a5 * h, y = ytemp, lambda = lambda5, nVar = n, param)
 
   ytemp <- y + h * (b61 * dydx + b62 * ak2 + b63 * ak3 + b64 * ak4 + b65 * ak5)
-  lambda6 <- GetLambda(x + a6 * h, param, info)
+  lambda6 <- GetLambda(x + a6 * h, param, info, minYear, maxYear)
   ak6 <-
     derivsFunc_c(x = x + a6 * h, y = ytemp, lambda = lambda6, nVar = n, param)
 

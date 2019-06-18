@@ -34,7 +34,9 @@ GetParamList <- function(
     AutoThetaFix = ifelse(incidenceParams$FullData, 0L, 1L),
     Smoothing1 = incidenceParams$Smoothing1,
     Smoothing2 = incidenceParams$Smoothing2,
-    RDisp = incidenceParams$RDisp
+    RDispAIDS = incidenceParams$RDisp,
+    RDispRest = incidenceParams$RDisp,
+    DefNoDiagTime = incidenceParams$DefNoDiagTime
   )
 
   deltaM <- matrix(0, param$NoStage, param$NoTime)

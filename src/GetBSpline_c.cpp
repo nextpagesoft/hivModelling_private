@@ -6,11 +6,11 @@ using namespace Rcpp;
 double GetBSpline_c(
   double time,
   List param,
-  List info
+  List info,
+  double minYear,
+  double maxYear
 ) {
-  int tmpMinYear = info["ModelMinYear"];
-  int tmpMaxYear = info["ModelMaxYear"];
-  if (time <= tmpMinYear || time > tmpMaxYear + 1e-7) {
+  if (time <= minYear || time > maxYear + 1e-7) {
     return 0;
   }
 
@@ -54,5 +54,5 @@ double GetBSpline_c(
 }
 
 /*** R
-GetBSpline_c(time, param, info)
+GetBSpline_c(time, param, info, minYear, maxYear)
 */

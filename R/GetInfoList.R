@@ -32,18 +32,13 @@ GetInfoList <- function(
     FitAIDSPosMaxYear = incidenceParams$FitAIDSPosMaxYear,
     FitAIDSMinYear = incidenceParams$FitAIDSMinYear,
     FitAIDSMaxYear = incidenceParams$FitAIDSMaxYear,
-
-    ModelFitDist = 'POISSON',
-
+    ModelFitDist = incidenceParams$FitDistribution,
+    OverdisperionType = ifelse(incidenceParams$FitDistribution == 'NEGATIVE_BINOMIAL', 2, 1),
     ModelNoKnots = incidenceParams$ModelNoKnots,
-
     SplineType = incidenceParams$SplineType,
     SplineOrder = incidenceParams$SplineOrder,
     MaxIncCorr = incidenceParams$MaxIncCorr
   )
-
-  message('Input distribution was set to "', incidenceParams$FitDistribution, '. ',
-          'This is overridden to "POISSON".')
 
   info[['ModelNoYears']] <- info$ModelMaxYear - info$ModelMinYear + 1
   info[['ModelSplineN']] <- info$ModelNoKnots + info$SplineOrder
@@ -71,6 +66,33 @@ GetInfoList <- function(
 
   info[['Knots']] <- knots
   info[['MyKnots']] <- myKnots
+
+  fitMinYear <- 10000
+  if (info$FitPosMinYear <= info$FitPosMaxYear && info$FitPosMaxYear >= info$ModelMinYear) {
+    fitMinYear <- min(fitMinYear, info$FitPosMinYear)
+  }
+
+  if (
+    info$FitPosCD4MinYear <= info$FitPosCD4MaxYear &&
+    info$FitPosCD4MaxYear >= info$ModelMinYear
+  ) {
+    FitMinYear <- min(fitMinYear, info$FitPosCD4MinYear)
+  }
+
+  if (
+    info$FitAIDSPosMinYear <= info$FitAIDSPosMaxYear &&
+    info$FitAIDSPosMaxYear >= info$ModelMinYear
+  ) {
+    FitMinYear <- min(fitMinYear, info$FitAIDSPosMinYear)
+  }
+
+  if (info$FitAIDSMinYear <= info$FitAIDSMaxYear && info$FitAIDSMaxYear >= info$ModelMinYear) {
+    fitMinYear <- min(fitMinYear, info$FitAIDSMinYear)
+  }
+
+  # The earliest year with data cannot be before the range of calculations.
+  fitMinYear <- max(fitMinYear, info$ModelMinYear)
+  info[['FitMinYear']] <- fitMinYear
 
   return(info)
 }
