@@ -1,3 +1,12 @@
+Version 0.4.3 (2019/06/18)
+
+* Add automated code check and linting using Travis online service
+* Reorganize parameters and settings to support providing more input arguments
+* Support Negative Binomial distribution
+* Implement overdisperion optimization
+* Calculate and return model outputs
+
+
 Version 0.4.2 (2019/05/29)
 
 * Model run time reduced by 30% compared to version 0.4.1
