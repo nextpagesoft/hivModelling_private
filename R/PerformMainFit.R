@@ -166,12 +166,11 @@ PerformMainFit <- function(
 
       message(sprintf('Overdisperion: AIDS = %f, Rest = %f', param$RDispAIDS, param$RDispRest))
     }
-
-    p <- GetParameterVector(beta, thetaF, param)
-    res <- FitLLTotal(p, probSurv1996, param, info, data)
-    statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
   }
 
+  p <- GetParameterVector(beta, thetaF, param)
+  res <- FitLLTotal(p, probSurv1996, param, info, data)
+  statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
   modelOutputs <- CalculateModelOutputs(lastResults$ModelResults, info, param)
 
   return(list(
