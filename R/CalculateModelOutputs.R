@@ -45,7 +45,8 @@ CalculateModelOutputs <- function(
                     param,
                     info,
                     minYear = tmpMinYear,
-                    maxYear = tmpMaxYear)
+                    maxYear = tmpMaxYear,
+                    derivsFunc = derivsFunc_c)
       ystart <- res$YStart
       iEq <- 1
 

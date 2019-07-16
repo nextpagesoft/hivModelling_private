@@ -9,7 +9,8 @@ odeint <- function(
   param,
   info,
   minYear,
-  maxYear
+  maxYear,
+  derivsFunc
 ) {
   if (info$SplineType == 'B-SPLINE') {
     GetLambda <- GetBSpline_c
@@ -30,16 +31,15 @@ odeint <- function(
   y <- rep(0, nVar)
 
   x <- x1
-  h <- Sign(h1, x2 - x1)
+  h <- Sign_c(h1, x2 - x1)
 
   y <- ystart
 
   minLambda <- VERY_LRG
 
   for (nstp in seq_len(MAXSTP)) {
-    derivLambda <- GetLambda(time = x, param, info, minYear, maxYear)
-
-    dydx <- derivsFunc_c(x, y, lambda = derivLambda, nVar, param)
+    derivLambda <- GetLambda(x, param, info, minYear, maxYear)
+    dydx <- derivsFunc(x, y, derivLambda, nVar, param, minYear)
 
     yscal <- abs(y) + abs(dydx * h) + TINY
 
@@ -47,8 +47,7 @@ odeint <- function(
       h <- x2 - x
     }
 
-    res <- rkqs(x, y, dydx, n = nVar, htry = h, eps, yscal, param, info,
-                GetLambda, minYear, maxYear)
+    res <- rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, GetLambda, minYear, maxYear, derivsFunc)
     x <- res$X
     y <- res$Y
     rkqsLambda <- res$MinLambda

@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.5.0.1
-RVersion: 3.6.0
+RVersion: 3.6.1
 Repos: CRAN=https://cloud.r-project.org
 
 Package: Rcpp
@@ -15,13 +15,13 @@ Hash: b1642cf2ee0ab1d1b152ffacdb4401f7
 
 Package: digest
 Source: CRAN
-Version: 0.6.19
-Hash: 99a5cdd9144b03b7a2ddbbef862fb07f
+Version: 0.6.20
+Hash: 96694793002a72637776e3b31956cbb2
 
 Package: future
 Source: CRAN
-Version: 1.13.0
-Hash: 580a9f286535b0306b5a1ab6759f1eba
+Version: 1.14.0
+Hash: be5e13b4f7a76297c720059f04845aeb
 Requires: digest, globals, listenv
 
 Package: globals

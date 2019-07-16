@@ -13,8 +13,12 @@ Sign_c <- function(a, b) {
     .Call(`_hivModelling_Sign_c`, a, b)
 }
 
-derivsFunc_c <- function(x, y, lambda, nVar, param) {
-    .Call(`_hivModelling_derivsFunc_c`, x, y, lambda, nVar, param)
+derivsFunc_c <- function(x, y, lambda, nVar, param, year) {
+    .Call(`_hivModelling_derivsFunc_c`, x, y, lambda, nVar, param, year)
+}
+
+derivsTimeFunc_c <- function(x, y, lambda, nVar, param, year) {
+    .Call(`_hivModelling_derivsTimeFunc_c`, x, y, lambda, nVar, param, year)
 }
 
 zbrent_c <- function(func, x1, x2, tol, extraArgs) {

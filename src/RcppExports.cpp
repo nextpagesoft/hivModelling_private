@@ -45,8 +45,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // derivsFunc_c
-NumericVector derivsFunc_c(double x, NumericVector y, double lambda, int nVar, List param);
-RcppExport SEXP _hivModelling_derivsFunc_c(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP) {
+NumericVector derivsFunc_c(double x, NumericVector y, double lambda, int nVar, List param, double year);
+RcppExport SEXP _hivModelling_derivsFunc_c(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -55,7 +55,24 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< int >::type nVar(nVarSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
-    rcpp_result_gen = Rcpp::wrap(derivsFunc_c(x, y, lambda, nVar, param));
+    Rcpp::traits::input_parameter< double >::type year(yearSEXP);
+    rcpp_result_gen = Rcpp::wrap(derivsFunc_c(x, y, lambda, nVar, param, year));
+    return rcpp_result_gen;
+END_RCPP
+}
+// derivsTimeFunc_c
+NumericVector derivsTimeFunc_c(double x, NumericVector y, double lambda, int nVar, List param, double year);
+RcppExport SEXP _hivModelling_derivsTimeFunc_c(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< int >::type nVar(nVarSEXP);
+    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< double >::type year(yearSEXP);
+    rcpp_result_gen = Rcpp::wrap(derivsTimeFunc_c(x, y, lambda, nVar, param, year));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -79,7 +96,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetBSpline_c", (DL_FUNC) &_hivModelling_GetBSpline_c, 5},
     {"_hivModelling_GetDelta_c", (DL_FUNC) &_hivModelling_GetDelta_c, 2},
     {"_hivModelling_Sign_c", (DL_FUNC) &_hivModelling_Sign_c, 2},
-    {"_hivModelling_derivsFunc_c", (DL_FUNC) &_hivModelling_derivsFunc_c, 5},
+    {"_hivModelling_derivsFunc_c", (DL_FUNC) &_hivModelling_derivsFunc_c, 6},
+    {"_hivModelling_derivsTimeFunc_c", (DL_FUNC) &_hivModelling_derivsTimeFunc_c, 6},
     {"_hivModelling_zbrent_c", (DL_FUNC) &_hivModelling_zbrent_c, 5},
     {NULL, NULL, 0}
 };

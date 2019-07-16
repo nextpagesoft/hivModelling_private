@@ -1,6 +1,6 @@
 library(hivModelling)
 
-# 1. Provide input settings and model parameters -------------------------------
+# 1. Provide input settings and model parameters ---------------------------------------------------
 #
 # 1a. Read XML model file
 # args <- ReadModelFile(modelFilePath)
@@ -38,7 +38,7 @@ args <- list(
   )
 )
 
-# 2. Run -----------------------------------------------------------------------
+# 2. Run -------------------------------------------------------------------------------------------
 
 # 2a. All sequentially
 results <- RunModels(args, future::sequential)
@@ -72,11 +72,11 @@ results <- RunIncidenceModel(
 )
 
 
-# 3. Create output artifacts (plots, reports, etc.) ----------------------------
+# 3. Create output artifacts (plots, reports, etc.) ------------------------------------------------
 artifacts <- GetOutputArtifacts(results)
 
 
-# 4. Testing -------------------------------------------------------------------
+# 4. Testing ---------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
     RunInParallel = TRUE,
@@ -92,9 +92,25 @@ context <- GetRunContext(
   )
 )
 
+context <- GetRunContext(
+  settings = list(
+    RunInParallel = TRUE,
+    ModelsToRun = c('INCIDENCE'),
+    InputDataPath = '~/share/HIV test files/Data/test Ard'
+  ),
+  parameters = list(
+    Models = list(
+      INCIDENCE = list(
+        Country = 'NL',
+        FitDistribution = 'POISSON'
+      )
+    )
+  )
+)
+
 data <- ReadInputData(context)
 
-results <- PerformMainFit(context, data)
+# results <- PerformMainFit(context, data)
 results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
 results$Converged

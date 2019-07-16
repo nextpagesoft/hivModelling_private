@@ -9,7 +9,8 @@ NumericVector derivsFunc_c(
   NumericVector y,
   double lambda,
   int nVar,
-  List param
+  List param,
+  double year
 ) {
   NumericVector dydx(nVar);
   NumericVector delta = GetDelta_c(x, param);
@@ -79,5 +80,5 @@ NumericVector derivsFunc_c(
 }
 
 /*** R
-# derivsFunc_c(x, y, lambda, nVar, param)
+# derivsFunc_c(x, y, lambda, nVar, param, year)
 */

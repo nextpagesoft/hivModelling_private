@@ -48,7 +48,7 @@ list(
       StartIncZero = TRUE,
 
       # B-splines: smooth incidence curve at the end of the observation interval
-      SplineType = "B-SPLINE",
+      SplineType = 'B-SPLINE',
 
       # Non editable model parameters ------------------------------------------
 

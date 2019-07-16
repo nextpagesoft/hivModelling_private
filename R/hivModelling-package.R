@@ -18,7 +18,7 @@
 #'
 #' @import data.table
 #' @import xml2
-#' @importFrom utils modifyList
+#' @importFrom utils modifyList tail
 #' @importFrom stats setNames
 #' @useDynLib hivModelling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
