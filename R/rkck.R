@@ -10,7 +10,8 @@ rkck <- function(
   GetLambda,
   minYear,
   maxYear,
-  derivsFunc
+  derivsFunc,
+  tmpYear
 ) {
   a2 <- 0.2
   a3 <- 0.3
@@ -47,27 +48,27 @@ rkck <- function(
   xtemp <- x + a2 * h
   ytemp <- y + b21 * h * dydx
   lambda2 <- GetLambda(xtemp, param, info, minYear, maxYear)
-  ak2 <- derivsFunc(xtemp, ytemp, lambda2, n, param, minYear)
+  ak2 <- derivsFunc(xtemp, ytemp, lambda2, n, param, tmpYear)
 
   xtemp <- x + a3 * h
   ytemp <- y + h * (b31 * dydx + b32 * ak2)
   lambda3 <- GetLambda(xtemp, param, info, minYear, maxYear)
-  ak3 <- derivsFunc(xtemp, ytemp, lambda3, n, param, minYear)
+  ak3 <- derivsFunc(xtemp, ytemp, lambda3, n, param, tmpYear)
 
   xtemp <- x + a4 * h
   ytemp <- y + h * (b41 * dydx + b42 * ak2 + b43 * ak3)
   lambda4 <- GetLambda(xtemp, param, info, minYear, maxYear)
-  ak4 <- derivsFunc(xtemp, ytemp, lambda4, n, param, minYear)
+  ak4 <- derivsFunc(xtemp, ytemp, lambda4, n, param, tmpYear)
 
   xtemp <- x + a5 * h
   ytemp <- y + h * (b51 * dydx + b52 * ak2 + b53 * ak3 + b54 * ak4)
   lambda5 <- GetLambda(xtemp, param, info, minYear, maxYear)
-  ak5 <- derivsFunc(xtemp, ytemp, lambda5, n, param, minYear)
+  ak5 <- derivsFunc(xtemp, ytemp, lambda5, n, param, tmpYear)
 
   xtemp <- x + a6 * h
   ytemp <- y + h * (b61 * dydx + b62 * ak2 + b63 * ak3 + b64 * ak4 + b65 * ak5)
   lambda6 <- GetLambda(xtemp, param, info, minYear, maxYear)
-  ak6 <- derivsFunc(xtemp, ytemp, lambda6, n, param, minYear)
+  ak6 <- derivsFunc(xtemp, ytemp, lambda6, n, param, tmpYear)
 
   yout <- y + h * (c1 * dydx + c3 * ak3 + c4 * ak4 + c6 * ak6)
   yerr <- h * (dc1 * dydx + dc3 * ak3 + dc4 * ak4 + dc5 * ak5 + dc6 * ak6)

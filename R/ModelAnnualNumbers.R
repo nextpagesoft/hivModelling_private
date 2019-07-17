@@ -4,7 +4,7 @@ ModelAnnualNumbers <- function(
   data
 ) {
 
-  # CRAN checks
+  # CRAN checks false positives workarounds
   C_HIV_Stage_1 <- NULL
   C_HIV_Stage_2 <- NULL
   C_HIV_Stage_3 <- NULL
@@ -71,14 +71,12 @@ ModelAnnualNumbers <- function(
   )
 
   modelResults[, ':='(
-    C_HIV =
-      C_HIV_Stage_1 + C_HIV_Stage_2 + C_HIV_Stage_3 + C_HIV_Stage_4 +
-      C_HIV_Stage_5,
-    N_HIV_Stage_1 =  diff(c(0, C_HIV_Stage_1)),
-    N_HIV_Stage_2 =  diff(c(0, C_HIV_Stage_2)),
-    N_HIV_Stage_3 =  diff(c(0, C_HIV_Stage_3)),
-    N_HIV_Stage_4 =  diff(c(0, C_HIV_Stage_4)),
-    N_HIV_Stage_5 =  diff(c(0, C_HIV_Stage_5))
+    C_HIV = C_HIV_Stage_1 + C_HIV_Stage_2 + C_HIV_Stage_3 + C_HIV_Stage_4 + C_HIV_Stage_5,
+    N_HIV_Stage_1 = diff(c(0, C_HIV_Stage_1)),
+    N_HIV_Stage_2 = diff(c(0, C_HIV_Stage_2)),
+    N_HIV_Stage_3 = diff(c(0, C_HIV_Stage_3)),
+    N_HIV_Stage_4 = diff(c(0, C_HIV_Stage_4)),
+    N_HIV_Stage_5 = diff(c(0, C_HIV_Stage_5))
   )]
 
   modelResults[, ':='(
@@ -87,18 +85,13 @@ ModelAnnualNumbers <- function(
     N_HIV_Stage_S_3 = N_HIV_Stage_3 * probSurv1996[seq_len(.N), 3],
     N_HIV_Stage_S_4 = N_HIV_Stage_4 * probSurv1996[seq_len(.N), 4],
     N_HIV_Stage_S_5 = N_HIV_Stage_5 * probSurv1996[seq_len(.N), 5],
-    N_HIV =
-      N_HIV_Stage_1 + N_HIV_Stage_2 + N_HIV_Stage_3 + N_HIV_Stage_4 +
-      N_HIV_Stage_5
+    N_HIV = N_HIV_Stage_1 + N_HIV_Stage_2 + N_HIV_Stage_3 + N_HIV_Stage_4 + N_HIV_Stage_5
   )]
 
   modelResults[, ':='(
-    N_HIV =
-      N_HIV_Stage_1 + N_HIV_Stage_2 + N_HIV_Stage_3 + N_HIV_Stage_4 +
-      N_HIV_Stage_5,
+    N_HIV = N_HIV_Stage_1 + N_HIV_Stage_2 + N_HIV_Stage_3 + N_HIV_Stage_4 + N_HIV_Stage_5,
     N_HIV_S =
-      N_HIV_Stage_S_1 + N_HIV_Stage_S_2 + N_HIV_Stage_S_3 + N_HIV_Stage_S_4 +
-      N_HIV_Stage_S_5
+      N_HIV_Stage_S_1 + N_HIV_Stage_S_2 + N_HIV_Stage_S_3 + N_HIV_Stage_S_4 + N_HIV_Stage_S_5
   )]
 
   modelResults[, ':='(

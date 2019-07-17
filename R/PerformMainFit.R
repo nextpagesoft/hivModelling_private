@@ -172,6 +172,9 @@ PerformMainFit <- function(
   res <- FitLLTotal(p, probSurv1996, param, info, data)
   statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
   modelOutputs <- CalculateModelOutputs(lastResults$ModelResults, info, param)
+  modelOutputs2 <- ModelTimeToDiagDist(lastResults$ModelResults, info, param)
+
+  finalResults <- ComputeResults(modelResults, modelOutputs, modelOutputs2, param, data)
 
   return(list(
     Converged = converged,
@@ -181,6 +184,6 @@ PerformMainFit <- function(
     DeltaM = param$DeltaM,
     Statistics = statRes,
     IterResults = iterResults,
-    ModelOutputs = modelOutputs
+    FinalResults = finalResults
   ))
 }

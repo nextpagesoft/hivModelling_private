@@ -115,3 +115,5 @@ results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
 results$Converged
 results$ModelOutputs
+
+fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.tsv', sep = '\t')
