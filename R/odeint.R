@@ -43,11 +43,13 @@ odeint <- function(
 
     yscal <- abs(y) + abs(dydx * h) + TINY
 
-    if ((x + h - x2) * (x + h - x1) > 0.0) {
+    if ((x + h - x2) * (x + h - x1) > 0) {
       h <- x2 - x
     }
 
-    res <- rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, GetLambda, minYear, maxYear, derivsFunc)
+    res <- rkqs(
+      x, y, dydx, nVar, h, eps, yscal, param, info, GetLambda, minYear, maxYear, derivsFunc
+    )
     x <- res$X
     y <- res$Y
     rkqsLambda <- res$MinLambda
