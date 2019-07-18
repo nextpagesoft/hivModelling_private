@@ -21,7 +21,7 @@ GetParameterVector <- function(
   param
 ) {
   p <- rep(0, param$NoDelta + param$NoTheta)
-  p[seq(param$NoDelta)] <- beta[seq(param$NoDelta)]
-  p[param$NoDelta + seq(param$NoTheta)] <- thetaF[seq(param$NoTheta)]
+  p[seq_len(param$NoDelta)] <- beta[seq_len(param$NoDelta)]
+  p[param$NoDelta + seq_len(param$NoTheta)] <- thetaF[seq_len(param$NoTheta)]
   return(p)
 }

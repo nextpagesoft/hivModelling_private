@@ -31,7 +31,6 @@ GetParamList <- function(
     NoDelta = incidenceParams$NoDelta,
     NoTheta = incidenceParams$NoTheta,
     NoThetaFix = incidenceParams$NoThetaFix,
-    AutoThetaFix = ifelse(incidenceParams$FullData, 0L, 1L),
     Smoothing1 = incidenceParams$Smoothing1,
     Smoothing2 = incidenceParams$Smoothing2,
     RDispAIDS = incidenceParams$RDisp,
@@ -51,8 +50,7 @@ GetParamList <- function(
   thetaP <- rep(0, param$NoTheta + 2)
   thetaP[2:(param$NoTheta + 1)] <- 1
 
-  param[['NoEq']] <-
-    1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
+  param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
   param[['DeltaP']] <- deltaP
   param[['ThetaP']] <- thetaP
   param[['DeltaM']] <- deltaM

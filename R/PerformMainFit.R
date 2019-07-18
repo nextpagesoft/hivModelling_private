@@ -112,8 +112,7 @@ PerformMainFit <- function(
                        probSurv1996,
                        param,
                        info,
-                       data,
-                       ...)
+                       data)
       message('  Run time: ', format(Sys.time() - startTime))
 
       pParam <- res$P
@@ -150,7 +149,7 @@ PerformMainFit <- function(
     rMin <- 1.0
     rMax <- 100000
 
-    if (info$OverdisperionType == 1) {
+    if (info$OverdisperionType != 2) {
       stop(sprintf('Overdisperion type %d is not supported', info$OverdisperionType))
     } else if (info$OverdisperionType == 2) {
       extraArgs <- list(
@@ -170,11 +169,11 @@ PerformMainFit <- function(
 
   p <- GetParameterVector(beta, thetaF, param)
   res <- FitLLTotal(p, probSurv1996, param, info, data)
-  statRes <- FitStatistics(lastResults$ModelResults, info, data, param)
-  modelOutputs <- CalculateModelOutputs(lastResults$ModelResults, info, param)
-  modelOutputs2 <- ModelTimeToDiagDist(lastResults$ModelResults, info, param)
+  statRes <- FitStatistics(res$ModelResults, info, data, param)
+  modelOutputs <- CalculateModelOutputs(res$ModelResults, info, param)
+  modelOutputs2 <- ModelTimeToDiagDist(res$ModelResults, info, param)
 
-  finalResults <- ComputeResults(modelResults, modelOutputs, modelOutputs2, param, data)
+  finalResults <- ComputeResults(res$ModelResults, modelOutputs, modelOutputs2, param, data)
 
   return(list(
     Converged = converged,

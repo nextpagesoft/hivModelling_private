@@ -23,9 +23,7 @@ FitStatistics <- function(
   totDatasAIDS <- data[['N_AIDS']]
   totModelsHIV <- modelResults[['N_HIV_S_Obs']]
   totDatasHIV <- data[['N_HIV']]
-  totModelsCD4 <-
-    modelResults[, sprintf('N_HIV_Stage_S_Obs_%d', seq_len(noCD4)),
-                               with = FALSE]
+  totModelsCD4 <- modelResults[, sprintf('N_HIV_Stage_S_Obs_%d', seq_len(noCD4)), with = FALSE]
   totDatasCD4 <- data[, sprintf('N_HIV_Stage_%d', seq_len(noCD4)), with = FALSE]
 
   for (year in seq_len(nrow(modelResults))) {
@@ -38,20 +36,19 @@ FitStatistics <- function(
     ) {
       N_LL_AIDSPos <- N_LL_AIDSPos + 1
       if (info$ModelFitDist == 'POISSON') {
-        PearsonX2 <- PearsonX2 +
-          (totDatasHIVAIDS[year] - totModelsHIVAIDS[year]) ^ 2 /
-          totModelsHIVAIDS[year]
+        PearsonX2 <-
+          PearsonX2 + (totDatasHIVAIDS[year] - totModelsHIVAIDS[year]) ^ 2 / totModelsHIVAIDS[year]
       } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-        PearsonX2 <- PearsonX2 +
+        PearsonX2 <-
+          PearsonX2 +
           (totDatasHIVAIDS[year] - totModelsHIVAIDS[year]) ^ 2 /
           (totModelsHIVAIDS[year] + totModelsHIVAIDS[year] ^ 2 / param$RDispRest)
       } else {
         stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
-      LL_Poisson <- LL_Poisson +
-        FitLLPoisson(totModelsHIVAIDS[year], totDatasHIVAIDS[year])
-      LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsHIVAIDS[year], totDatasHIVAIDS[year], param$RDispRest)
+      LL_Poisson <- LL_Poisson + FitLLPoisson(totModelsHIVAIDS[year], totDatasHIVAIDS[year])
+      LL_NegBin <-
+        LL_NegBin + FitLLNegBin(totModelsHIVAIDS[year], totDatasHIVAIDS[year], param$RDispRest)
     }
 
     # AIDS
@@ -62,19 +59,18 @@ FitStatistics <- function(
     ) {
       N_LL_AIDS <- N_LL_AIDS + 1
       if (info$ModelFitDist == 'POISSON') {
-        PearsonX2 <- PearsonX2 +
-          (totDatasAIDS[year] - totModelsAIDS[year]) ^ 2 / totModelsAIDS[year]
+        PearsonX2 <-
+          PearsonX2 + (totDatasAIDS[year] - totModelsAIDS[year]) ^ 2 / totModelsAIDS[year]
       } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-        PearsonX2 <- PearsonX2 +
+        PearsonX2 <-
+          PearsonX2 +
           (totDatasAIDS[year] - totModelsAIDS[year]) ^ 2 /
           (totModelsAIDS[year] + totModelsAIDS[year] ^ 2 / param$RDispAIDS)
       } else {
         stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
-      LL_Poisson <- LL_Poisson +
-        FitLLPoisson(totModelsAIDS[year], totDatasAIDS[year])
-      LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsAIDS[year], totDatasAIDS[year], param$RDispAIDS)
+      LL_Poisson <- LL_Poisson + FitLLPoisson(totModelsAIDS[year], totDatasAIDS[year])
+      LL_NegBin <- LL_NegBin + FitLLNegBin(totModelsAIDS[year], totDatasAIDS[year], param$RDispAIDS)
     }
 
     # HIV
@@ -87,8 +83,7 @@ FitStatistics <- function(
     ) {
       N_LL_Pos <- N_LL_Pos + 1
       if (info$ModelFitDist == 'POISSON') {
-        PearsonX2 <- PearsonX2 +
-          (totDatasHIV[year] - totModelsHIV[year]) ^ 2 / totModelsHIV[year]
+        PearsonX2 <- PearsonX2 + (totDatasHIV[year] - totModelsHIV[year]) ^ 2 / totModelsHIV[year]
       } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
         PearsonX2 <- PearsonX2 +
           (totDatasHIV[year] - totModelsHIV[year]) ^ 2 /
@@ -96,10 +91,8 @@ FitStatistics <- function(
       } else {
         stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
       }
-      LL_Poisson <- LL_Poisson +
-        FitLLPoisson(totModelsHIV[year], totDatasHIV[year])
-      LL_NegBin <- LL_NegBin +
-        FitLLNegBin(totModelsHIV[year], totDatasHIV[year], param$RDispRest)
+      LL_Poisson <- LL_Poisson + FitLLPoisson(totModelsHIV[year], totDatasHIV[year])
+      LL_NegBin <- LL_NegBin + FitLLNegBin(totModelsHIV[year], totDatasHIV[year], param$RDispRest)
     }
 
     # HIV by CD4
@@ -111,9 +104,9 @@ FitStatistics <- function(
       ) {
         N_LL_PosCD4[j] <- N_LL_PosCD4[j] + 1
         if (info$ModelFitDist == 'POISSON') {
-          PearsonX2 <- PearsonX2 +
-            (totDatasCD4[[j]][year] -
-               totModelsCD4[[j]][year]) ^ 2 / totModelsCD4[[j]][year]
+          PearsonX2 <-
+            PearsonX2 +
+            (totDatasCD4[[j]][year] - totModelsCD4[[j]][year]) ^ 2 / totModelsCD4[[j]][year]
         } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
           PearsonX2 <- PearsonX2 +
             (totDatasCD4[[j]][year] - totModelsCD4[[j]][year]) ^ 2 /
@@ -133,6 +126,10 @@ FitStatistics <- function(
 
   return(list(
     N_LL_Total = N_LL_Total,
+    N_LL_AIDSPos = N_LL_AIDSPos,
+    N_LL_AIDS = N_LL_AIDS,
+    N_LL_Pos = N_LL_Pos,
+    N_LL_PosCD4 = N_LL_PosCD4,
     PearsonX2 = PearsonX2,
     LL_Poisson = LL_Poisson,
     LL_NegBin = LL_NegBin
