@@ -40,7 +40,7 @@ FitLLTotal <- function(
                   info,
                   minYear = info$ModelMinYear,
                   maxYear = info$ModelMaxYear,
-                  derivsFunc = derivsFunc_c)
+                  derivsFunc = derivsFunc)
     ystart <- res$YStart
     minLambda <- min(minLambda,
                      res$MinLambda)

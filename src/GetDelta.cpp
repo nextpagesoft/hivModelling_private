@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector GetDelta_c(
+NumericVector GetDelta(
   double time,
   List param
 ) {
@@ -53,5 +53,5 @@ NumericVector GetDelta_c(
 }
 
 /*** R
-GetDelta_c(time, param)
+GetDelta(time, param)
 */

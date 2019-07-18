@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double GetBSpline_c(
+double GetBSpline(
   double time,
   List param,
   List info,
@@ -37,9 +37,7 @@ double GetBSpline_c(
         }
 
         if (myKnots[i + k] != myKnots[i]) {
-          bSpline(i, k) +=
-            (time - myKnots[i]) * bSpline(i, k - 1) /
-              (myKnots[i + k] - myKnots[i]);
+          bSpline(i, k) += (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
         }
       }
     }
@@ -54,5 +52,5 @@ double GetBSpline_c(
 }
 
 /*** R
-GetBSpline_c(time, param, info, minYear, maxYear)
+GetBSpline(time, param, info, minYear, maxYear)
 */

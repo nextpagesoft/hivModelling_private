@@ -46,7 +46,7 @@ ModelTimeToDiagMedian <- function(
                   info,
                   minYear = tmpMinYear,
                   maxYear = tmpMaxYear,
-                  derivsFunc = derivsTimeFunc_c,
+                  derivsFunc = derivsTimeFunc,
                   tmpYear = tmpMinYear)
 
     ystart <- res$YStart

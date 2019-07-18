@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// GetBSpline_c
-double GetBSpline_c(double time, List param, List info, double minYear, double maxYear);
-RcppExport SEXP _hivModelling_GetBSpline_c(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
+// GetBSpline
+double GetBSpline(double time, List param, List info, double minYear, double maxYear);
+RcppExport SEXP _hivModelling_GetBSpline(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -16,37 +16,37 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< List >::type info(infoSEXP);
     Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetBSpline_c(time, param, info, minYear, maxYear));
+    rcpp_result_gen = Rcpp::wrap(GetBSpline(time, param, info, minYear, maxYear));
     return rcpp_result_gen;
 END_RCPP
 }
-// GetDelta_c
-NumericVector GetDelta_c(double time, List param);
-RcppExport SEXP _hivModelling_GetDelta_c(SEXP timeSEXP, SEXP paramSEXP) {
+// GetDelta
+NumericVector GetDelta(double time, List param);
+RcppExport SEXP _hivModelling_GetDelta(SEXP timeSEXP, SEXP paramSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type time(timeSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetDelta_c(time, param));
+    rcpp_result_gen = Rcpp::wrap(GetDelta(time, param));
     return rcpp_result_gen;
 END_RCPP
 }
-// Sign_c
-double Sign_c(double a, double b);
-RcppExport SEXP _hivModelling_Sign_c(SEXP aSEXP, SEXP bSEXP) {
+// Sign
+double Sign(double a, double b);
+RcppExport SEXP _hivModelling_Sign(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(Sign_c(a, b));
+    rcpp_result_gen = Rcpp::wrap(Sign(a, b));
     return rcpp_result_gen;
 END_RCPP
 }
-// derivsFunc_c
-NumericVector derivsFunc_c(double x, NumericVector y, double lambda, int nVar, List param, double year);
-RcppExport SEXP _hivModelling_derivsFunc_c(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
+// derivsFunc
+NumericVector derivsFunc(double x, NumericVector y, double lambda, int nVar, List param, double year);
+RcppExport SEXP _hivModelling_derivsFunc(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -56,13 +56,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nVar(nVarSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< double >::type year(yearSEXP);
-    rcpp_result_gen = Rcpp::wrap(derivsFunc_c(x, y, lambda, nVar, param, year));
+    rcpp_result_gen = Rcpp::wrap(derivsFunc(x, y, lambda, nVar, param, year));
     return rcpp_result_gen;
 END_RCPP
 }
-// derivsTimeFunc_c
-NumericVector derivsTimeFunc_c(double x, NumericVector y, double lambda, int nVar, List param, double year);
-RcppExport SEXP _hivModelling_derivsTimeFunc_c(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
+// derivsTimeFunc
+NumericVector derivsTimeFunc(double x, NumericVector y, double lambda, int nVar, List param, double year);
+RcppExport SEXP _hivModelling_derivsTimeFunc(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP paramSEXP, SEXP yearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -72,13 +72,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nVar(nVarSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< double >::type year(yearSEXP);
-    rcpp_result_gen = Rcpp::wrap(derivsTimeFunc_c(x, y, lambda, nVar, param, year));
+    rcpp_result_gen = Rcpp::wrap(derivsTimeFunc(x, y, lambda, nVar, param, year));
     return rcpp_result_gen;
 END_RCPP
 }
-// zbrent_c
-double zbrent_c(Function func, double x1, double x2, double tol, List extraArgs);
-RcppExport SEXP _hivModelling_zbrent_c(SEXP funcSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP tolSEXP, SEXP extraArgsSEXP) {
+// zbrent
+double zbrent(Function func, double x1, double x2, double tol, List extraArgs);
+RcppExport SEXP _hivModelling_zbrent(SEXP funcSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP tolSEXP, SEXP extraArgsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -87,18 +87,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type x2(x2SEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< List >::type extraArgs(extraArgsSEXP);
-    rcpp_result_gen = Rcpp::wrap(zbrent_c(func, x1, x2, tol, extraArgs));
+    rcpp_result_gen = Rcpp::wrap(zbrent(func, x1, x2, tol, extraArgs));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_hivModelling_GetBSpline_c", (DL_FUNC) &_hivModelling_GetBSpline_c, 5},
-    {"_hivModelling_GetDelta_c", (DL_FUNC) &_hivModelling_GetDelta_c, 2},
-    {"_hivModelling_Sign_c", (DL_FUNC) &_hivModelling_Sign_c, 2},
-    {"_hivModelling_derivsFunc_c", (DL_FUNC) &_hivModelling_derivsFunc_c, 6},
-    {"_hivModelling_derivsTimeFunc_c", (DL_FUNC) &_hivModelling_derivsTimeFunc_c, 6},
-    {"_hivModelling_zbrent_c", (DL_FUNC) &_hivModelling_zbrent_c, 5},
+    {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 5},
+    {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 2},
+    {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
+    {"_hivModelling_derivsFunc", (DL_FUNC) &_hivModelling_derivsFunc, 6},
+    {"_hivModelling_derivsTimeFunc", (DL_FUNC) &_hivModelling_derivsTimeFunc, 6},
+    {"_hivModelling_zbrent", (DL_FUNC) &_hivModelling_zbrent, 5},
     {NULL, NULL, 0}
 };
 

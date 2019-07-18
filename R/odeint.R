@@ -14,7 +14,7 @@ odeint <- function(
   tmpYear = 0
 ) {
   if (info$SplineType == 'B-SPLINE') {
-    GetLambda <- GetBSpline_c
+    GetLambda <- GetBSpline
   } else if (info$SplineType == 'M-SPLINE') {
     stop('GetLambda for info$SplineType == "M-SPLINE" is not yet implemented')
   } else {
@@ -32,7 +32,7 @@ odeint <- function(
   y <- rep(0, nVar)
 
   x <- x1
-  h <- Sign_c(h1, x2 - x1)
+  h <- Sign(h1, x2 - x1)
 
   y <- ystart
 

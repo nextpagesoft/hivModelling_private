@@ -9,7 +9,7 @@ ComputeResults <- function(
   VERY_SML <- 1.0e-20
   noCD4 <- param$NoStage - 1
 
-  deltasList <- lapply(modelResults$Year, GetDelta_c, param)
+  deltasList <- lapply(modelResults$Year, GetDelta, param)
   deltasDT <- as.data.table(t(simplify2array(deltasList)))
   timeToDiag <- sapply(deltasList, ModelTimeToDiag, param)
   timeToDiagPercList <- lapply(modelResults$Year, ModelTimeToDiagMedian, param, info)

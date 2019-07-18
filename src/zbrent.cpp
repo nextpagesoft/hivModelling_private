@@ -1,10 +1,10 @@
 #include <Rcpp.h>
-#include "Sign_c.h"
+#include "Sign.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double zbrent_c(
+double zbrent(
   Function func,
   double x1,
   double x2,
@@ -88,7 +88,7 @@ double zbrent_c(
     if (fabs(d) > tol1) {
       b += d;
     } else {
-      b += Sign_c(tol1, xm);
+      b += Sign(tol1, xm);
     }
 
     fb = as<double>(func(b, extraArgs));
@@ -101,5 +101,5 @@ double zbrent_c(
 
 
 /*** R
-# zbrent_c(42)
+# zbrent(42)
 */

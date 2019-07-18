@@ -1,10 +1,10 @@
 #include <Rcpp.h>
-#include "GetDelta_c.h"
+#include "GetDelta.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector derivsFunc_c(
+NumericVector derivsFunc(
   double x,
   NumericVector y,
   double lambda,
@@ -13,7 +13,7 @@ NumericVector derivsFunc_c(
   double year
 ) {
   NumericVector dydx(nVar);
-  NumericVector delta = GetDelta_c(x, param);
+  NumericVector delta = GetDelta(x, param);
   NumericVector qoppa = param["Qoppa"];
   NumericVector fInit = param["FInit"];
   double alphaP = param["AlphaP"];
@@ -80,5 +80,5 @@ NumericVector derivsFunc_c(
 }
 
 /*** R
-# derivsFunc_c(x, y, lambda, nVar, param, year)
+# derivsFunc(x, y, lambda, nVar, param, year)
 */
