@@ -1,11 +1,16 @@
-FitLLNegBin <- function(
+FitLLNegBin.R <- function(
   y_m,
   y_d,
   r
 ) {
-  LL <- ifelse(y_d == 0.0,
-               -2 * r * (log(r) - log(r + y_m)),
-               2 * y_d * (log(y_d) - log(y_m)) - 2 * (r + y_d) * (log(r + y_d) - log(r + y_m)))
+  LL <- rep(0, length(y_m))
+  sel0 <- y_d == 0.0
+  LL[sel0] <- -2 * r * (log(r) - log(r + y_m[sel0]))
+
+  x_d <- y_d[!sel0]
+  x_m <- y_m[!sel0]
+
+  LL[!sel0] <- 2 * y_d * (log(x_d) - log(x_m)) - 2 * (r + x_d) * (log(r + x_d) - log(r + x_m))
 
   return(LL)
 }

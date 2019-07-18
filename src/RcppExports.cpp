@@ -6,6 +6,31 @@
 
 using namespace Rcpp;
 
+// FitLLNegBin
+double FitLLNegBin(double y_m, double y_d, double r);
+RcppExport SEXP _hivModelling_FitLLNegBin(SEXP y_mSEXP, SEXP y_dSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type y_m(y_mSEXP);
+    Rcpp::traits::input_parameter< double >::type y_d(y_dSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(FitLLNegBin(y_m, y_d, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FitLLPoisson
+double FitLLPoisson(double y_m, double y_d);
+RcppExport SEXP _hivModelling_FitLLPoisson(SEXP y_mSEXP, SEXP y_dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type y_m(y_mSEXP);
+    Rcpp::traits::input_parameter< double >::type y_d(y_dSEXP);
+    rcpp_result_gen = Rcpp::wrap(FitLLPoisson(y_m, y_d));
+    return rcpp_result_gen;
+END_RCPP
+}
 // GetBSpline
 double GetBSpline(double time, List param, List info, double minYear, double maxYear);
 RcppExport SEXP _hivModelling_GetBSpline(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
@@ -126,6 +151,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
+    {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 5},
     {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 2},
     {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
