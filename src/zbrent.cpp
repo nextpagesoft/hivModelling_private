@@ -23,7 +23,7 @@ double zbrent(
   double fb = as<double>(func(b, extraArgs));
 
   if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
-    Rcout << "zbrent_c: Root must be bracketed\n";
+    Rcout << "zbrent: Root must be bracketed\n";
   }
 
   double fc = fb;
