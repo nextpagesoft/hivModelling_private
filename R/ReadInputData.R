@@ -52,6 +52,8 @@ ReadInputData <- function(context)
     inputData <- list()
   }
 
+  message('DEVELOPMENT NOTE: Years 1980:2017 are hardcoded "ReadInputData" function')
+
   data <- data.table(
     Year = 1980L:2017L,
     N_HIV = 0,
@@ -95,6 +97,16 @@ ReadInputData <- function(context)
     C_Dead = cumsum(N_Dead),
     C_Dead_U = cumsum(N_Dead_U),
     C_Emig = cumsum(N_Emig)
+  )]
+
+  data[, ':='(
+    Prob_CD4 = 0,
+    Prob_HIVAIDS = 0
+  )]
+
+  data[N_HIV > N_HIV_Stage_5, ':='(
+    Prob_CD4 = (N_HIV_Stage_1 + N_HIV_Stage_2 + N_HIV_Stage_3 + N_HIV_Stage_4) / (N_HIV - N_HIV_Stage_5),
+    Prob_HIVAIDS = N_HIV_Stage_5 / N_HIV
   )]
 
   return(data)
