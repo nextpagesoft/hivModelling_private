@@ -28,25 +28,24 @@ double GetBSpline(
   }
 
   for (int k = 1; k < kOrder; ++k) {
-     for (int i = 0; i < modelSplineN; ++i) {
-       if (time >= myKnots[i] && time < myKnots[i + k + 1]) {
-         if (myKnots[i + k + 1] != myKnots[i + 1]) {
-           bSpline(i, k) +=
-             (myKnots[i + k + 1] - time) * bSpline(i + 1, k - 1) /
-               (myKnots[i + k + 1] - myKnots[i + 1]);
+    for (int i = 0; i < modelSplineN; ++i) {
+      int ik1 = i + k + 1;
+
+      if (time >= myKnots[i] && time < myKnots[ik1]) {
+        if (myKnots[ik1] != myKnots[i + 1]) {
+          bSpline(i, k) +=
+            (myKnots[ik1] - time) * bSpline(i + 1, k - 1) / (myKnots[ik1] - myKnots[i + 1]);
         }
 
         if (myKnots[i + k] != myKnots[i]) {
-          bSpline(i, k) += (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
+          bSpline(i, k) +=
+            (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
         }
       }
     }
   }
 
-  double val = 0;
-  for (int i = 0; i < modelSplineN; ++i) {
-    val += theta[i] * bSpline(i, kOrder - 1);
-  }
+  double val = sum(theta * bSpline(_, kOrder - 1));
 
   return val;
 }

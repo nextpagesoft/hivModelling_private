@@ -9,10 +9,9 @@ rkqs <- function(
   yscal,
   param,
   info,
-  GetLambda,
   minYear,
   maxYear,
-  derivsFunc,
+  derivsFuncXptr,
   tmpYear
 ) {
   VERY_LRG <- 1e+10
@@ -26,7 +25,7 @@ rkqs <- function(
   minLambda <- VERY_LRG
 
   while (TRUE) {
-    res <- rkck(x, y, dydx, n, h, param, info, GetLambda, minYear, maxYear, derivsFunc, tmpYear)
+    res <- rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFuncXptr, tmpYear)
     yout <- res$YOut
     yerr <- res$YErr
     minLambda <- min(minLambda,

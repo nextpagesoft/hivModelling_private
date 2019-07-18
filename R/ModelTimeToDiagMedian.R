@@ -8,12 +8,11 @@ ModelTimeToDiagMedian <- function(
   eps <- 0.0001
   bitSml <- 1e-6
 
-  # Infection year for which diagnosis rates are determined
-  tmpYear <- time
-
   # Number of equations for calculating the distribution of time to diagnosis
   nEq <- 1 + 2 * param$NoStage
-  iEq <- 1 + param$NoStage
+
+  tmpMinYear <- time
+  tmpMaxYear <- tmpMinYear + 1
 
   ystart <- c(1000, rep(0, nEq - 1))
 
@@ -32,8 +31,6 @@ ModelTimeToDiagMedian <- function(
     j <- j + 1
     timeA <- (j - 1) * 0.001
     timeB <- timeA + 0.001
-    tmpMinYear <- time
-    tmpMaxYear <- tmpMinYear + 1
 
     res <- odeint(ystart,
                   nVar = nEq,
@@ -46,7 +43,7 @@ ModelTimeToDiagMedian <- function(
                   info,
                   minYear = tmpMinYear,
                   maxYear = tmpMaxYear,
-                  derivsFunc = derivsTimeFunc,
+                  derivsFuncName = 'derivsTimeFunc',
                   tmpYear = tmpMinYear)
 
     ystart <- res$YStart

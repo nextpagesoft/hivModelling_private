@@ -39,7 +39,7 @@ ModelTimeToDiagDist <- function(
                     info,
                     minYear = tmpMinYear,
                     maxYear = tmpMaxYear,
-                    derivsFunc = derivsTimeFunc,
+                    derivsFuncName = 'derivsTimeFunc',
                     tmpYear = tmpMinYear)
       ystart <- res$YStart
 
@@ -80,7 +80,7 @@ ModelTimeToDiagDist <- function(
                     info,
                     minYear = tmpMinYear,
                     maxYear = tmpMaxYear,
-                    derivsFunc = derivsTimeFunc,
+                    derivsFuncName = 'derivsTimeFunc',
                     tmpYear = tmpYear)
       ystart <- res$YStart
 

@@ -1,0 +1,2 @@
+PKG_CPPFLAGS = -DRCPP_USE_UNWIND_PROTECT
+CXXFLAGS += -O3 -Wall -pipe -Wno-unused

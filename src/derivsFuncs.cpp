@@ -1,10 +1,11 @@
 #include <Rcpp.h>
 #include "GetDelta.h"
+#include "hivModelling_types.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector derivsFunc(
+NumericVector derivsMainFunc(
   double x,
   NumericVector y,
   double lambda,
@@ -79,6 +80,58 @@ NumericVector derivsFunc(
   return dydx;
 }
 
+// [[Rcpp::export]]
+NumericVector derivsTimeFunc(
+    double x,
+    NumericVector y,
+    double lambda,
+    int nVar,
+    List param,
+    double year
+) {
+  NumericVector dydx(nVar);
+  NumericVector delta = GetDelta(year, param);
+  NumericVector qoppa = param["Qoppa"];
+  NumericVector fInit = param["FInit"];
+  double alphaP = param["AlphaP"];
+  double mu = param["Mu"];
+  int noStage = param["NoStage"];
+
+  int iEq = 0;
+
+  // Primary infection
+  dydx[iEq] = -alphaP * y[0] - mu * y[0];
+  iEq += 1;
+
+  // Undiagnosed cases progressing through stages of infection
+  dydx[iEq] = fInit[0] * alphaP * y[0] - (qoppa[0] + delta[0] + mu) * y[iEq];
+  for (int i = 1; i < noStage; i++) {
+    int j = iEq + i;
+    dydx[j] = fInit[i] * alphaP * y[0] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j];
+  }
+  iEq += noStage;
+
+  // Cumulative number of diagnoses in each stage
+  for (int i = 0; i < noStage; i++) {
+    int j = iEq + i;
+    dydx[j] = delta[i] * y[j - noStage];
+  }
+
+  return dydx;
+}
+
+// [[Rcpp::export]]
+derivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
+{
+  if (funcName == "derivsMainFunc") {
+    return derivsFuncXPtr(new derivsFuncPtr(&derivsMainFunc));
+  } else if (funcName == "derivsTimeFunc") {
+    return derivsFuncXPtr(new derivsFuncPtr(&derivsTimeFunc));
+  } else {
+    return derivsFuncXPtr(R_NilValue);
+  }
+}
+
 /*** R
-# derivsFunc(x, y, lambda, nVar, param, year)
+# derivsMainFunc(x, y, lambda, nVar, param, year)
 */

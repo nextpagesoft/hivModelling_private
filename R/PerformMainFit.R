@@ -136,7 +136,7 @@ PerformMainFit <- function(
   }
 
   if (converged) {
-    message(sprintf('Fit converged with goodness-of-fit: %f', lastResults$LLTotal))
+    message(sprintf('Fit converged with goodness-of-fit: %f\n', lastResults$LLTotal))
   }
 
   message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), beta[seq_len(param$NoDelta)]))
@@ -174,7 +174,7 @@ PerformMainFit <- function(
   modelOutputs <- CalculateModelOutputs(res$ModelResults, info, param)
   modelOutputs2 <- ModelTimeToDiagDist(res$ModelResults, info, param)
 
-  finalResults <- ComputeResults(res$ModelResults, modelOutputs, modelOutputs2, param, data)
+  finalResults <- ComputeResults(res$ModelResults, modelOutputs, modelOutputs2, info, param, data)
 
   return(list(
     Converged = converged,
