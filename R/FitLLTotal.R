@@ -7,6 +7,7 @@ FitLLTotal <- function(
 ) {
   # CRAN checks
   Year <- NULL
+  Prob_CD4 <- NULL
 
   VERY_LRG <- 1e+10
   hMin <- 0

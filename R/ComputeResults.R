@@ -6,6 +6,40 @@ ComputeResults <- function(
   param,
   data
 ) {
+  # CRAN checks
+  `.` <- NULL
+  Year <- NULL
+  N_HIV_D <- NULL
+  N_HIV <- NULL
+  N_AIDS_M <- NULL
+  N_AIDS_D <- NULL
+  N_AIDS <- NULL
+  Cum_Inf_M <- NULL
+  Cum_Inf_D <- NULL
+  C_Inf <- NULL
+  N_Inf_M <- NULL
+  N_Inf_D <- NULL
+  N_Inf <- NULL
+  t_diag <- NULL
+  D_Avg_time <- NULL
+  N_Alive <- NULL
+  Cum_Dead_D <- NULL
+  Cum_Und_Dead_M <- NULL
+  N_Alive_Diag_M <- NULL
+  Cum_HIV_M <- NULL
+  N_Und <- NULL
+  N_Und_1 <- NULL
+  N_Und_2 <- NULL
+  N_Und_Inf_p <- NULL
+  N_Und_Alive_p <- NULL
+  N_Und_PrimInf <- NULL
+  N_Und_HIVAIDS_M <- NULL
+  N_Und_500 <- NULL
+  N_Und_CD4_1_M <- NULL
+  N_Und_350 <- NULL
+  LL_HIV <- NULL
+  LL_AIDS <- NULL
+  LL_HIVAIDS <- NULL
 
   VERY_SML <- 1.0e-20
   noCD4 <- param$NoStage - 1

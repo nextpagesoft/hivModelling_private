@@ -17,8 +17,19 @@ FitLLPosCD4 <- function(
   totModels <- modelResults[[N_HIV_Stage_S_Obs]]
   totDatas <- data[[N_HIV_Stage]]
 
-  for (year in seq_len(nrow(modelResults))) {
+  # sel <-
+  #   totModels > 0 &
+  #   modelResults$Year >= info$FitPosCD4MinYear &
+  #   modelResults$Year <= info$FitPosCD4MaxYear
+  # if (info$ModelFitDist == 'POISSON') {
+  #   modelResults[sel, (LL_PosCD4_Year) := FitLLPoisson(totModels, totDatas)]
+  # } else  if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+  #   modelResults[sel, (LL_PosCD4_Year) := FitLLNegBin(totModels, totDatas, param$RDispRest)]
+  # } else {
+  #   stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
+  # }
 
+  for (year in seq_len(nrow(modelResults))) {
     if (
       totModels[year] > 0 &&
       modelResults$Year[year] >= info$FitPosCD4MinYear &&
