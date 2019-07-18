@@ -84,10 +84,10 @@ CalculateModelOutputs <- function(
     for (j in seq(i, length(modelResults$Year))) {
       if (modelResults$Year[i] >= info$FitMinYear) {
         # Number undiagnosed in year j and infected in year i or later
-        N_Und_2[j] <- PI_Now_2D_DV[i, j] + sum(CD4_Now_U_2D_DV[i, j, ])
+        N_Und_2[j] <- N_Und_2[j] + PI_Now_2D_DV[i, j] + sum(CD4_Now_U_2D_DV[i, j, ])
       } else {
         # Number undiagnosed in year j and infected before year i
-        N_Und_1[j] <- PI_Now_2D_DV[i, j] + sum(CD4_Now_U_2D_DV[i, j, ])
+        N_Und_1[j] <- N_Und_1[j] + PI_Now_2D_DV[i, j] + sum(CD4_Now_U_2D_DV[i, j, ])
       }
     }
   }
