@@ -116,7 +116,7 @@ results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 results$Converged
 newVer <- results$FinalResults
 
-fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.csv', sep = ',')
+data.table::fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.csv', sep = ',')
 
 
 oldVer <- fread('~/share/HIV test files/Results/FullData/pop_0_Result_main.csv')

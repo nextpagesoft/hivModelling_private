@@ -112,8 +112,7 @@ PerformMainFit <- function(
                        probSurv1996,
                        param,
                        info,
-                       data,
-                       ...)
+                       data)
       message('  Run time: ', format(Sys.time() - startTime))
 
       pParam <- res$P
@@ -170,11 +169,12 @@ PerformMainFit <- function(
 
   p <- GetParameterVector(beta, thetaF, param)
   res <- FitLLTotal(p, probSurv1996, param, info, data)
-  statRes <- FitStatistics(res$ModelResults, info, data, param)
-  modelOutputs <- CalculateModelOutputs(res$ModelResults, info, param)
-  modelOutputs2 <- ModelTimeToDiagDist(res$ModelResults, info, param)
+  modelResults <- res$ModelResults
+  statRes <- FitStatistics(modelResults, info, data, param)
 
-  finalResults <- ComputeResults(res$ModelResults, modelOutputs, modelOutputs2, info, param, data)
+  countResults <- ModelCountResults(modelResults, info, param)
+  timeResults <- ModelTimeResults(modelResults, info, param)
+  mainOutputs <- ModelOutputs(countResults, timeResults, info, param, data)
 
   return(list(
     Converged = converged,
@@ -184,6 +184,6 @@ PerformMainFit <- function(
     DeltaM = param$DeltaM,
     Statistics = statRes,
     IterResults = iterResults,
-    FinalResults = finalResults
+    MainOutputs = mainOutputs
   ))
 }

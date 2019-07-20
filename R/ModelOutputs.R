@@ -1,7 +1,6 @@
-ComputeResults <- function(
-  modelResults,
-  modelOutputs,
-  modelOutputs2,
+ModelOutputs <- function(
+  countResults,
+  timeResults,
   info,
   param,
   data

@@ -1,4 +1,4 @@
-CalculateModelOutputs <- function(
+ModelCountResults <- function(
   modelResults,
   info,
   param
