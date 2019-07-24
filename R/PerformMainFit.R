@@ -112,7 +112,8 @@ PerformMainFit <- function(
                        probSurv1996,
                        param,
                        info,
-                       data)
+                       data,
+                       ...)
       message('  Run time: ', format(Sys.time() - startTime))
 
       pParam <- res$P
@@ -174,7 +175,7 @@ PerformMainFit <- function(
 
   countResults <- ModelCountResults(modelResults, info, param)
   timeResults <- ModelTimeResults(modelResults, info, param)
-  mainOutputs <- ModelOutputs(countResults, timeResults, info, param, data)
+  mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
 
   return(list(
     Converged = converged,

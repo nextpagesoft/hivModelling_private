@@ -10,6 +10,7 @@ ModelTimeResults <- function(
   timeToDiagDist <- ModelTimeToDiagDist(modelResults, info, param)
 
   return(list(
+    DeltasList = deltasList,
     TimeToDiag = timeToDiag,
     TimeToDiagMedian = timeToDiagMedian,
     TimeToDiagDist = timeToDiagDist

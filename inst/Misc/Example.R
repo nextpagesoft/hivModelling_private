@@ -110,20 +110,20 @@ context <- GetRunContext(
 
 data <- ReadInputData(context)
 
-# results <- PerformMainFit(context, data)
-results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
+results <- PerformMainFit(context, data)
+# results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
-results$Converged
-newVer <- results$FinalResults
-
-data.table::fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.csv', sep = ',')
-
-
+newVer <- results$MainOutputs
 oldVer <- fread('~/share/HIV test files/Results/FullData/pop_0_Result_main.csv')
 oldVer[, ':='(
   Version = NULL,
   Timestamp = NULL
 )]
+setnames(oldVer, old = c('run', 'year'), new = c('Run', 'Year'))
 
+newVer[, Version := 'R']
+oldVer[, Version := 'C']
 
-
+test <- rbind(newVer, oldVer)
+test[, sum(N_Und_CD4_4_T_3), by = .(Version)]
+# data.table::fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.csv', sep = ',')
