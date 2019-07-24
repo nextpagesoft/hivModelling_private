@@ -12,7 +12,7 @@
 #' @param ... Additional arguments passed to amoeba function. Optional.
 #'
 #' @return
-#' List of amoeba results
+#' Results list object
 #'
 #' @examples
 #' \dontrun{
@@ -183,8 +183,13 @@ PerformMainFit <- function(
     Theta = param$theta,
     ThetaF = thetaF,
     DeltaM = param$DeltaM,
+    Info = info,
+    Param = param,
     Statistics = statRes,
     IterResults = iterResults,
+    ModelResults = modelResults,
+    CountResults = countResults,
+    TimeResults = timeResults,
     MainOutputs = mainOutputs
   ))
 }

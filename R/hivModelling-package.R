@@ -19,7 +19,7 @@
 #' @import data.table
 #' @import xml2
 #' @importFrom utils modifyList tail
-#' @importFrom stats setNames
+#' @importFrom stats setNames rnbinom rbinom
 #' @useDynLib hivModelling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 NULL

@@ -23,7 +23,7 @@ Default = 1e-5.}
 \item{...}{Additional arguments passed to amoeba function. Optional.}
 }
 \value{
-List of amoeba results
+Results list object
 }
 \description{
 Description

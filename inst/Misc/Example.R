@@ -110,20 +110,38 @@ context <- GetRunContext(
 
 data <- ReadInputData(context)
 
-results <- PerformMainFit(context, data)
-# results <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
+# mainResults <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
+mainResults <- PerformMainFit(context, data)
+bsResults <- PerformBootstrapFits(context, data, mainResults)
 
-newVer <- results$MainOutputs
+# Reconcile against the Windows version
+newVer <- mainResults$MainOutputs
+newVer[, Version := 'R']
 oldVer <- fread('~/share/HIV test files/Results/FullData/pop_0_Result_main.csv')
 oldVer[, ':='(
-  Version = NULL,
+  Version = 'C',
   Timestamp = NULL
 )]
 setnames(oldVer, old = c('run', 'year'), new = c('Run', 'Year'))
 
-newVer[, Version := 'R']
-oldVer[, Version := 'C']
+compareDT <- rbind(newVer, oldVer)
+keyCols <- c('Version', 'Run', 'Year')
+numCols <- setdiff(colnames(compareDT), keyCols)
+compareDT <- compareDT[, lapply(.SD, sum), .SDcols = numCols, by = .(Version)]
+compareDT <- melt(compareDT, id.vars = 'Version', variable.name = 'Column', value.name = 'Value')
+compareDT <- dcast(compareDT, Column ~ Version, value.var = 'Value')
+compareDT[, Difference := R - C]
+errors <- compareDT[abs(Difference) > 1e-3]
+if (nrow(errors) > 0) {
+  message('Reconciliation failed:')
+  print(errors)
+} else {
+  message('Reconciliation successful')
+}
 
-test <- rbind(newVer, oldVer)
-test[, sum(N_Und_CD4_4_T_3), by = .(Version)]
-# data.table::fwrite(results$FinalResults, '~/share/HIV test files/Results/FUllData/Result_main.csv', sep = ',')
+# Save results in csv file
+data.table::fwrite(
+  mainResults$MainOutputs,
+  '~/share/HIV test files/Results/FUllData/Result_main.csv',
+  sep = ','
+)
