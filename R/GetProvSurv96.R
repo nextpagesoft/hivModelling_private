@@ -2,26 +2,28 @@
 #'
 #' Description
 #'
-#' @param country country
-#' @param noStage noStage
-#' @param qoppa qoppa
-#' @param modelMinYear modelMinYear
-#' @param modelNoYears modelNoYears
+#' @param param Parameters list
+#' @param info Info list
 #'
 #' @return
 #' matrix
 #'
 #' @examples
 #' \dontrun{
-#' GetProvSurv96(, noStage, qoppa, modelMinYear, modelNoYears)
+#' GetProvSurv96(param, info)
 #' }
 #'
 #' @export
-GetProvSurv96 <- function(country, noStage, qoppa, modelMinYear, modelNoYears)
+GetProvSurv96 <- function(param, info)
 {
+  noStage <- param$NoStage
+  qoppa <- param$Qoppa
+  modelMinYear <- info$ModelMinYear
+  modelNoYears <- info$ModelNoYears
+
   probSurv1996 <- matrix(1, modelNoYears, noStage)
 
-  if (country == 'NL') {
+  if (info$Country == 'NL') {
     qbar <- matrix(0, noStage, noStage)
     for (i in seq(noStage)) {
       for (j in seq(noStage)) {

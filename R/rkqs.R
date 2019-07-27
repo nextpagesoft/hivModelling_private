@@ -32,6 +32,12 @@ rkqs <- function(
                      res$MinLambda)
 
     errMax <- max(abs(yerr / yscal), 0) / eps
+    if (is.na(errMax)) {
+      print(x)
+      print(y)
+      print(yerr)
+      print(yscal)
+    }
 
     if (errMax > 1) {
       hTemp <- SAFETY * h * errMax ^ PSHRNK

@@ -112,7 +112,8 @@ data <- ReadInputData(context)
 
 # mainResults <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 mainResults <- PerformMainFit(context, data)
-bsResults <- PerformBootstrapFits(context, data, mainResults)
+bsResults <- PerformBootstrapFit(context, data, mainResults)
+bsResultsList <- PerformBootstrapFits(bsCount = 4, context, data, mainResults)
 
 # Reconcile against the Windows version
 newVer <- mainResults$MainOutputs

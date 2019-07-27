@@ -43,10 +43,8 @@ odeint <- function(
       h <- x2 - x
     }
 
-    res <- rkqs(
-      x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr,
-      tmpYear
-    )
+    res <-
+      rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear)
     x <- res$X
     y <- res$Y
     rkqsLambda <- res$MinLambda

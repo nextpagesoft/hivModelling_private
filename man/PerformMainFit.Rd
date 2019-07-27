@@ -26,11 +26,11 @@ Default = 1e-5.}
 Results list object
 }
 \description{
-Description
+Perform main fit
 }
 \examples{
 \dontrun{
-PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5)
+PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE)
 }
 
 }

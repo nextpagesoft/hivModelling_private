@@ -5,8 +5,8 @@ Repos: CRAN=https://cloud.r-project.org
 
 Package: Rcpp
 Source: CRAN
-Version: 1.0.1
-Hash: 390ed5b5da840cec3e6f5c90c6ab23f7
+Version: 1.0.2
+Hash: d04e441a8d398e3d3a71f294c07fa94d
 
 Package: data.table
 Source: CRAN
@@ -46,5 +46,5 @@ GithubSha1: 90c7c752e7e2abcda7f469e732cef452db881dd0
 Package: xml2
 Source: CRAN
 Version: 1.2.0
-Hash: 6e643a368e9748966b96332eaa631411
+Hash: 04e7ac037f05df0041a504e2fcea07c9
 Requires: Rcpp

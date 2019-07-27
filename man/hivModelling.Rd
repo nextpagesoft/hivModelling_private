@@ -10,9 +10,6 @@ Calculates HIV incidence in a given population.
 }
 \author{
 Author: Ard van Sighem \email{<a.i.vansighem@amc.uva.nl>}\cr
-Author: Magdalena Rosinska \email{<mrosinska@pzh.gov.pl>}\cr
-Author: Nikos Pantazis \email{<npantaz@med.uoa.gr>}\cr
 Author: Chantal Quinten \email{<chantal.quinten@ecdc.europa.eu>}\cr
-Author: Janusz Janiec \email{<jjaniec@pzh.gov.pl>}\cr
 Creator: Daniel Lewandowski \email{<daniel@nextpagesoft.net>}
 }

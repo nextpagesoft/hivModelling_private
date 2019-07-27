@@ -4,18 +4,12 @@
 \alias{GetProvSurv96}
 \title{GetProvSurv96}
 \usage{
-GetProvSurv96(country, noStage, qoppa, modelMinYear, modelNoYears)
+GetProvSurv96(param, info)
 }
 \arguments{
-\item{country}{country}
+\item{param}{Parameters list}
 
-\item{noStage}{noStage}
-
-\item{qoppa}{qoppa}
-
-\item{modelMinYear}{modelMinYear}
-
-\item{modelNoYears}{modelNoYears}
+\item{info}{Info list}
 }
 \value{
 matrix
@@ -25,7 +19,7 @@ Description
 }
 \examples{
 \dontrun{
-GetProvSurv96(, noStage, qoppa, modelMinYear, modelNoYears)
+GetProvSurv96(param, info)
 }
 
 }

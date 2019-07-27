@@ -16,6 +16,7 @@ Depends: R (>= 3.5.0)
 Imports: 
     data.table (>= 1.12.0),
     future (>= 1.12.0),
+    nloptr (>= 1.2.1),
     xml2 (>= 1.2.0),
     Rcpp (>= 1.0.1),
     utils (>= 3.5.0),
