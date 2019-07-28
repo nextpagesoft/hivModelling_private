@@ -2,7 +2,7 @@ library(miniCRAN)
 
 repoCRAN <- 'https://cran.r-project.org/'
 
-pkgs <- c('data.table', 'future', 'xml2', 'Rcpp', 'utils', 'stats')
+pkgs <- c('data.table', 'future', 'xml2', 'Rcpp', 'utils', 'stats', 'nloptr')
 pkgs <- setdiff(pkgs,
                 c('grid', 'graphics', 'parallel', 'stats', 'tools', 'utils'))
 
