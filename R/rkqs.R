@@ -28,11 +28,11 @@ rkqs <- function(
     res <- rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFuncXptr, tmpYear)
     yout <- res$YOut
     yerr <- res$YErr
-    minLambda <- min(minLambda,
-                     res$MinLambda)
+    minLambda <- min(minLambda, res$MinLambda)
 
     errMax <- max(abs(yerr / yscal), 0) / eps
     if (is.na(errMax)) {
+      message('rkqs: errMax is NA')
       print(x)
       print(y)
       print(yerr)

@@ -2,6 +2,7 @@
 #'
 #' Perform bootstrap fit
 #'
+#' @param runId Bootstrap run index. Must be greater than 0, which is reserved for the main fit.
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
 #' @param mainResults Main results
@@ -22,6 +23,7 @@
 #'
 #' @export
 PerformBootstrapFit <- function(
+  runId,
   context,
   data,
   mainResults,
@@ -54,6 +56,7 @@ PerformBootstrapFit <- function(
   param <- mainResults$Param
   probSurv1996 <- GetProvSurv96(param, info)
 
+  # Generate 'data' object
   dataBS <- data[, .(Year, Prob_CD4, N_Dead, C_Dead, N_Inf, C_Inf, N_Emig, C_Emig)]
   dataBS[mainResults$ModelResults,
          Prob_HIVAIDS := N_HIV_Stage_S_Obs_5 / (BIT_SML + N_HIV_S_Obs),
@@ -91,6 +94,7 @@ PerformBootstrapFit <- function(
 
   GetDataWeights(dataBS)
 
+  # Perform fit on the generated data
   res <- EstimateParameters(
     runType = 'BOOTSTRAP', mainResults, probSurv1996, param, info, data = dataBS, maxNoFit, ctol,
     ftol, ...
@@ -111,7 +115,7 @@ PerformBootstrapFit <- function(
 
   countResults <- ModelCountResults(modelResults, info, param)
   timeResults <- ModelTimeResults(modelResults, info, param)
-  mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
+  mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data, runId)
 
   return(list(
     Converged = converged,

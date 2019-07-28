@@ -1,82 +1,6 @@
 library(hivModelling)
 
-# 1. Provide input settings and model parameters ---------------------------------------------------
-#
-# 1a. Read XML model file
-# args <- ReadModelFile(modelFilePath)
-
-# 1b. Specify arguments directly
-#
-args <- list(
-  Run1 = list(
-    Settings = list(
-      RunInParallel = TRUE,
-      ModelsToRun = c('INCIDENCE'),
-      InputDataPath = '~/share/HIV test files/Data/test NL'
-    ),
-    Parameters = list(
-      Models = list(
-        INCIDENCE = list(
-          Country = 'NL'
-        )
-      )
-    )
-  ),
-  Run2 = list(
-    Settings = list(
-      RunInParallel = TRUE,
-      ModelsToRun = c('INCIDENCE'),
-      InputDataPath = '~/share/HIV test files/Data/test NL'
-    ),
-    Parameters = list(
-      Models = list(
-        INCIDENCE = list(
-          Country = 'NL'
-        )
-      )
-    )
-  )
-)
-
-# 2. Run -------------------------------------------------------------------------------------------
-
-# 2a. All sequentially
-results <- RunModels(args, future::sequential)
-
-# 2b. All in parallel
-results <- RunModels(args, future::multiprocess)
-
-# 2c. Single incidence model
-results <- do.call(RunIncidenceModel, args[[1]])
-
-# 2d. Single incidence model
-results <- RunIncidenceModel(
-  settings = args$Run1$Settings,
-  parameters = args$Run1$Parameters
-)
-
-# 2e. Single incidence model
-results <- RunIncidenceModel(
-  settings = list(
-    RunInParallel = TRUE,
-    ModelsToRun = c('INCIDENCE'),
-    InputDataPath = '~/share/HIV test files/Data/test NL'
-  ),
-  parameters = list(
-    Models = list(
-      INCIDENCE = list(
-        Country = 'NL'
-      )
-    )
-  )
-)
-
-
-# 3. Create output artifacts (plots, reports, etc.) ------------------------------------------------
-artifacts <- GetOutputArtifacts(results)
-
-
-# 4. Testing ---------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
     RunInParallel = TRUE,
@@ -92,29 +16,58 @@ context <- GetRunContext(
   )
 )
 
-context <- GetRunContext(
-  settings = list(
-    RunInParallel = TRUE,
-    ModelsToRun = c('INCIDENCE'),
-    InputDataPath = '~/share/HIV test files/Data/test Ard'
-  ),
-  parameters = list(
-    Models = list(
-      INCIDENCE = list(
-        Country = 'NL',
-        FitDistribution = 'POISSON'
-      )
-    )
-  )
-)
+# context <- GetRunContext(
+#   settings = list(
+#     RunInParallel = TRUE,
+#     ModelsToRun = c('INCIDENCE'),
+#     InputDataPath = '~/share/HIV test files/Data/test Ard'
+#   ),
+#   parameters = list(
+#     Models = list(
+#       INCIDENCE = list(
+#         Country = 'NL',
+#         FitDistribution = 'POISSON'
+#       )
+#     )
+#   )
+# )
 
 data <- ReadInputData(context)
 
-# mainResults <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 mainResults <- PerformMainFit(context, data)
-bsResults <- PerformBootstrapFit(context, data, mainResults)
-bsResultsList <- PerformBootstrapFits(bsCount = 4, context, data, mainResults)
+# mainResults <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
+# Algorithms checked on a single boostrap iteration (only for general comparison, results differ
+# from iteration to iteration):
+# NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
+# NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
+# NLOPT_LN_SBPLX        - very slow, interrupted
+# NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
+# NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
+# NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
+# NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
+bsResultsList <- PerformBootstrapFits(
+  bsCount = 20,
+  context,
+  data,
+  mainResults,
+  algorithm = 'NLOPT_LN_BOBYQA'
+)
+
+# Save results in csv file
+data.table::fwrite(
+  mainResults$MainOutputs,
+  '~/share/HIV test files/Results/FUllData/Result_main.csv',
+  sep = ','
+)
+
+data.table::fwrite(
+  rbindlist(lapply(bsResultsList, '[[', 'MainOutputs')),
+  '~/share/HIV test files/Results/FUllData/Result_BS.csv',
+  sep = ','
+)
+
+# --------------------------------------------------------------------------------------------------
 # Reconcile against the Windows version
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
@@ -139,10 +92,3 @@ if (nrow(errors) > 0) {
 } else {
   message('Reconciliation successful')
 }
-
-# Save results in csv file
-data.table::fwrite(
-  mainResults$MainOutputs,
-  '~/share/HIV test files/Results/FUllData/Result_main.csv',
-  sep = ','
-)

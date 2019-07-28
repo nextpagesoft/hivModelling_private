@@ -6,12 +6,12 @@
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
 #' @param mainResults Main results
-#' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
+#' @param maxNoFit Maximum number of optimization iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
-#' @param ftol Minium required deviance in amoeba calculations. Optional.
+#' @param ftol Minium required deviance in optimization calculations. Optional.
 #'   Default = 1e-5.
-#' @param ... Additional arguments passed to amoeba function. Optional.
+#' @param ... Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.
 #'
 #' @return
 #' list object containing context, data and model objects
@@ -32,9 +32,13 @@ PerformBootstrapFits <- function(
   ftol = 1e-5,
   ...
 ) {
+  # CRAN checks
+  Run <- NULL
+
   results <- list()
   for (idx in seq_len(bsCount)) {
-    results[[idx]] <- PerformBootstrapFit(context, data, mainResults, maxNoFit, ctol, ftol, ...)
+    results[[idx]] <-
+      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, ...)
   }
 
   return(results)

@@ -4,10 +4,12 @@
 \alias{PerformBootstrapFit}
 \title{PerformBootstrapFit}
 \usage{
-PerformBootstrapFit(context, data, mainResults, maxNoFit = 30,
+PerformBootstrapFit(runId, context, data, mainResults, maxNoFit = 30,
   ctol = 1e-06, ftol = 1e-05, ...)
 }
 \arguments{
+\item{runId}{Bootstrap run index. Must be greater than 0, which is reserved for the main fit.}
+
 \item{context}{List of parameters. Required.}
 
 \item{data}{Input data as data.table. Required.}

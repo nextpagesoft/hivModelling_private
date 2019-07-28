@@ -16,15 +16,15 @@ PerformBootstrapFits(bsCount = 20, context, data, mainResults,
 
 \item{mainResults}{Main results}
 
-\item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
+\item{maxNoFit}{Maximum number of optimization iterations. Optional. Default = 30.}
 
 \item{ctol}{Minium required deviance in consecutive lambda estimations.
 Optional. Default = 1e-6.}
 
-\item{ftol}{Minium required deviance in amoeba calculations. Optional.
+\item{ftol}{Minium required deviance in optimization calculations. Optional.
 Default = 1e-5.}
 
-\item{...}{Additional arguments passed to amoeba function. Optional.}
+\item{...}{Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.}
 }
 \value{
 list object containing context, data and model objects

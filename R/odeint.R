@@ -49,9 +49,7 @@ odeint <- function(
     y <- res$Y
     rkqsLambda <- res$MinLambda
 
-    minLambda <- min(minLambda,
-                     derivLambda,
-                     rkqsLambda)
+    minLambda <- min(minLambda, derivLambda, rkqsLambda)
 
     if (res$hDid == h) {
       nOk <- nOk + 1

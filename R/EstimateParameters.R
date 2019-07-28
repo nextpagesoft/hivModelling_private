@@ -13,6 +13,8 @@
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
+#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for boostrap
+#'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param ... Additional arguments passed to amoeba function. Optional.
 #'
 #' @return
@@ -34,6 +36,7 @@ EstimateParameters <- function(
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
+  algorithm = 'NLOPT_LN_BOBYQA',
   ...
 ) {
   OptimFunc <- function(p) {
@@ -108,6 +111,7 @@ EstimateParameters <- function(
   message('  Run time: ', format(Sys.time() - startTime))
 
   # Stop fitting when the change in deviance is smaller than ctol.
+  totalStartTime <- Sys.time()
   llOld <- 0
   while (
     abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&
@@ -115,50 +119,51 @@ EstimateParameters <- function(
   ) {
     iter <- iter + 1
 
+    startTime <- Sys.time()
+
     if (runType == 'MAIN') {
       message('--- Iteration ', iter, ': Amoeba')
-      startTime <- Sys.time()
       res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, ...)
-      message('  Run time: ', format(Sys.time() - startTime))
     } else {
-      message('--- Iteration ', iter, ': nloptr')
-      startTime <- Sys.time()
+      message('--- Iteration ', iter, ': ', algorithm)
 
-      # Algorithms that work:
-      # NLOPT_LN_NELDERMEAD - accurate, slow
-      # NLOPT_LN_BOBYQA - moderately accurate, fast
-      # NLOPT_LN_SBPLX - accurate, slow
+      # Algorithms checked:
+      # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
+      # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
+      # NLOPT_LN_SBPLX        - very slow, interrupted
+      # NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
+      # NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
+      # NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
+      # NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
       optimRes <- nloptr::nloptr(
         pParam,
         OptimFunc,
-        lb = c(rep(0, param$NoDelta), rep(-Inf, param$NoTheta)),
-        ub = c(rep(1, param$NoDelta), rep(Inf, param$NoTheta)),
+        lb = c(rep(0, param$NoDelta), rep(-10000, param$NoTheta)),
+        ub = c(rep(1, param$NoDelta), rep(10000, param$NoTheta)),
         opts = list(
-          algorithm = 'NLOPT_GN_ORIG_DIRECT_L',
-          xtol_rel = 1.0e-8,
-          print_level = 0,
-          maxeval = 100000
+          algorithm = algorithm,
+          ftol_abs = ftol,
+          maxeval = 50000
         )
       )
 
-      # test <- nlm(OptimFunc, pParam)
-      # OptimFunc(optimRes$solution)
-      # OptimFunc(pParam)
-
       p <- optimRes$solution
       fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
+      message('  LLTotal = ', fitRes$LLTotal)
       res <- modifyList(
         list(P = p),
         fitRes
       )
-
-      message('  Run time: ', format(Sys.time() - startTime))
     }
+
+    message('  Run time: ', format(Sys.time() - startTime))
 
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
+  message('  Total run time: ', format(Sys.time() - totalStartTime))
+  cat('\n')
 
   lastResults <- iterResults[[iter]]
 

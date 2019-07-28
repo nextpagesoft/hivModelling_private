@@ -5,7 +5,8 @@
 \title{EstimateParameters}
 \usage{
 EstimateParameters(runType, mainResults = NULL, probSurv1996, param,
-  info, data, maxNoFit = 30, ctol = 1e-06, ftol = 1e-05, ...)
+  info, data, maxNoFit = 30, ctol = 1e-06, ftol = 1e-05,
+  algorithm = "NLOPT_LN_BOBYQA", ...)
 }
 \arguments{
 \item{runType}{String indicating type of run, either 'MAIN' or 'BOOSTRAP'}
@@ -27,6 +28,9 @@ Optional. Default = 1e-6.}
 
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
+
+\item{algorithm}{Name of optimization algorithm from package \code{nloptr} to use for boostrap
+iterations. Default = 'NLOPT_LN_BOBYQA'}
 
 \item{...}{Additional arguments passed to amoeba function. Optional.}
 }

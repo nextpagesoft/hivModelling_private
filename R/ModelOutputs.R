@@ -4,7 +4,8 @@ ModelOutputs <- function(
   timeResults,
   info,
   param,
-  data
+  data,
+  runId = 0
 ) {
   # CRAN checks
   `.` <- NULL
@@ -49,7 +50,7 @@ ModelOutputs <- function(
 
   # Initialize from modelResults
   outputs <- modelResults[, .(
-    Run = 0,
+    Run = runId,
     Year
   )]
 
