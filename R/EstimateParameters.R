@@ -162,7 +162,7 @@ EstimateParameters <- function(
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
-  message('  Total run time: ', format(Sys.time() - totalStartTime))
+  message('Total run time: ', format(Sys.time() - totalStartTime))
   cat('\n')
 
   lastResults <- iterResults[[iter]]
