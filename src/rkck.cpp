@@ -1,8 +1,7 @@
 // Take a Cash-Karp Runge-Kutta step
 
-#include <Rcpp.h>
+#include "rkck.h"
 #include "GetBSpline.h"
-#include "hivModelling_types.h"
 
 using namespace Rcpp;
 
@@ -17,7 +16,7 @@ List rkck(
   List info,
   int minYear,
   int maxYear,
-  derivsFuncXPtr derivsFunc,
+  DerivsFuncXPtr derivsFunc,
   double tmpYear
 ) {
   double a2 = 0.2;

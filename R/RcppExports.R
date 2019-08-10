@@ -37,6 +37,10 @@ rkck <- function(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tm
     .Call(`_hivModelling_rkck`, x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }
 
+rkqs <- function(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear) {
+    .Call(`_hivModelling_rkqs`, x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear)
+}
+
 zbrent <- function(func, x1, x2, tol, extraArgs) {
     .Call(`_hivModelling_zbrent`, func, x1, x2, tol, extraArgs)
 }

@@ -14,6 +14,6 @@ typedef NumericVector (*derivsFuncPtr)(
     double year
 );
 
-typedef XPtr<derivsFuncPtr> derivsFuncXPtr;
+typedef XPtr<derivsFuncPtr> DerivsFuncXPtr;
 
 #endif // _hivModelling_types_

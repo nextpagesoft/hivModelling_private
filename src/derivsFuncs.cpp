@@ -121,14 +121,14 @@ NumericVector derivsTimeFunc(
 }
 
 // [[Rcpp::export]]
-derivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
+DerivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
 {
   if (funcName == "derivsMainFunc") {
-    return derivsFuncXPtr(new derivsFuncPtr(&derivsMainFunc));
+    return DerivsFuncXPtr(new derivsFuncPtr(&derivsMainFunc));
   } else if (funcName == "derivsTimeFunc") {
-    return derivsFuncXPtr(new derivsFuncPtr(&derivsTimeFunc));
+    return DerivsFuncXPtr(new derivsFuncPtr(&derivsTimeFunc));
   } else {
-    return derivsFuncXPtr(R_NilValue);
+    return DerivsFuncXPtr(R_NilValue);
   }
 }
 
