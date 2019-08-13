@@ -11,7 +11,7 @@ odeint <- function(
   minYear,
   maxYear,
   derivsFuncName,
-  tmpYear = 0.0
+  tmpYear = 0
 ) {
   theta <- param$Theta
   kOrder <- info$SplineOrder

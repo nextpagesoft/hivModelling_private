@@ -7,36 +7,26 @@ FitLLAIDS <- function(
   # CRAN checks
   LL_AIDS_Year <- NULL
 
-  L_AIDS <- 0.0
-
-  modelResults[, LL_AIDS_Year := 0]
-
   totModels <- modelResults[['N_AIDS']]
   totDatas <- data[['N_AIDS']]
 
-  for (year in seq_len(nrow(modelResults))) {
+  sel <-
+    totModels > 0 &
+    modelResults$Year >= info$FitAIDSMinYear &
+    modelResults$Year <= info$FitAIDSMaxYear
 
-    if (totModels[year] > 0 &&
-        modelResults$Year[year] >= info$FitAIDSMinYear &&
-        modelResults$Year[year] <= info$FitAIDSMaxYear)
-    {
-      if (info$ModelFitDist == 'POISSON') {
-        set(x = modelResults,
-            i = year,
-            j = 'LL_AIDS_Year',
-            value = FitLLPoisson(totModels[year], totDatas[year]))
-      } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-        set(x = modelResults,
-            i = year,
-            j = 'LL_AIDS_Year',
-            value = FitLLNegBin(totModels[year], totDatas[year], param$RDispAIDS))
-      } else {
-        stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
-      }
-
-      L_AIDS <- L_AIDS + modelResults[['LL_AIDS_Year']][year]
-    }
+  if (info$ModelFitDist == 'POISSON') {
+    vals <- FitLLPoisson(totModels[sel], totDatas[sel])
+  } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+    vals <- FitLLNegBin(totModels[sel], totDatas[sel], param$RDispRest)
+  } else {
+    stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
   }
 
-  return(L_AIDS)
+  modelResults[, LL_AIDS_Year := 0]
+  modelResults[sel, LL_AIDS_Year := vals]
+
+  ll <- sum(modelResults$LL_AIDS_Year)
+
+  return(ll)
 }

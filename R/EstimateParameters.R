@@ -53,7 +53,7 @@ EstimateParameters <- function(
 
   # Maximum number of iterations
   iterResults <- list()
-  llMin <- 1.0e+10
+  llMin <- 1e+10
   iter <- 1
 
   startTime <- Sys.time()

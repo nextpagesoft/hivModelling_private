@@ -7,26 +7,26 @@
 using namespace Rcpp;
 
 // FitLLNegBin
-double FitLLNegBin(double y_m, double y_d, double r);
+NumericVector FitLLNegBin(NumericVector y_m, NumericVector y_d, double r);
 RcppExport SEXP _hivModelling_FitLLNegBin(SEXP y_mSEXP, SEXP y_dSEXP, SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type y_m(y_mSEXP);
-    Rcpp::traits::input_parameter< double >::type y_d(y_dSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_m(y_mSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_d(y_dSEXP);
     Rcpp::traits::input_parameter< double >::type r(rSEXP);
     rcpp_result_gen = Rcpp::wrap(FitLLNegBin(y_m, y_d, r));
     return rcpp_result_gen;
 END_RCPP
 }
 // FitLLPoisson
-double FitLLPoisson(double y_m, double y_d);
+NumericVector FitLLPoisson(NumericVector y_m, NumericVector y_d);
 RcppExport SEXP _hivModelling_FitLLPoisson(SEXP y_mSEXP, SEXP y_dSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type y_m(y_mSEXP);
-    Rcpp::traits::input_parameter< double >::type y_d(y_dSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_m(y_mSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_d(y_dSEXP);
     rcpp_result_gen = Rcpp::wrap(FitLLPoisson(y_m, y_d));
     return rcpp_result_gen;
 END_RCPP

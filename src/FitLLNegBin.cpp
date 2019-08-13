@@ -3,17 +3,21 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double FitLLNegBin(
-    double y_m,
-    double y_d,
-    double r
+NumericVector FitLLNegBin(
+  NumericVector y_m,
+  NumericVector y_d,
+  double r
 ) {
-  double LL = 0.0;
+  NumericVector LL(y_m.size());
 
-  if (y_d == 0.0) {
-    LL = -2 * r *(log(r) - log(r + y_m));
-  } else {
-    LL = 2 * y_d *(log(y_d) - log(y_m)) - 2 * (r + y_d) * (log(r + y_d) - log(r + y_m));
+  for (int i = 0; i < LL.size(); ++i) {
+    if (y_d[i] == 0.0) {
+      LL[i] = -2 * r *(log(r) - log(r + y_m[i]));
+    } else {
+      LL[i] =
+        2 * y_d[i] *(log(y_d[i]) - log(y_m[i])) -
+        2 * (r + y_d[i]) * (log(r + y_d[i]) - log(r + y_m[i]));
+    }
   }
 
   return LL;

@@ -62,7 +62,7 @@ FitLLTotal <- function(
              'Year'))
 
   # Changes made by reference
-  probCD4 <- data[-.N, Prob_CD4]
+  probCD4 <- data$Prob_CD4[-nrow(data)]
   ModelAnnualNumbers(modelResults, probSurv1996, probCD4)
 
   lambdaPenalty <- ifelse(minLambda < 0,
