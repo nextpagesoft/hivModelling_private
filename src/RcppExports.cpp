@@ -32,17 +32,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // GetBSpline
-double GetBSpline(double time, List param, List info, double minYear, double maxYear);
-RcppExport SEXP _hivModelling_GetBSpline(SEXP timeSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
+double GetBSpline(double time, NumericVector theta, int kOrder, int modelSplineN, NumericVector myKnots, double minYear, double maxYear);
+RcppExport SEXP _hivModelling_GetBSpline(SEXP timeSEXP, SEXP thetaSEXP, SEXP kOrderSEXP, SEXP modelSplineNSEXP, SEXP myKnotsSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
-    Rcpp::traits::input_parameter< List >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int >::type kOrder(kOrderSEXP);
+    Rcpp::traits::input_parameter< int >::type modelSplineN(modelSplineNSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type myKnots(myKnotsSEXP);
     Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetBSpline(time, param, info, minYear, maxYear));
+    rcpp_result_gen = Rcpp::wrap(GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -176,7 +178,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
     {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
-    {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 5},
+    {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
     {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 2},
     {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
     {"_hivModelling_derivsMainFunc", (DL_FUNC) &_hivModelling_derivsMainFunc, 6},

@@ -5,19 +5,16 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 double GetBSpline(
   double time,
-  List param,
-  List info,
+  NumericVector theta,
+  int kOrder,
+  int modelSplineN,
+  NumericVector myKnots,
   double minYear,
   double maxYear
 ) {
-  if (time <= minYear || time > maxYear + 1e-7) {
+  if (time <= minYear || time > maxYear + 1e-7 || all(theta == 0).is_true()) {
     return 0;
   }
-
-  int kOrder = info["SplineOrder"];
-  int modelSplineN = info["ModelSplineN"];
-  NumericVector myKnots = info["MyKnots"];
-  NumericVector theta = param["Theta"];
 
   NumericMatrix bSpline(modelSplineN, kOrder);
 
@@ -38,8 +35,7 @@ double GetBSpline(
         }
 
         if (myKnots[i + k] != myKnots[i]) {
-          bSpline(i, k) +=
-            (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
+          bSpline(i, k) += (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
         }
       }
     }
@@ -51,5 +47,5 @@ double GetBSpline(
 }
 
 /*** R
-GetBSpline(time, param, info, minYear, maxYear)
+GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 */

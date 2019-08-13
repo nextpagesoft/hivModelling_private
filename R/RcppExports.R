@@ -9,8 +9,8 @@ FitLLPoisson <- function(y_m, y_d) {
     .Call(`_hivModelling_FitLLPoisson`, y_m, y_d)
 }
 
-GetBSpline <- function(time, param, info, minYear, maxYear) {
-    .Call(`_hivModelling_GetBSpline`, time, param, info, minYear, maxYear)
+GetBSpline <- function(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear) {
+    .Call(`_hivModelling_GetBSpline`, time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 }
 
 GetDelta <- function(time, param) {

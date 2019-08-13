@@ -22,10 +22,10 @@ List rkqs(
   DerivsFuncXPtr derivsFunc,
   int tmpYear
 ) {
-  const double SAFETY = 0.9;
-  const double PSHRNK = -0.25;
-  const double ERRCON = 1.89e-4;
-  const double PGROW = -0.2;
+  static const double SAFETY = 0.9;
+  static const double PSHRNK = -0.25;
+  static const double ERRCON = 1.89e-4;
+  static const double PGROW = -0.2;
 
   NumericVector yerr(n);
   NumericVector ytemp(n);

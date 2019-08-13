@@ -13,15 +13,19 @@ odeint <- function(
   derivsFuncName,
   tmpYear = 0.0
 ) {
+  theta <- param$Theta
+  kOrder <- info$SplineOrder
+  modelSplineN <- info$ModelSplineN
+  myKnots <- info$MyKnots
+
   derivsFunc <- get(derivsFuncName)
   derivsFuncXptr <- GetDerivsFuncXptr(derivsFuncName)
 
+  MAXSTP <- 1e+4
+  TINY <- 1e-30
   VERY_LRG <- 1e+10
   nBad <- 0
   nOk <- 0
-
-  MAXSTP <- 10e+5
-  TINY <- 1e-30
 
   yscal <- rep(0, nVar)
   y <- rep(0, nVar)
@@ -34,7 +38,8 @@ odeint <- function(
   minLambda <- VERY_LRG
 
   for (nstp in seq_len(MAXSTP)) {
-    derivLambda <- GetBSpline(x, param, info, minYear, maxYear)
+
+    derivLambda <- GetBSpline(x, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
     dydx <- derivsFunc(x, y, derivLambda, nVar, param, tmpYear)
 
     yscal <- abs(y) + abs(dydx * h) + TINY
