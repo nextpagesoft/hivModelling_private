@@ -22,7 +22,6 @@ List rkqs(
   DerivsFuncXPtr derivsFunc,
   int tmpYear
 ) {
-  const double VERY_LRG = 1e+10;
   const double SAFETY = 0.9;
   const double PSHRNK = -0.25;
   const double ERRCON = 1.89e-4;
