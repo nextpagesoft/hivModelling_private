@@ -11,6 +11,9 @@
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in optimization calculations. Optional.
 #'   Default = 1e-5.
+#' @param executionPlan Execution plan for the job planner (see package 'future'). Optional.
+#'   Default = future::sequential.
+#' @param statusRefreshRate Number of seconds to next refresh of job status. Optional. Default = 2.
 #' @param ... Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.
 #'
 #' @return
@@ -30,16 +33,23 @@ PerformBootstrapFits <- function(
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
+  executionPlan = future::sequential,
+  statusRefreshRate = 2,
   ...
 ) {
-  # CRAN checks
-  Run <- NULL
+  # Set execution plan
+  future::plan(executionPlan)
 
-  results <- list()
-  for (idx in seq_len(bsCount)) {
-    results[[idx]] <-
-      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, ...)
-  }
+  # Create jobs
+  jobs <- lapply(seq_len(bsCount), function(idx) {
+    message(sprintf('Performing iteration %d', idx))
+    future::future({
+      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol)
+    })
+  })
+
+  # Monitor jobs and check results.
+  results <- MonitorFutureJobs(jobs, statusRefreshRate)
 
   return(results)
 }

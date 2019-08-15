@@ -5,7 +5,8 @@
 \title{PerformBootstrapFits}
 \usage{
 PerformBootstrapFits(bsCount = 20, context, data, mainResults,
-  maxNoFit = 30, ctol = 1e-06, ftol = 1e-05, ...)
+  maxNoFit = 30, ctol = 1e-06, ftol = 1e-05,
+  executionPlan = future::sequential, statusRefreshRate = 2, ...)
 }
 \arguments{
 \item{bsCount}{Count of boostrap iterations. Default = \code{20}}
@@ -23,6 +24,11 @@ Optional. Default = 1e-6.}
 
 \item{ftol}{Minium required deviance in optimization calculations. Optional.
 Default = 1e-5.}
+
+\item{executionPlan}{Execution plan for the job planner (see package 'future'). Optional.
+Default = future::sequential.}
+
+\item{statusRefreshRate}{Number of seconds to next refresh of job status. Optional. Default = 2.}
 
 \item{...}{Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.}
 }

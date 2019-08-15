@@ -87,7 +87,7 @@ PerformMainFit <- function(
       param$RDispAIDS <- zbrent(FitLLrAIDS, rMin, rMax, ftol, extraArgs)
       param$RDispRest <- zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
 
-      message(sprintf('Overdisperion: AIDS = %f, Rest = %f', param$RDispAIDS, param$RDispRest))
+      message(sprintf('Overdispersion: AIDS = %f, Rest = %f', param$RDispAIDS, param$RDispRest))
     }
   }
 

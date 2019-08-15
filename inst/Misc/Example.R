@@ -51,7 +51,8 @@ bsResultsList <- PerformBootstrapFits(
   context,
   data,
   mainResults,
-  algorithm = 'NLOPT_LN_BOBYQA'
+  algorithm = 'NLOPT_LN_BOBYQA',
+  executionPlan = future::multiprocess
 )
 
 # Save results in csv file

@@ -62,9 +62,7 @@ PerformBootstrapFit <- function(
          Prob_HIVAIDS := N_HIV_Stage_S_Obs_5 / (BIT_SML + N_HIV_S_Obs),
          on = .(Year)]
 
-  if (info$ModelFitDist == 'POISSON') {
-
-  } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
+  if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
     pp <- mainResults$ModelResults[, .(
       Year,
       Prob = param$RDispAIDS / (param$RDispAIDS + BIT_SML + N_AIDS)
@@ -107,7 +105,6 @@ PerformBootstrapFit <- function(
   param <- res$Param
   info <- res$Info
   iterResults <- res$IterResults
-  lastResults <- res$IterResults[[length(res$IterResults)]]
 
   res <- FitLLTotal(p, probSurv1996, param, info, data)
   modelResults <- res$ModelResults
