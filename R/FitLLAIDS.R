@@ -19,7 +19,7 @@ FitLLAIDS <- function(
   if (info$ModelFitDist == 'POISSON') {
     vals[sel] <- FitLLPoisson(totModels[sel], totDatas[sel])
   } else if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-    vals[sel] <- FitLLNegBin(totModels[sel], totDatas[sel], param$RDispRest)
+    vals[sel] <- FitLLNegBin(totModels[sel], totDatas[sel], param$RDispAIDS)
   } else {
     stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
   }
