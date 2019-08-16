@@ -4,7 +4,7 @@
 \alias{PerformMainFit}
 \title{PerformMainFit}
 \usage{
-PerformMainFit(context, data, maxNoFit = 30, ctol = 1e-06,
+PerformMainFit(context, data, maxNoFit = 30L, ctol = 1e-06,
   ftol = 1e-05, ...)
 }
 \arguments{

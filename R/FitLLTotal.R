@@ -28,6 +28,7 @@ FitLLTotal <- function(
   modelResults <- matrix(0, info$ModelNoYears - 1, param$NoEq)
 
   minLambda <- VERY_LRG
+  derivsFunc <- GetDerivsFuncXptr('derivsMainFunc')
 
   for (i in seq_len(info$ModelNoYears - 1)) {
     res <- odeint(ystart,
@@ -41,7 +42,7 @@ FitLLTotal <- function(
                   info,
                   minYear = info$ModelMinYear,
                   maxYear = info$ModelMaxYear,
-                  derivsFuncName = 'derivsMainFunc')
+                  derivsFunc = derivsFunc)
     ystart <- res$YStart
     minLambda <- min(minLambda, res$MinLambda)
     modelResults[i, ] <- ystart

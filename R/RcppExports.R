@@ -33,6 +33,10 @@ GetDerivsFuncXptr <- function(funcName) {
     .Call(`_hivModelling_GetDerivsFuncXptr`, funcName)
 }
 
+odeint <- function(ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
+    .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear)
+}
+
 rkck <- function(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear) {
     .Call(`_hivModelling_rkck`, x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }

@@ -27,6 +27,8 @@ ModelCountResults <- function(
   D_Cum_Time_Advanced <- matrix(0, param$DefNoDiagTime, numYears)
   D_Avg_Time <- rep(0, numYears)
 
+  derivsFunc <- GetDerivsFuncXptr('derivsMainFunc')
+
   for (i in seq_len(numYears)) {
     ystart <- rep(0, param$NoEq)
     tmpMinYear <- info$ModelMinYear + (i - 1)
@@ -46,7 +48,7 @@ ModelCountResults <- function(
                     info,
                     minYear = tmpMinYear,
                     maxYear = tmpMaxYear,
-                    derivsFuncName = 'derivsMainFunc')
+                    derivsFunc = derivsFunc)
       ystart <- res$YStart
       iEq <- 1
 

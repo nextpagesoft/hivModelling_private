@@ -115,6 +115,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// odeint
+List odeint(NumericVector ystart, int nVar, double x1, double x2, double eps, double h1, double hMin, List param, List info, double minYear, double maxYear, DerivsFuncXPtr derivsFunc, double tmpYear);
+RcppExport SEXP _hivModelling_odeint(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP epsSEXP, SEXP h1SEXP, SEXP hMinSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type ystart(ystartSEXP);
+    Rcpp::traits::input_parameter< int >::type nVar(nVarSEXP);
+    Rcpp::traits::input_parameter< double >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< double >::type x2(x2SEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< double >::type h1(h1SEXP);
+    Rcpp::traits::input_parameter< double >::type hMin(hMinSEXP);
+    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< List >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
+    Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
+    Rcpp::traits::input_parameter< DerivsFuncXPtr >::type derivsFunc(derivsFuncSEXP);
+    Rcpp::traits::input_parameter< double >::type tmpYear(tmpYearSEXP);
+    rcpp_result_gen = Rcpp::wrap(odeint(ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rkck
 List rkck(double x, NumericVector y, NumericVector dydx, int n, double h, List param, List info, int minYear, int maxYear, DerivsFuncXPtr derivsFunc, double tmpYear);
 RcppExport SEXP _hivModelling_rkck(SEXP xSEXP, SEXP ySEXP, SEXP dydxSEXP, SEXP nSEXP, SEXP hSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
@@ -184,6 +207,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_derivsMainFunc", (DL_FUNC) &_hivModelling_derivsMainFunc, 6},
     {"_hivModelling_derivsTimeFunc", (DL_FUNC) &_hivModelling_derivsTimeFunc, 6},
     {"_hivModelling_GetDerivsFuncXptr", (DL_FUNC) &_hivModelling_GetDerivsFuncXptr, 1},
+    {"_hivModelling_odeint", (DL_FUNC) &_hivModelling_odeint, 13},
     {"_hivModelling_rkck", (DL_FUNC) &_hivModelling_rkck, 11},
     {"_hivModelling_rkqs", (DL_FUNC) &_hivModelling_rkqs, 13},
     {"_hivModelling_zbrent", (DL_FUNC) &_hivModelling_zbrent, 5},

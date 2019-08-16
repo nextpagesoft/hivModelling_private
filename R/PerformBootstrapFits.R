@@ -44,7 +44,7 @@ PerformBootstrapFits <- function(
   jobs <- lapply(seq_len(bsCount), function(idx) {
     message(sprintf('Performing iteration %d', idx))
     future::future({
-      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol)
+      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, ...)
     })
   })
 

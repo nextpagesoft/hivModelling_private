@@ -14,6 +14,7 @@ ModelTimeToDiagDist <- function(
   Dist_TimeToDiag <- matrix(0, param$DefNoDiagTime, numYears)
   Dist_ProbDiag <- matrix(0, param$DefNoDiagTime, numYears)
 
+  derivsFunc <- GetDerivsFuncXptr('derivsTimeFunc')
   # Expected proportion diagnosed in each year following the year of infection
   # when diagnosis rates remain the same as in the year of infection
   for (i in seq_len(numYears)) {
@@ -39,7 +40,7 @@ ModelTimeToDiagDist <- function(
                     info,
                     minYear = tmpMinYear,
                     maxYear = tmpMaxYear,
-                    derivsFuncName = 'derivsTimeFunc',
+                    derivsFunc = derivsFunc,
                     tmpYear = tmpMinYear)
       ystart <- res$YStart
 
@@ -80,7 +81,7 @@ ModelTimeToDiagDist <- function(
                     info,
                     minYear = tmpMinYear,
                     maxYear = tmpMaxYear,
-                    derivsFuncName = 'derivsTimeFunc',
+                    derivsFunc = derivsFunc,
                     tmpYear = tmpYear)
       ystart <- res$YStart
 

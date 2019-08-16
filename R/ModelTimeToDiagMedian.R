@@ -26,6 +26,7 @@ ModelTimeToDiagMedian <- function(
 
   j <- 0
   iNowStop <- FALSE
+  derivsFunc <- GetDerivsFuncXptr('derivsTimeFunc')
   while (!iNowStop) {
     # Continue calculations until t75 is not updated anymore
     j <- j + 1
@@ -43,7 +44,7 @@ ModelTimeToDiagMedian <- function(
                   info,
                   minYear = tmpMinYear,
                   maxYear = tmpMaxYear,
-                  derivsFuncName = 'derivsTimeFunc',
+                  derivsFunc = derivsFunc,
                   tmpYear = tmpMinYear)
 
     ystart <- res$YStart
