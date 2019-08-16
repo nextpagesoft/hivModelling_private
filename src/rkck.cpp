@@ -1,12 +1,10 @@
 // Take a Cash-Karp Runge-Kutta step
-
 #include "rkck.h"
-#include "GetBSpline.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List rkck(
+void rkck(
   double x,
   NumericVector y,
   NumericVector dydx,
@@ -14,10 +12,11 @@ List rkck(
   double h,
   List param,
   List info,
-  int minYear,
-  int maxYear,
+  double minYear,
+  double maxYear,
   DerivsFuncXPtr derivsFunc,
-  double tmpYear
+  double tmpYear,
+  List& result
 ) {
   NumericVector theta = param["Theta"];
   int kOrder = info["SplineOrder"];
@@ -84,15 +83,11 @@ List rkck(
 
   double minLambda = min(NumericVector::create(lambda2, lambda3, lambda4, lambda5, lambda6));
 
-  List result = List::create(
-    Named("YOut") = yout,
-    Named("YErr") = yerr,
-    Named("MinLambda") = minLambda
-  );
-
-  return result;
+  result["YOut"] = yout;
+  result["YErr"] = yerr;
+  result["MinLambda"] = minLambda;
 }
 
 /*** R
-rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear)
+rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result)
 */

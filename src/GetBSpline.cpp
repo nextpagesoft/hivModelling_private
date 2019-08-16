@@ -18,24 +18,25 @@ double GetBSpline(
 
   NumericMatrix bSpline(modelSplineN, kOrder);
 
-  for (int i = 0; i < modelSplineN; ++i) {
-    if (time >= myKnots[i] && time < myKnots[i + 1]) {
-      bSpline(i, 0) = 1.0;
+  for (int i = 0; i != modelSplineN; ++i) {
+    if (myKnots[i] <= time && time < myKnots[i + 1]) {
+      bSpline(i, 0) = 1;
     }
   }
 
-  for (int k = 1; k < kOrder; ++k) {
-    for (int i = 0; i < modelSplineN; ++i) {
-      int ik1 = i + k + 1;
+  for (int k = 1; k != kOrder; ++k) {
+    for (int i = 0; i != modelSplineN; ++i) {
+      const int ik = i + k;
+      const int ik1 = ik + 1;
 
-      if (time >= myKnots[i] && time < myKnots[ik1]) {
+      if (myKnots[i] <= time && time < myKnots[ik1]) {
         if (myKnots[ik1] != myKnots[i + 1]) {
           bSpline(i, k) +=
             (myKnots[ik1] - time) * bSpline(i + 1, k - 1) / (myKnots[ik1] - myKnots[i + 1]);
         }
 
-        if (myKnots[i + k] != myKnots[i]) {
-          bSpline(i, k) += (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[i + k] - myKnots[i]);
+        if (myKnots[ik] != myKnots[i]) {
+          bSpline(i, k) += (time - myKnots[i]) * bSpline(i, k - 1) / (myKnots[ik] - myKnots[i]);
         }
       }
     }
@@ -45,6 +46,7 @@ double GetBSpline(
 
   return val;
 }
+
 
 /*** R
 GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)

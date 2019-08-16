@@ -116,8 +116,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // odeint
-List odeint(NumericVector ystart, int nVar, double x1, double x2, double eps, double h1, double hMin, List param, List info, double minYear, double maxYear, DerivsFuncXPtr derivsFunc, double tmpYear);
-RcppExport SEXP _hivModelling_odeint(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP epsSEXP, SEXP h1SEXP, SEXP hMinSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
+List odeint(NumericVector ystart, int nVar, double x1, double x2, double eps, double h1, List param, List info, double minYear, double maxYear, DerivsFuncXPtr derivsFunc, double tmpYear);
+RcppExport SEXP _hivModelling_odeint(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP epsSEXP, SEXP h1SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -127,22 +127,34 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type x2(x2SEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
     Rcpp::traits::input_parameter< double >::type h1(h1SEXP);
-    Rcpp::traits::input_parameter< double >::type hMin(hMinSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< List >::type info(infoSEXP);
     Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
     Rcpp::traits::input_parameter< DerivsFuncXPtr >::type derivsFunc(derivsFuncSEXP);
     Rcpp::traits::input_parameter< double >::type tmpYear(tmpYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(odeint(ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear));
+    rcpp_result_gen = Rcpp::wrap(odeint(ystart, nVar, x1, x2, eps, h1, param, info, minYear, maxYear, derivsFunc, tmpYear));
+    return rcpp_result_gen;
+END_RCPP
+}
+// odeintLoop
+List odeintLoop(NumericVector modelYears, List param, List info, DerivsFuncXPtr derivsFunc);
+RcppExport SEXP _hivModelling_odeintLoop(SEXP modelYearsSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP derivsFuncSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type modelYears(modelYearsSEXP);
+    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< List >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< DerivsFuncXPtr >::type derivsFunc(derivsFuncSEXP);
+    rcpp_result_gen = Rcpp::wrap(odeintLoop(modelYears, param, info, derivsFunc));
     return rcpp_result_gen;
 END_RCPP
 }
 // rkck
-List rkck(double x, NumericVector y, NumericVector dydx, int n, double h, List param, List info, int minYear, int maxYear, DerivsFuncXPtr derivsFunc, double tmpYear);
-RcppExport SEXP _hivModelling_rkck(SEXP xSEXP, SEXP ySEXP, SEXP dydxSEXP, SEXP nSEXP, SEXP hSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
+void rkck(double x, NumericVector y, NumericVector dydx, int n, double h, List param, List info, double minYear, double maxYear, DerivsFuncXPtr derivsFunc, double tmpYear, List& result);
+RcppExport SEXP _hivModelling_rkck(SEXP xSEXP, SEXP ySEXP, SEXP dydxSEXP, SEXP nSEXP, SEXP hSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP, SEXP resultSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
@@ -151,19 +163,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< List >::type info(infoSEXP);
-    Rcpp::traits::input_parameter< int >::type minYear(minYearSEXP);
-    Rcpp::traits::input_parameter< int >::type maxYear(maxYearSEXP);
+    Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
+    Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
     Rcpp::traits::input_parameter< DerivsFuncXPtr >::type derivsFunc(derivsFuncSEXP);
     Rcpp::traits::input_parameter< double >::type tmpYear(tmpYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< List& >::type result(resultSEXP);
+    rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result);
+    return R_NilValue;
 END_RCPP
 }
 // rkqs
-List rkqs(double x, NumericVector y, NumericVector dydx, int n, double htry, double eps, NumericVector yscal, List param, List info, int minYear, int maxYear, DerivsFuncXPtr derivsFunc, int tmpYear);
-RcppExport SEXP _hivModelling_rkqs(SEXP xSEXP, SEXP ySEXP, SEXP dydxSEXP, SEXP nSEXP, SEXP htrySEXP, SEXP epsSEXP, SEXP yscalSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
+void rkqs(double x, NumericVector y, NumericVector dydx, int n, double htry, double eps, NumericVector yscal, List param, List info, double minYear, double maxYear, DerivsFuncXPtr derivsFunc, double tmpYear, List& rkqsRes, List& rkckRes);
+RcppExport SEXP _hivModelling_rkqs(SEXP xSEXP, SEXP ySEXP, SEXP dydxSEXP, SEXP nSEXP, SEXP htrySEXP, SEXP epsSEXP, SEXP yscalSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP, SEXP rkqsResSEXP, SEXP rkckResSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
@@ -174,12 +186,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type yscal(yscalSEXP);
     Rcpp::traits::input_parameter< List >::type param(paramSEXP);
     Rcpp::traits::input_parameter< List >::type info(infoSEXP);
-    Rcpp::traits::input_parameter< int >::type minYear(minYearSEXP);
-    Rcpp::traits::input_parameter< int >::type maxYear(maxYearSEXP);
+    Rcpp::traits::input_parameter< double >::type minYear(minYearSEXP);
+    Rcpp::traits::input_parameter< double >::type maxYear(maxYearSEXP);
     Rcpp::traits::input_parameter< DerivsFuncXPtr >::type derivsFunc(derivsFuncSEXP);
-    Rcpp::traits::input_parameter< int >::type tmpYear(tmpYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(rkqs(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< double >::type tmpYear(tmpYearSEXP);
+    Rcpp::traits::input_parameter< List& >::type rkqsRes(rkqsResSEXP);
+    Rcpp::traits::input_parameter< List& >::type rkckRes(rkckResSEXP);
+    rkqs(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes, rkckRes);
+    return R_NilValue;
 END_RCPP
 }
 // zbrent
@@ -207,9 +221,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_derivsMainFunc", (DL_FUNC) &_hivModelling_derivsMainFunc, 6},
     {"_hivModelling_derivsTimeFunc", (DL_FUNC) &_hivModelling_derivsTimeFunc, 6},
     {"_hivModelling_GetDerivsFuncXptr", (DL_FUNC) &_hivModelling_GetDerivsFuncXptr, 1},
-    {"_hivModelling_odeint", (DL_FUNC) &_hivModelling_odeint, 13},
-    {"_hivModelling_rkck", (DL_FUNC) &_hivModelling_rkck, 11},
-    {"_hivModelling_rkqs", (DL_FUNC) &_hivModelling_rkqs, 13},
+    {"_hivModelling_odeint", (DL_FUNC) &_hivModelling_odeint, 12},
+    {"_hivModelling_odeintLoop", (DL_FUNC) &_hivModelling_odeintLoop, 4},
+    {"_hivModelling_rkck", (DL_FUNC) &_hivModelling_rkck, 12},
+    {"_hivModelling_rkqs", (DL_FUNC) &_hivModelling_rkqs, 15},
     {"_hivModelling_zbrent", (DL_FUNC) &_hivModelling_zbrent, 5},
     {NULL, NULL, 0}
 };

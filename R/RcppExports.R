@@ -33,16 +33,20 @@ GetDerivsFuncXptr <- function(funcName) {
     .Call(`_hivModelling_GetDerivsFuncXptr`, funcName)
 }
 
-odeint <- function(ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
-    .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFunc, tmpYear)
+odeint <- function(ystart, nVar, x1, x2, eps, h1, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
+    .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, eps, h1, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }
 
-rkck <- function(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear) {
-    .Call(`_hivModelling_rkck`, x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear)
+odeintLoop <- function(modelYears, param, info, derivsFunc) {
+    .Call(`_hivModelling_odeintLoop`, modelYears, param, info, derivsFunc)
 }
 
-rkqs <- function(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear) {
-    .Call(`_hivModelling_rkqs`, x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear)
+rkck <- function(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result) {
+    invisible(.Call(`_hivModelling_rkck`, x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result))
+}
+
+rkqs <- function(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes, rkckRes) {
+    invisible(.Call(`_hivModelling_rkqs`, x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes, rkckRes))
 }
 
 zbrent <- function(func, x1, x2, tol, extraArgs) {

@@ -1,8 +1,4 @@
-#include <Rcpp.h>
-#include "hivModelling_types.h"
-#include "Sign.h"
-#include "GetBSpline.h"
-#include "rkqs.h"
+#include "odeint.h"
 
 using namespace Rcpp;
 
@@ -14,7 +10,6 @@ List odeint(
   double x2,
   double eps,
   double h1,
-  double hMin,
   List param,
   List info,
   double minYear,
@@ -36,9 +31,24 @@ List odeint(
   double x = x1;
   double h = Sign(h1, x2 - x1);
 
-  NumericVector y = clone(ystart);
+  NumericVector y = ystart;
   double minLambda = VERY_LRG;
-  for (int nstp = 0; nstp < MAXSTP; ++nstp) {
+
+  List rkqsRes = List::create(
+    Named("X") = R_NilValue,
+    Named("Y") = R_NilValue,
+    Named("MinLambda") = R_NilValue,
+    Named("hDid") = R_NilValue,
+    Named("hNext") = R_NilValue
+  );
+
+  List rkckRes = List::create(
+    Named("YOut") = R_NilValue,
+    Named("YErr") = R_NilValue,
+    Named("MinLambda") = R_NilValue
+  );
+
+  for (int nstp = 0; nstp != MAXSTP; ++nstp) {
 
     double derivLambda = GetBSpline(x, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
     NumericVector dydx = (*derivsFunc)(x, y, derivLambda, nVar, param, tmpYear);
@@ -49,12 +59,12 @@ List odeint(
       h = x2 - x;
     }
 
-    List res =
-      rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear);
-    x = res["X"];
-    y = res["Y"];
-    double rkqsLambda = res["MinLambda"];
-    double hDid = res["hDid"];
+    rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear,
+         rkqsRes, rkckRes);
+    x = rkqsRes["X"];
+    y = rkqsRes["Y"];
+    double rkqsLambda = rkqsRes["MinLambda"];
+    double hDid = rkqsRes["hDid"];
 
     minLambda = fmin(fmin(minLambda, derivLambda), rkqsLambda);
 
@@ -65,11 +75,11 @@ List odeint(
     }
 
     if ((x - x2) * (x2 - x1) >= 0) {
-      ystart = clone(y);
+      ystart = y;
       break;
     }
 
-    h = res["hNext"];
+    h = rkqsRes["hNext"];
   }
 
   List result = List::create(
@@ -84,5 +94,5 @@ List odeint(
 }
 
 /*** R
-odeint(ystart, nVar, x1, x2, eps, h1, hMin, param, info, minYear, maxYear, derivsFuncName, tmpYear)
+odeint(ystart, nVar, x1, x2, eps, h1, param, info, minYear, maxYear, derivsFuncName, tmpYear)
 */

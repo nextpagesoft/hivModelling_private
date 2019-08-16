@@ -6,20 +6,22 @@
 
 using namespace Rcpp;
 
-List rkqs(
-    double x,
-    NumericVector y,
-    NumericVector dydx,
-    int n,
-    double htry,
-    double eps,
-    NumericVector yscal,
-    List param,
-    List info,
-    int minYear,
-    int maxYear,
-    DerivsFuncXPtr derivsFunc,
-    int tmpYear
+void rkqs(
+  double x,
+  NumericVector y,
+  NumericVector dydx,
+  int n,
+  double htry,
+  double eps,
+  NumericVector yscal,
+  List param,
+  List info,
+  double minYear,
+  double maxYear,
+  DerivsFuncXPtr derivsFunc,
+  double tmpYear,
+  List& rkqsRes,
+  List& rkckRes
 );
 
 #endif // _rkqs_

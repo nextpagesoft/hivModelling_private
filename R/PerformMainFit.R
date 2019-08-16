@@ -23,7 +23,7 @@
 PerformMainFit <- function(
   context,
   data,
-  maxNoFit = 30L,
+  maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
   ...
@@ -39,7 +39,7 @@ PerformMainFit <- function(
             'This is overridden to "', info$ModelFitDist, '" for the main fit.')
   }
 
-  nTheta <- 100L
+  nTheta <- 100
   while (nTheta != param$NoTheta) {
     message(sprintf('Number of estimated spline weights: %d', param$NoTheta))
     nTheta <- param$NoTheta

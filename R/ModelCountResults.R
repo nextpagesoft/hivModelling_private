@@ -6,7 +6,6 @@ ModelCountResults <- function(
   VERY_SML <- 1.0e-20
   bitSml <- 1e-6
   eps <- 0.0001
-  hMin <- 0
   h1 <- 0.02
 
   numYears <- nrow(modelResults)
@@ -43,7 +42,6 @@ ModelCountResults <- function(
                     x2 = timeB - bitSml,
                     eps,
                     h1,
-                    hMin,
                     param,
                     info,
                     minYear = tmpMinYear,

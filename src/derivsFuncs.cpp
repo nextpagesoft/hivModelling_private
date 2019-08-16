@@ -21,73 +21,66 @@ NumericVector derivsMainFunc(
   double mu = param["Mu"];
   int noStage = param["NoStage"];
 
-  double dlambdad2x = 0.0;
-
-  int iEq = 0;
-
   // Element 0
-  dydx[iEq] = lambda - (alphaP - mu) * y[iEq];
-  iEq += 1;
+  dydx[0] = lambda - (alphaP - mu) * y[0];
 
   // Undiagnosed cases progressing through stages of infection
-  dydx[iEq] = fInit[0] * alphaP * y[0] - (qoppa[0] + delta[0] + mu) * y[iEq];
-  for (int i = 1; i < noStage; ++i) {
-    int j = iEq + i;
-    dydx[j] = fInit[i] * alphaP * y[0] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j];
-  }
-  iEq += noStage;
+  int undiagIdx = 1;
+  dydx[undiagIdx] = fInit[0] * alphaP * y[0] - (qoppa[0] + delta[0] + mu) * y[undiagIdx];
 
   // Diagnosed cases progressing through stages of infection i
-  dydx[iEq] = delta[0] * y[1] - (qoppa[0] + mu) * y[iEq];
-  for (int i = 1; i < noStage; ++i) {
-    int j = iEq + i;
-    dydx[j] = delta[i] * y[i + 1] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + mu) * y[j];
-  }
-  iEq += noStage;
+  int diagIdx = undiagIdx + noStage;
+  dydx[diagIdx] = delta[0] * y[1] - (qoppa[0] + mu) * y[diagIdx];
 
   // After diagnosed infection
-  for (int i = 0; i < noStage; ++i) {
-    int j = iEq + i;
-    dydx[j] = delta[i] * y[1 + i];
-  }
-  iEq += noStage;
+  const int diagInfIdx = diagIdx + noStage;
 
   // Cumulative number of AIDS cases
-  dydx[iEq] = delta[noStage - 1] * y[noStage] + qoppa[noStage - 2] * y[2 * noStage - 1];
-  iEq += 1;
+  const int aidsIdx = diagInfIdx + noStage;
+  dydx[aidsIdx] = delta[noStage - 1] * y[noStage] + qoppa[noStage - 2] * y[2 * noStage - 1];
 
   // Cumulative number of diagnosed deaths
-  dydx[iEq] = qoppa[noStage - 1] * y[2 * noStage];
-  for (int i = 0; i < noStage; ++i) {
-    dydx[iEq] += mu * y[noStage + i];
-  }
-  iEq += 1;
+  const int cumDiagDeathIdx = aidsIdx + 1;
+  dydx[cumDiagDeathIdx] = qoppa[noStage - 1] * y[2 * noStage];
 
   // Cumulative number of undiagnosed deaths
-  dydx[iEq] = qoppa[noStage - 1] * y[noStage] + mu * y[0];
-  for (int i = 0; i < noStage; ++i) {
-    dydx[iEq] += mu * y[i];
+  const int cumUndiagDeathIdx = cumDiagDeathIdx +  1;
+  dydx[cumUndiagDeathIdx] = qoppa[noStage - 1] * y[noStage] + mu * y[0];
+
+  // Progress through stages
+  for (int i = 0; i != noStage; ++i) {
+    if (i != 0) {
+      undiagIdx++;
+      dydx[undiagIdx] =
+        fInit[i] * alphaP * y[0] + qoppa[i - 1] * y[undiagIdx - 1] -
+        (qoppa[i] + delta[i] + mu) * y[undiagIdx];
+
+      diagIdx++;
+      dydx[diagIdx] =
+        delta[i] * y[i + 1] + qoppa[i - 1] * y[diagIdx - 1] - (qoppa[i] + mu) * y[diagIdx];
+    }
+
+    dydx[diagInfIdx + i] = delta[i] * y[i + 1];
+
+    dydx[cumDiagDeathIdx] += mu * y[noStage + i];
+
+    dydx[cumUndiagDeathIdx] += mu * y[i];
   }
-  iEq += 1;
 
   // Total cumulative incidence
-  dydx[iEq] = lambda;
-  iEq += 1;
-
-  // After cumulative incidence (1 compartment) reset base counter
-  dydx[iEq] = dlambdad2x * dlambdad2x;
+  dydx[cumUndiagDeathIdx + 1] = lambda;
 
   return dydx;
 }
 
 // [[Rcpp::export]]
 NumericVector derivsTimeFunc(
-    double x,
-    NumericVector y,
-    double lambda,
-    int nVar,
-    List param,
-    double year
+  double x,
+  NumericVector y,
+  double lambda,
+  int nVar,
+  List param,
+  double year
 ) {
   NumericVector dydx(nVar);
   NumericVector delta = GetDelta(year, param);
@@ -105,14 +98,14 @@ NumericVector derivsTimeFunc(
 
   // Undiagnosed cases progressing through stages of infection
   dydx[iEq] = fInit[0] * alphaP * y[0] - (qoppa[0] + delta[0] + mu) * y[iEq];
-  for (int i = 1; i < noStage; i++) {
+  for (int i = 1; i != noStage; ++i) {
     int j = iEq + i;
     dydx[j] = fInit[i] * alphaP * y[0] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j];
   }
   iEq += noStage;
 
   // Cumulative number of diagnoses in each stage
-  for (int i = 0; i < noStage; i++) {
+  for (int i = 0; i != noStage; ++i) {
     int j = iEq + i;
     dydx[j] = delta[i] * y[j - noStage];
   }

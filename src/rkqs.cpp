@@ -1,13 +1,10 @@
 // Takes one "quality-controlled" Runge-Kutta step
-
-#include <Rcpp.h>
-#include "hivModelling_types.h"
 #include "rkck.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List rkqs(
+void rkqs(
   double x,
   NumericVector y,
   NumericVector dydx,
@@ -17,10 +14,12 @@ List rkqs(
   NumericVector yscal,
   List param,
   List info,
-  int minYear,
-  int maxYear,
+  double minYear,
+  double maxYear,
   DerivsFuncXPtr derivsFunc,
-  int tmpYear
+  double tmpYear,
+  List& rkqsRes,
+  List& rkckRes
 ) {
   static const double SAFETY = 0.9;
   static const double PSHRNK = -0.25;
@@ -34,12 +33,13 @@ List rkqs(
   double hDid = 0;
   double minLambda = 0;
   double h = htry;
-  for (;;) {
-    List res = rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear);
 
-    NumericVector yOut = res["YOut"];
-    NumericVector yErr = res["YErr"];
-    minLambda = fmin(minLambda, res["MinLambda"]);
+  for (;;) {
+    rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, rkckRes);
+
+    NumericVector yOut = rkckRes["YOut"];
+    NumericVector yErr = rkckRes["YErr"];
+    minLambda = fmin(minLambda, rkckRes["MinLambda"]);
 
     double errMax = fmax(max(abs(yErr / yscal)), 0) / eps;
 
@@ -59,17 +59,14 @@ List rkqs(
     }
   }
 
-  List result = List::create(
-    Named("X") = x,
-    Named("Y") = y,
-    Named("MinLambda") = minLambda,
-    Named("hDid") = hDid,
-    Named("hNext") = hNext
-  );
-
-  return result;
+  rkqsRes["X"] = x;
+  rkqsRes["Y"] = y;
+  rkqsRes["MinLambda"] = minLambda;
+  rkqsRes["hDid"] = hDid;
+  rkqsRes["hNext"] = hNext;
 }
 
 /*** R
-rkqs(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear)
+rkqs(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear,
+     rkqsRes, rkckRes)
 */

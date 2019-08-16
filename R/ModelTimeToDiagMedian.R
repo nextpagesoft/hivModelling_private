@@ -3,7 +3,6 @@ ModelTimeToDiagMedian <- function(
   param,
   info
 ) {
-  hMin <- 0
   h1 <- 0.02
   eps <- 0.0001
   bitSml <- 1e-6
@@ -39,7 +38,6 @@ ModelTimeToDiagMedian <- function(
                   x2 = timeB - bitSml,
                   eps,
                   h1,
-                  hMin,
                   param,
                   info,
                   minYear = tmpMinYear,

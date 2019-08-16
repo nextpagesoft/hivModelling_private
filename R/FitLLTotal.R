@@ -10,43 +10,20 @@ FitLLTotal <- function(
   Prob_CD4 <- NULL
 
   VERY_LRG <- 1e+10
-  hMin <- 0
-  h1 <- 0.02
-  eps <- 0.0001
-  bitSml <- 1e-6
   # Smoothness omitted
   smooth1 <- 0
   smooth2 <- 0
 
-  modelYears <- info$ModelMinYear:info$ModelMaxYear
+  # Force numeric type to avoid conversion from integer to numeric later
+  modelYears <- as.numeric(info$ModelMinYear:info$ModelMaxYear)
 
   param$DeltaM <- GetParamDeltaM(p, param)
   param$Theta <- GetParamTheta(p, param, info)
 
-  ystart <- rep(0, param$NoEq)
-
-  modelResults <- matrix(0, info$ModelNoYears - 1, param$NoEq)
-
-  minLambda <- VERY_LRG
   derivsFunc <- GetDerivsFuncXptr('derivsMainFunc')
-
-  for (i in seq_len(info$ModelNoYears - 1)) {
-    res <- odeint(ystart,
-                  nVar = param$NoEq,
-                  x1 = modelYears[i] + bitSml,
-                  x2 = modelYears[i + 1] - bitSml,
-                  eps,
-                  h1,
-                  hMin,
-                  param,
-                  info,
-                  minYear = info$ModelMinYear,
-                  maxYear = info$ModelMaxYear,
-                  derivsFunc = derivsFunc)
-    ystart <- res$YStart
-    minLambda <- min(minLambda, res$MinLambda)
-    modelResults[i, ] <- ystart
-  }
+  res <- odeintLoop(modelYears, param, info, derivsFunc)
+  modelResults <- res[['ModelResults']]
+  minLambda <- res[['MinLambda']]
 
   modelResults <- as.data.table(modelResults)
   modelResults[, Year := modelYears[-length(modelYears)]]

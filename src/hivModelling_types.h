@@ -6,12 +6,12 @@ using namespace Rcpp;
 #define _hivModelling_types_
 
 typedef NumericVector (*derivsFuncPtr)(
-    double x,
-    NumericVector y,
-    double lambda,
-    int nVar,
-    List param,
-    double year
+  double x,
+  NumericVector y,
+  double lambda,
+  int nVar,
+  List param,
+  double year
 );
 
 typedef XPtr<derivsFuncPtr> DerivsFuncXPtr;

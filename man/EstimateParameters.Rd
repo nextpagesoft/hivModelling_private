@@ -5,7 +5,7 @@
 \title{EstimateParameters}
 \usage{
 EstimateParameters(runType, mainResults = NULL, probSurv1996, param,
-  info, data, maxNoFit = 30L, ctol = 1e-06, ftol = 1e-05,
+  info, data, maxNoFit = 30, ctol = 1e-06, ftol = 1e-05,
   algorithm = "NLOPT_LN_BOBYQA", ...)
 }
 \arguments{

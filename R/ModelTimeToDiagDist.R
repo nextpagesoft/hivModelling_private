@@ -6,7 +6,6 @@ ModelTimeToDiagDist <- function(
   nEq <- 1 + 2 * param$NoStage
 
   bitSml <- 1e-6
-  hMin <- 0.0
   h1 <- 0.02
   eps <- 0.0001
   numYears <- nrow(modelResults)
@@ -35,7 +34,6 @@ ModelTimeToDiagDist <- function(
                     x2 = timeB - bitSml,
                     eps,
                     h1,
-                    hMin,
                     param,
                     info,
                     minYear = tmpMinYear,
@@ -76,7 +74,6 @@ ModelTimeToDiagDist <- function(
                     x2 = timeB - bitSml,
                     eps,
                     h1,
-                    hMin,
                     param,
                     info,
                     minYear = tmpMinYear,

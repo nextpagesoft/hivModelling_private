@@ -33,7 +33,7 @@ EstimateParameters <- function(
   param,
   info,
   data,
-  maxNoFit = 30L,
+  maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
@@ -54,7 +54,7 @@ EstimateParameters <- function(
   # Maximum number of iterations
   iterResults <- list()
   llMin <- 1e+10
-  iter <- 1L
+  iter <- 1
 
   startTime <- Sys.time()
   message('--- Iteration ', iter, ': Scale')
