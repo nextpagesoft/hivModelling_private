@@ -49,7 +49,16 @@ PerformBootstrapFits <- function(
   })
 
   # Monitor jobs and check results.
-  results <- MonitorFutureJobs(jobs, statusRefreshRate)
+  bsIterResults <- MonitorFutureJobs(jobs, statusRefreshRate)
+
+  # Add confidence bounds
+  confBounds <- ComputeConfidenceBounds(bsIterResults)
+
+  # Create results object
+  results <- modifyList(
+    list(BSIterResults = bsIterResults),
+    list(ConfBounds = confBounds)
+  )
 
   return(results)
 }

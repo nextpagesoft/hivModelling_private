@@ -1,6 +1,7 @@
+library(data.table)
 library(hivModelling)
 
-# --------------------------------------------------------------------------------------------------
+# RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
     RunInParallel = TRUE,
@@ -55,6 +56,16 @@ bsResultsList <- PerformBootstrapFits(
   executionPlan = future::multiprocess
 )
 
+confBounds <- ComputeConfidenceBounds(bsResultsList)
+
+bsResultsList <- modifyList(
+  list(BSIterResults = bsResultsList),
+  list(ConfBounds = confBounds)
+)
+
+CreateOutputPlots(mainResults, bsResultsList)
+
+
 # Save results in csv file
 data.table::fwrite(
   mainResults$MainOutputs,
@@ -68,7 +79,7 @@ data.table::fwrite(
   sep = ','
 )
 
-# --------------------------------------------------------------------------------------------------
+# RECONCILIATION -----------------------------------------------------------------------------------
 # Reconcile against the Windows version
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
