@@ -53,7 +53,6 @@ ModelTimeToDiagDist <- function(
   }
 
   # Real proportion diagnosed in each year following the year of infection
-  # i <- 1
   for (i in seq_len(numYears)) {
     tmpMinYear <- info$ModelMinYear + (i - 1)
     tmpMaxYear <- tmpMinYear + 1
@@ -61,7 +60,6 @@ ModelTimeToDiagDist <- function(
     # Start values.
     ystart <- c(1, rep(0, nEq - 1))
 
-    # j <- 1
     for (j in seq_len(param$DefNoDiagTime)) {
       # Loop through years after infection
       timeA <- info$ModelMinYear + (i - 1) + (j - 1)

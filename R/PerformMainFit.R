@@ -39,28 +39,43 @@ PerformMainFit <- function(
             'This is overridden to "', info$ModelFitDist, '" for the main fit.')
   }
 
-  nTheta <- 100
-  while (nTheta != param$NoTheta) {
-    message(sprintf('Number of estimated spline weights: %d', param$NoTheta))
-    nTheta <- param$NoTheta
+  converged <- FALSE
+  while (!converged) {
+    nTheta <- 100
+    while (nTheta != param$NoTheta) {
+      message(sprintf('Number of estimated spline weights: %d', param$NoTheta))
+      nTheta <- param$NoTheta
 
-    res <- EstimateParameters(
-      runType = 'MAIN', mainResults = NULL,
-      probSurv1996, param, info, data, maxNoFit, ctol, ftol, ...
-    )
+      res <- EstimateParameters(
+        runType = 'MAIN', mainResults = NULL,
+        probSurv1996, param, info, data, maxNoFit, ctol, ftol, ...
+      )
 
-    p <- res$P
-    converged <- res$Converged
-    beta <- res$Beta
-    thetaF <- res$ThetaF
-    param <- res$Param
-    info <- res$Info
-    iterResults <- res$IterResults
-    lastResults <- res$IterResults[[length(res$IterResults)]]
-  }
+      p <- res$P
+      converged <- res$Converged
+      beta <- res$Beta
+      thetaF <- res$ThetaF
+      param <- res$Param
+      info <- res$Info
 
-  if (converged) {
-    message(sprintf('Fit converged with goodness-of-fit: %f\n', lastResults$LLTotal))
+      selSmallTheta <- abs(param$Theta) < 1
+      param$ThetaP[selSmallTheta] <- 0
+      param$Theta[selSmallTheta] <- 0
+      param$NoTheta <- sum(param$ThetaP)
+
+      iterResults <- res$IterResults
+      lastResults <- res$IterResults[[length(res$IterResults)]]
+    }
+
+    if (!converged) {
+      message(sprintf('Fit did NOT converge, goodness-of-fit: %f\n', lastResults$LLTotal))
+      context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
+      param <- GetParamList(context)
+      info <- GetInfoList(context)
+      probSurv1996 <- GetProvSurv96(param, info)
+    } else {
+      message(sprintf('Fit converged, goodness-of-fit: %f\n', lastResults$LLTotal))
+    }
   }
 
   message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), beta[seq_len(param$NoDelta)]))

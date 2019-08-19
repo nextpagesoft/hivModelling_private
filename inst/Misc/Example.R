@@ -56,15 +56,7 @@ bsResultsList <- PerformBootstrapFits(
   executionPlan = future::multiprocess
 )
 
-confBounds <- ComputeConfidenceBounds(bsResultsList)
-
-bsResultsList <- modifyList(
-  list(BSIterResults = bsResultsList),
-  list(ConfBounds = confBounds)
-)
-
-CreateOutputPlots(mainResults, bsResultsList)
-
+plots <- CreateOutputPlots(mainResults, bsResultsList)
 
 # Save results in csv file
 data.table::fwrite(

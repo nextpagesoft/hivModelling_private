@@ -44,8 +44,7 @@ GetInfoList <- function(
   info[['ModelSplineN']] <- info$ModelNoKnots + info$SplineOrder
 
   # Param_Knots
-  knotsDistance <-
-    (info$ModelMaxYear - info$ModelMinYear) / (info$ModelNoKnots + 1)
+  knotsDistance <- (info$ModelMaxYear - info$ModelMinYear) / (info$ModelNoKnots + 1)
 
   knots <- matrix(0,
                   info$SplineOrder + 1,

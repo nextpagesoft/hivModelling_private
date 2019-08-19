@@ -49,18 +49,20 @@ PerformBootstrapFit <- function(
   N_AIDS <- NULL
   N_HIV <- NULL
   Prob <- NULL
+  C_Dead_U <- NULL
+  N_Dead_U <- NULL
 
-  BIT_SML <- 1.0e-6
+  BIT_SML <- 1e-6
 
   info <- mainResults$Info
   param <- mainResults$Param
   probSurv1996 <- GetProvSurv96(param, info)
 
   # Generate 'data' object
-  dataBS <- data[, .(Year, Prob_CD4, N_Dead, C_Dead, N_Inf, C_Inf, N_Emig, C_Emig)]
-  dataBS[mainResults$ModelResults,
-         Prob_HIVAIDS := N_HIV_Stage_S_Obs_5 / (BIT_SML + N_HIV_S_Obs),
-         on = .(Year)]
+  dataBS <- data[, .(
+    Year, Prob_CD4, N_Dead, N_Dead_U, C_Dead, C_Dead_U, N_Inf, C_Inf, N_Emig, C_Emig,
+    Prob_HIVAIDS = 0
+  )]
 
   if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
     pp <- mainResults$ModelResults[, .(
@@ -69,23 +71,32 @@ PerformBootstrapFit <- function(
     )]
     dataBS[pp, N_AIDS := rnbinom(.N, param$RDispAIDS, Prob), on = .(Year)]
 
-    colNames <- sprintf('N_HIV_Stage_%d', seq_len(param$NoStage))
+    inColNames <- sprintf('N_HIV_Stage_S_%d', seq_len(param$NoStage))
+    outColNames <- sprintf('N_HIV_Stage_%d', seq_len(param$NoStage))
     # Compute probabilities
     pp <- mainResults$ModelResults[, modifyList(
       .(Year = Year),
       param$RDispRest / (param$RDispRest + BIT_SML + .SD)
-    ), .SDcols = colNames]
+    ), .SDcols = inColNames]
     # Generate counts
-    pp[, (colNames) := lapply(.SD, function(prob) rnbinom(.N, param$RDispRest, prob)),
-       .SDcols = colNames]
-    dataBS[pp, (colNames) := pp[, colNames, with = FALSE], on = .(Year)]
-    dataBS[, N_HIV := rowSums(.SD), .SDcols = colNames]
+    pp[, (outColNames) := lapply(.SD, function(prob) rnbinom(.N, param$RDispRest, prob)),
+       .SDcols = inColNames]
+    dataBS[pp, (outColNames) := pp[, outColNames, with = FALSE], on = .(Year)]
+    dataBS[, N_HIV := rowSums(.SD), .SDcols = outColNames]
+  } else if (info$ModelFitDist == 'POISSON') {
+    dataBS[, N_AIDS := rpois(.N, mainResults$MainOutputs$N_AIDS_M)]
+    inColNames <- sprintf('N_HIV_Stage_S_%d', seq_len(param$NoStage))
+    outColNames <- sprintf('N_HIV_Stage_%d', seq_len(param$NoStage))
+    pp <- mainResults$ModelResults[, union('Year', inColNames), with = FALSE]
+    pp[, (outColNames) := lapply(.SD, function(col) rpois(.N, col)), .SDcols = inColNames]
+    dataBS[pp, (outColNames) := pp[, outColNames, with = FALSE], on = .(Year)]
+    dataBS[, N_HIV := rowSums(.SD), .SDcols = outColNames]
   } else {
     stop(sprintf('info$ModelFitDist equal "%s" is unsupported', info$ModelFitDist))
   }
 
-  colNames <- colNames[-length(colNames)]
-  for (colName in colNames) {
+  outColNames <- outColNames[-length(outColNames)]
+  for (colName in outColNames) {
     dataBS[Prob_CD4 >  0 & Prob_CD4 <  1, (colName) := rbinom(.N, get(colName), Prob_CD4)]
     dataBS[Prob_CD4 <= 0 | Prob_CD4 >= 1, (colName) := 0]
   }
@@ -94,8 +105,8 @@ PerformBootstrapFit <- function(
 
   # Perform fit on the generated data
   res <- EstimateParameters(
-    runType = 'BOOTSTRAP', mainResults, probSurv1996, param, info, data = dataBS, maxNoFit, ctol,
-    ftol, ...
+    runType = 'BOOTSTRAP', mainResults, probSurv1996, param, info, dataBS, maxNoFit, ctol, ftol,
+    ...
   )
 
   p <- res$P
@@ -106,13 +117,13 @@ PerformBootstrapFit <- function(
   info <- res$Info
   iterResults <- res$IterResults
 
-  res <- FitLLTotal(p, probSurv1996, param, info, data)
+  res <- FitLLTotal(p, probSurv1996, param, info, dataBS)
   modelResults <- res$ModelResults
-  statRes <- FitStatistics(modelResults, info, data, param)
+  statRes <- FitStatistics(modelResults, info, dataBS, param)
 
   countResults <- ModelCountResults(modelResults, info, param)
   timeResults <- ModelTimeResults(modelResults, info, param)
-  mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data, runId)
+  mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, dataBS, runId)
 
   return(list(
     Converged = converged,

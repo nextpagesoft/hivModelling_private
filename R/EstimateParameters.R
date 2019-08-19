@@ -94,19 +94,13 @@ EstimateParameters <- function(
   } else {
     beta <- mainResults$Beta
     thetaF <- mainResults$ThetaF
-    p <- GetParameterVector(beta, thetaF, param)
-    res <- FitLLTotal(p, probSurv1996, param, info, data)
-    ll <- res$LLTotal
-
-    if (ll < llMin) {
-      llMin <- ll
-      pParam <- p
-      iterResults[[iter]] <- list(
-        P = p,
-        LLTotal = res$LLTotal,
-        ModelResults = res$ModelResults
-      )
-    }
+    pParam <- GetParameterVector(beta, thetaF, param)
+    res <- FitLLTotal(pParam, probSurv1996, param, info, data)
+    iterResults[[iter]] <- list(
+      P = pParam,
+      LLTotal = res$LLTotal,
+      ModelResults = res$ModelResults
+    )
   }
   message('  Run time: ', format(Sys.time() - startTime))
 
@@ -138,12 +132,12 @@ EstimateParameters <- function(
       optimRes <- nloptr::nloptr(
         pParam,
         OptimFunc,
-        lb = c(rep(0, param$NoDelta), rep(-10000, param$NoTheta)),
-        ub = c(rep(1, param$NoDelta), rep(10000, param$NoTheta)),
+        lb = c(rep(0, param$NoDelta), rep(-1e+4, param$NoTheta)),
+        ub = c(rep(1, param$NoDelta), rep(1e+4, param$NoTheta)),
         opts = list(
           algorithm = algorithm,
           ftol_abs = ftol,
-          maxeval = 50000
+          maxeval = 5e+4
         )
       )
 
@@ -173,20 +167,16 @@ EstimateParameters <- function(
   param$Theta <- GetParamTheta(lastResults$P, param, info)
   param$DeltaM <- GetParamDeltaM(lastResults$P, param)
 
-  selSmallTheta <- abs(param$Theta) < 1
-  param$ThetaP[selSmallTheta] <- 0
-  param$Theta[selSmallTheta] <- 0
-  param$NoTheta <- sum(param$ThetaP)
-
   invisible(list(
     Converged = converged,
     P = lastResults$P,
     Beta = beta,
-    Theta = param$theta,
+    Theta = param$Theta,
     ThetaF = thetaF,
     DeltaM = param$DeltaM,
     Info = info,
     Param = param,
+    Data = data,
     IterResults = iterResults
   ))
 }

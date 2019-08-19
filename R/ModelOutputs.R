@@ -54,12 +54,12 @@ ModelOutputs <- function(
     Year
   )]
 
-  # HIV
+  # Compute HIV
   outputs[, c('N_HIV_M', 'Cum_HIV_M', 'N_HIV_Obs_M') :=
             modelResults[, c('N_HIV', 'C_HIV', 'N_HIV_S_Obs')]]
   outputs[data, N_HIV_D := N_HIV, on = c('Year')]
 
-  # CD4
+  # Compute CD4
   for (i in seq_len(param$NoStage - 1)) {
     mOutputColNames <- sprintf(c('N_CD4_%d_M', 'N_CD4_%d_Obs_M_NoW', 'N_CD4_%d_Obs_M'), i)
     mInputColNames <- sprintf(c('N_HIV_Stage_%d', 'N_HIV_Stage_S_%d', 'N_HIV_Stage_S_Obs_%d'), i)
@@ -70,7 +70,7 @@ ModelOutputs <- function(
     outputs[data, (dOutputColNames) := data[, dInputColNames, with = FALSE], on = c('Year')]
   }
 
-  # HIV/AIDS
+  # Compute HIV/AIDS
   mOutputColNames <- c('N_HIVAIDS_M', 'N_HIVAIDS_Obs_M')
   mInputColNames <- sprintf(c('N_HIV_Stage_%d', 'N_HIV_Stage_S_Obs_%d'), param$NoStage)
   outputs[, (mOutputColNames) := modelResults[, mInputColNames, with = FALSE]]
@@ -79,11 +79,11 @@ ModelOutputs <- function(
   dInputColNames <- sprintf(c('N_HIV_Stage_%d'), param$NoStage)
   outputs[data, (dOutputColNames) := data[, dInputColNames, with = FALSE], on = c('Year')]
 
-  # AIDS
+  # Compute AIDS
   outputs[, N_AIDS_M := modelResults$N_AIDS]
   outputs[data, N_AIDS_D := N_AIDS, on = c('Year')]
 
-  # Dead
+  # Compute Dead
   dOutputColNames <- c('N_Dead_D', 'Cum_Dead_D')
   dInputColNames <- c('N_Dead', 'C_Dead')
   outputs[data, (dOutputColNames) := data[, dInputColNames, with = FALSE], on = c('Year')]
@@ -100,40 +100,40 @@ ModelOutputs <- function(
   mInputColNames <- c('N_Dead_U', 'C_Dead_U')
   outputs[, (mOutputColNames) := modelResults[, mInputColNames, with = FALSE]]
 
-  # Emig
+  # Compute Emig
   dOutputColNames <- c('N_Emig_D', 'Cum_Emig_D')
   dInputColNames <- c('N_Emig', 'C_Emig')
   outputs[data, (dOutputColNames) := data[, dInputColNames, with = FALSE], on = c('Year')]
 
-  # Infections
+  # Compute Infections
   outputs[, Cum_Inf_M := modelResults$C_Inf]
   outputs[data, Cum_Inf_D := C_Inf, on = c('Year')]
 
   outputs[, N_Inf_M := modelResults$N_Inf]
   outputs[data, N_Inf_D := N_Inf, on = c('Year')]
 
-  # Delta
+  # Compute Delta
   mOutputColNames <- sprintf('delta%d', seq_len(noCD4))
   outputs[, (mOutputColNames) := deltasDT[, seq_len(noCD4), with = FALSE]]
 
-  # Time to diagnosis
+  # Compute Time to diagnosis
   outputs[, t_diag := timeResults$TimeToDiag]
 
   mOutputColNames <- c('t_diag_p50', 't_diag_p25', 't_diag_p75')
   outputs[, (mOutputColNames) := timeToDiagMedianDT[, c(2, 1, 3), with = FALSE]]
 
-  # Average diagnosis time
+  # Compute Average diagnosis time
   outputs[, D_Avg_Time := countResults$D_Avg_Time]
   mOutputColNames <- sprintf('t_diag_%d', seq_len(ncol(timeResults$TimeToDiagDist$Dist_TimeToDiag)))
   outputs[, (mOutputColNames) := as.data.table(timeResults$TimeToDiagDist$Dist_TimeToDiag)]
 
-  # Number living with HIV
+  # Compute Number living with HIV
   outputs[, N_Alive := Cum_Inf_M - Cum_Dead_D - Cum_Und_Dead_M]
 
-  # Number diagnosed and living with HIV
+  # Compute Number diagnosed and living with HIV
   outputs[, N_Alive_Diag_M := Cum_HIV_M - Cum_Dead_D]
 
-  # Number living with undiagnosed HIV
+  # Compute Number living with undiagnosed HIV
   outputs[, N_Und := Cum_Inf_M - Cum_HIV_M - Cum_Und_Dead_M]
   outputs[, N_Und_1 := countResults$N_Und_1]
   outputs[, N_Und_2 := countResults$N_Und_2]
