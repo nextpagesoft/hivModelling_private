@@ -54,7 +54,7 @@ ModelTimeToDiagMedian <- function(
     dist <- abs(sumYstart / 1000 - 0.25)
     if (dist < min25) {
       min25 <- dist
-      t25 = (timeA + timeB) / 2
+      t25 <- (timeA + timeB) / 2
     }
 
     dist <- abs(sumYstart / 1000 - 0.50)
