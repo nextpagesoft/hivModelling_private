@@ -1,3 +1,19 @@
+#' CreateOutputPlots
+#'
+#' Creates output plots
+#'
+#' @param mainResults Output of function \code{\link{PerformMainFit}}. Required.
+#' @param bsResultsList Output of function \code{\link{PerformBootstrapFits}}. Required.
+#'
+#' @return
+#' list of ggplot2 objects
+#'
+#' @examples
+#' \dontrun{
+#' CreateOutputPlots(mainResults, bsResultsList)
+#' }
+#'
+#' @export
 CreateOutputPlots <- function(
   mainResults,
   bsResultsList
