@@ -32,24 +32,46 @@ ReadInputData <- function(context)
   `.` <- NULL
 
   inputDataPath <- context$Settings$InputDataPath
-  if (!is.null(inputDataPath) && dir.exists(inputDataPath)) {
-    fileNames <- list.files(inputDataPath, pattern = '.csv', full.names = TRUE,
-                            ignore.case = FALSE)
-    inputData <- setNames(
-      lapply(fileNames, fread),
-      tools::file_path_sans_ext(basename(fileNames))
-    )
 
-    inputData <- lapply(inputData, function(dataSet) {
-      setnames(dataSet, c('Year', 'Count'))
-      dataSet[, ':='(
-        Year = as.integer(Year),
-        Count = as.numeric(Count)
-      )]
-    })
-    message(sprintf('File %s read\n', fileNames))
-  } else {
-    inputData <- list()
+  inputData <- list()
+  if (!is.null(inputDataPath) && file.exists(inputDataPath)) {
+    # Read zip file
+    if (!isTRUE(file.info(inputDataPath)$isdir)) {
+      inDir <- tempfile()
+      dir.create(inDir, recursive = TRUE)
+      on.exit({
+        unlink(inDir, recursive = TRUE, force = TRUE)
+      })
+
+      unzip(inputDataPath, exdir = inDir)
+
+      fileNames <- list.files(inDir, recursive = TRUE, full.names = TRUE)
+      inputDataPath <- unique(dirname(fileNames))
+    }
+
+    # All files should be present in a single folder
+    if (length(inputDataPath) == 1L) {
+      # Read directory
+      fileNames <- list.files(
+        inputDataPath,
+        pattern = '.csv',
+        full.names = TRUE,
+        ignore.case = FALSE
+      )
+      inputData <- setNames(
+        lapply(fileNames, fread),
+        tools::file_path_sans_ext(basename(fileNames))
+      )
+
+      inputData <- lapply(inputData, function(dataSet) {
+        setnames(dataSet, c('Year', 'Count'))
+        dataSet[, ':='(
+          Year = as.integer(Year),
+          Count = as.numeric(Count)
+        )]
+      })
+      message(sprintf('File %s read\n', fileNames))
+    }
   }
 
   message('DEVELOPMENT NOTE: Years 1980:2017 are hardcoded "ReadInputData" function')
