@@ -16,7 +16,7 @@
 #' @import data.table
 #' @import xml2
 #' @import ggplot2
-#' @importFrom utils modifyList tail setTxtProgressBar txtProgressBar
+#' @importFrom utils modifyList tail setTxtProgressBar txtProgressBar unzip
 #' @importFrom stats setNames rnbinom rbinom rpois quantile
 #' @useDynLib hivModelling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
