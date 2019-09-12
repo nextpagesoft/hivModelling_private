@@ -4,12 +4,12 @@
 \alias{CreateOutputPlots}
 \title{CreateOutputPlots}
 \usage{
-CreateOutputPlots(mainResults, bsResultsList)
+CreateOutputPlots(mainResults, bsResultsList = NULL)
 }
 \arguments{
 \item{mainResults}{Output of function \code{\link{PerformMainFit}}. Required.}
 
-\item{bsResultsList}{Output of function \code{\link{PerformBootstrapFits}}. Required.}
+\item{bsResultsList}{Output of function \code{\link{PerformBootstrapFits}}. Optional.}
 }
 \value{
 list of ggplot2 objects

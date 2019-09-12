@@ -3,7 +3,7 @@
 #' Creates output plots
 #'
 #' @param mainResults Output of function \code{\link{PerformMainFit}}. Required.
-#' @param bsResultsList Output of function \code{\link{PerformBootstrapFits}}. Required.
+#' @param bsResultsList Output of function \code{\link{PerformBootstrapFits}}. Optional.
 #'
 #' @return
 #' list of ggplot2 objects
@@ -16,7 +16,7 @@
 #' @export
 CreateOutputPlots <- function(
   mainResults,
-  bsResultsList
+  bsResultsList = NULL
 ) {
   # CRAN checks
   `.` <- NULL
@@ -51,7 +51,7 @@ CreateOutputPlots <- function(
   colors <- c('#69b023', '#9d8b56', '#7bbcc0', '#ce80ce')
   fillColor <- '#d9d9d9'
 
-  main <- mainResults$MainOutputs[, .(
+  dt <- mainResults$MainOutputs[, .(
     Year,
     N_HIV_D, N_HIV_Obs_M,
     N_CD4_1_D, N_CD4_1_Obs_M,
@@ -65,24 +65,26 @@ CreateOutputPlots <- function(
     N_Alive, N_Alive_Diag_M, N_Und,
     N_Und_Alive_p
   )]
-  conf <- bsResultsList$ConfBounds[
-    Run == length(bsResultsList$IterResults),
-    .(
-      Year,
-      N_HIV_Obs_M_LB, N_HIV_Obs_M_UB,
-      N_CD4_1_Obs_M_LB, N_CD4_1_Obs_M_UB,
-      N_CD4_2_Obs_M_LB, N_CD4_2_Obs_M_UB,
-      N_CD4_3_Obs_M_LB, N_CD4_3_Obs_M_UB,
-      N_CD4_4_Obs_M_LB, N_CD4_4_Obs_M_UB,
-      N_HIVAIDS_Obs_M_LB, N_HIVAIDS_Obs_M_UB,
-      N_AIDS_M_LB, N_AIDS_M_UB,
-      N_Inf_M_LB, N_Inf_M_UB,
-      t_diag_LB, t_diag_UB,
-      N_Alive_LB, N_Alive_UB, N_Alive_Diag_M_LB, N_Alive_Diag_M_UB, N_Und_LB, N_Und_UB,
-      N_Und_Alive_p_LB, N_Und_Alive_p_UB
-    )
-  ]
-  dt <- merge(main, conf, by = 'Year', all = TRUE)
+  if (!is.null(bsResultsList)) {
+    conf <- bsResultsList$ConfBounds[
+      Run == length(bsResultsList$IterResults),
+      .(
+        Year,
+        N_HIV_Obs_M_LB, N_HIV_Obs_M_UB,
+        N_CD4_1_Obs_M_LB, N_CD4_1_Obs_M_UB,
+        N_CD4_2_Obs_M_LB, N_CD4_2_Obs_M_UB,
+        N_CD4_3_Obs_M_LB, N_CD4_3_Obs_M_UB,
+        N_CD4_4_Obs_M_LB, N_CD4_4_Obs_M_UB,
+        N_HIVAIDS_Obs_M_LB, N_HIVAIDS_Obs_M_UB,
+        N_AIDS_M_LB, N_AIDS_M_UB,
+        N_Inf_M_LB, N_Inf_M_UB,
+        t_diag_LB, t_diag_UB,
+        N_Alive_LB, N_Alive_UB, N_Alive_Diag_M_LB, N_Alive_Diag_M_UB, N_Und_LB, N_Und_UB,
+        N_Und_Alive_p_LB, N_Und_Alive_p_UB
+      )
+      ]
+    dt <- merge(dt, conf, by = 'Year', all = TRUE)
+  }
 
   GetPlotBase <- function() {
     list(
@@ -103,124 +105,43 @@ CreateOutputPlots <- function(
     )
   }
 
-  plots <- list()
+  GetPlot <- function(dt, dataVarName = NULL, modelVarName = NULL, title = NULL) {
+    p <- ggplot(data = dt, aes(x = Year))
+    if (!is.null(dataVarName)) {
+      lineTypes <- c(Data = 'solid', Mean = 'dashed')
+      p <- p + geom_line(aes_string(y = dataVarName, color = '"Data"', linetype = '"Data"'))
+    } else {
+      lineTypes <- c(Data = 'dashed', Mean = 'solid')
+    }
+    if (!is.null(modelVarName)) {
+      p <- p +
+        geom_line(aes_string(y = modelVarName, color = '"Mean"', linetype = '"Mean"'), size = 0.8)
 
-  plots[['HIV diagnoses, total']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_HIV_Obs_M_LB, ymax = N_HIV_Obs_M_UB, fill = 'Min-max'), alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_HIV_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_HIV_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, total')
+      lbVarName <- sprintf('%s_LB', modelVarName)
+      ubVarName <- sprintf('%s_UB', modelVarName)
+      if (all(c(lbVarName, ubVarName) %in% colnames(dt))) {
+        p <- p +
+          geom_ribbon(aes_string(
+            ymin = sprintf('%s_LB', modelVarName),
+            ymax = sprintf('%s_UB', modelVarName),
+            fill = '"Min-max"'),
+            alpha = 0.4
+          ) +
+          scale_fill_manual('Bounds', values = fillColor)
+      }
+    }
+    if (!is.null(title)) {
+      p <- p +
+        ggtitle(title)
+    }
+    p <- p +
+      scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
+      scale_linetype_manual('Datasets', values = lineTypes) +
+      GetPlotBase()
+    return(p)
+  }
 
-  plots[['HIV diagnoses, CD4 >= 500']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_CD4_1_Obs_M_LB, ymax = N_CD4_1_Obs_M_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_CD4_1_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_CD4_1_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, CD4 >= 500')
-
-  plots[['HIV diagnoses, CD4 >= 350-499']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_CD4_2_Obs_M_LB, ymax = N_CD4_2_Obs_M_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_CD4_2_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_CD4_2_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, CD4 >= 350-499')
-
-  plots[['HIV diagnoses, CD4 >= 200-349']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_CD4_3_Obs_M_LB, ymax = N_CD4_3_Obs_M_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_CD4_3_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_CD4_3_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, CD4 >= 200-349')
-
-  plots[['HIV diagnoses, CD4 < 200']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_CD4_4_Obs_M_LB, ymax = N_CD4_4_Obs_M_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_CD4_4_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_CD4_4_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, CD4 >= 200-349')
-
-  plots[['HIV/AIDS diagnoses']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_HIVAIDS_Obs_M_LB, ymax = N_HIVAIDS_Obs_M_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_HIVAIDS_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_HIVAIDS_Obs_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV/AIDS diagnoses')
-
-  plots[['HIV diagnoses, total']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_AIDS_M_LB, ymax = N_AIDS_M_UB, fill = 'Min-max'), alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_AIDS_D, color = 'Data', linetype = 'Data')) +
-    geom_line(aes(y = N_AIDS_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Data = 'solid', Mean = 'dashed')) +
-    GetPlotBase() +
-    ggtitle('HIV diagnoses, total')
-
-  plots[['HIV infections per year']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_Inf_M_LB, ymax = N_Inf_M_UB, fill = 'Min-max'), alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_Inf_M, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Mean = 'solid')) +
-    GetPlotBase() +
-    ggtitle('HIV infections per year')
-
-  plots[['Time to diagnosis']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = t_diag_LB, ymax = t_diag_UB, fill = 'Min-max'), alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = t_diag, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    GetPlotBase() +
-    ggtitle('Time to diagnosis')
-
-  plots[['Total number of HIV-infected']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_Alive_LB, ymax = N_Alive_UB, fill = 'Alive Min-max'), alpha = 0.2) +
-    geom_ribbon(aes(ymin = N_Alive_Diag_M_LB, ymax = N_Alive_Diag_M_UB, fill = 'Diagnosed Min-max'),
-                alpha = 0.2) +
-    geom_ribbon(aes(ymin = N_Und_LB, ymax = N_Und_UB, fill = 'Undiagnosed Min-max'), alpha = 0.2) +
+  pTotalHIVInf <- ggplot(data = dt, aes(x = Year)) +
     scale_fill_manual('Bounds', values = colors[1:3]) +
     geom_line(aes(y = N_Alive, color = 'Alive'), size = 0.8) +
     geom_line(aes(y = N_Alive_Diag_M, color = 'Diagnosed'), size = 0.8) +
@@ -229,18 +150,32 @@ CreateOutputPlots <- function(
     scale_color_manual('Datasets', values = colors[1:3]) +
     GetPlotBase() +
     ggtitle('Total number of HIV-infected')
+  if (all(c('N_Alive_LB', 'N_Alive_UB') %in% colnames(dt))) {
+    pTotalHIVInf <- pTotalHIVInf +
+      geom_ribbon(aes(ymin = N_Alive_LB, ymax = N_Alive_UB, fill = 'Alive Min-max'), alpha = 0.2)
+  }
+  if (all(c('N_Alive_Diag_M_LB', 'N_Alive_Diag_M_UB') %in% colnames(dt))) {
+    pTotalHIVInf <- pTotalHIVInf +
+      geom_ribbon(aes(ymin = N_Alive_Diag_M_LB, ymax = N_Alive_Diag_M_UB, fill = 'Diagnosed Min-max'),
+                  alpha = 0.2)
+  }
+  if (all(c('N_Und_LB', 'N_Und_UB') %in% colnames(dt))) {
+    pTotalHIVInf <- pTotalHIVInf +
+      geom_ribbon(aes(ymin = N_Und_LB, ymax = N_Und_UB, fill = 'Undiagnosed Min-max'), alpha = 0.2)
+  }
 
-  plots[['Proportion undiagnosed of all those alive']] <-
-    ggplot(data = dt, aes(x = Year)) +
-    geom_ribbon(aes(ymin = N_Und_Alive_p_LB, ymax = N_Und_Alive_p_UB, fill = 'Min-max'),
-                alpha = 0.4) +
-    scale_fill_manual('Bounds', values = fillColor) +
-    geom_line(aes(y = N_Und_Alive_p, color = 'Mean', linetype = 'Mean'), size = 0.8) +
-    labs(colour = 'Datasets', x = 'xxx', y = 'yyy') +
-    scale_color_manual("Datasets", values = c(colors[1], fillColor)) +
-    scale_linetype_manual('Datasets', values = c(Mean = 'solid')) +
-    GetPlotBase() +
-    ggtitle('Proportion undiagnosed of all those alive')
+  plots <- list()
+  plots[['HIV diagnoses, total']] <- GetPlot(dt, 'N_HIV_D', 'N_HIV_Obs_M', 'HIV diagnoses, total')
+  plots[['HIV diagnoses, CD4 >= 500']] <- GetPlot(dt, 'N_CD4_1_D', 'N_CD4_1_Obs_M', 'HIV diagnoses, CD4 >= 500')
+  plots[['HIV diagnoses, CD4 >= 350-499']] <- GetPlot(dt, 'N_CD4_2_D', 'N_CD4_2_Obs_M', 'HIV diagnoses, CD4 >= 350-499')
+  plots[['HIV diagnoses, CD4 >= 200-349']] <- GetPlot(dt, 'N_CD4_3_D', 'N_CD4_3_Obs_M', 'HIV diagnoses, CD4 >= 200-349')
+  plots[['HIV diagnoses, CD4 < 200']] <- GetPlot(dt, 'N_CD4_4_D', 'N_CD4_4_Obs_M', 'HIV diagnoses, CD4 < 200')
+  plots[['HIV/AIDS diagnoses']] <- GetPlot(dt, 'N_HIVAIDS_D', 'N_HIVAIDS_Obs_M', 'HIV/AIDS diagnoses')
+  plots[['AIDS diagnoses, total']] <- GetPlot(dt, 'N_AIDS_D', 'N_AIDS_M', 'AIDS diagnoses, total')
+  plots[['HIV infections per year']] <- GetPlot(dt, NULL, 'N_Inf_M', 'HIV infections per year')
+  plots[['Time to diagnosis']] <- GetPlot(dt, NULL, 't_diag', 'Time to diagnosis')
+  plots[['Total number of HIV-infected']] <- pTotalHIVInf
+  plots[['Proportion undiagnosed of all those alive']] <- GetPlot(dt, NULL, 'N_Und_Alive_p', 'Proportion undiagnosed of all those alive')
 
   return(plots)
 }

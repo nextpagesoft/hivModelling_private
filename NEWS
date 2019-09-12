@@ -1,6 +1,7 @@
 Version 0.9.10 (2019/09/11)
 
 * Support loading data from zipped files/folders
+* Support creating plots with and without bootstrap iterations
 
 
 Version 0.9.9 (2019/08/19)

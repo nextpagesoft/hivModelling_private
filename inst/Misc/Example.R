@@ -56,6 +56,7 @@ bsResultsList <- PerformBootstrapFits(
   executionPlan = future::multiprocess
 )
 
+plots <- CreateOutputPlots(mainResults)
 plots <- CreateOutputPlots(mainResults, bsResultsList)
 
 # Save results in csv file
