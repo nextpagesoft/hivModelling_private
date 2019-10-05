@@ -25,8 +25,8 @@ Hash: 622be49032fe50bd42e96aaef613e209
 
 Package: backports
 Source: CRAN
-Version: 1.1.4
-Hash: e88df919a68845e664e019570e2251b6
+Version: 1.1.5
+Hash: 35ad64fcf2063e2a52031b0f1a59d8f0
 
 Package: cli
 Source: CRAN
@@ -46,18 +46,18 @@ Hash: ff2840dd9b0d563fc80377a5a45510cd
 
 Package: data.table
 Source: CRAN
-Version: 1.12.2
-Hash: b1642cf2ee0ab1d1b152ffacdb4401f7
+Version: 1.12.4
+Hash: 5015dd3f765a09d779b1f3405af2f61f
 
 Package: digest
 Source: CRAN
-Version: 0.6.20
-Hash: 96694793002a72637776e3b31956cbb2
+Version: 0.6.21
+Hash: b75f091dd438a0ed4d858a3e415e054c
 
 Package: ellipsis
 Source: CRAN
-Version: 0.2.0.1
-Hash: f1c603e7493506909ebbde7bee39a33f
+Version: 0.3.0
+Hash: 30b58109e4d7c6184a9c2e32f9ae38c6
 Requires: rlang
 
 Package: fansi
@@ -141,8 +141,8 @@ Requires: cli, crayon, fansi, rlang, utf8, vctrs
 
 Package: pkgconfig
 Source: CRAN
-Version: 2.0.2
-Hash: b0fd6ed908e150b77e5f00c6478bd58c
+Version: 2.0.3
+Hash: 5ff5f2361851a49534c96caa2a8071c7
 
 Package: plyr
 Source: CRAN
