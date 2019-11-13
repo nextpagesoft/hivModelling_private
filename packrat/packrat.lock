@@ -5,8 +5,8 @@ Repos: CRAN=https://cloud.r-project.org
 
 Package: R6
 Source: CRAN
-Version: 2.4.0
-Hash: 948a547c484e5bea15eee76cc53cce3f
+Version: 2.4.1
+Hash: b488861d8c3dfac497e041ec911df9fb
 
 Package: RColorBrewer
 Source: CRAN
@@ -15,8 +15,8 @@ Hash: c0d56cd15034f395874c870141870c25
 
 Package: Rcpp
 Source: CRAN
-Version: 1.0.2
-Hash: d04e441a8d398e3d3a71f294c07fa94d
+Version: 1.0.3
+Hash: 99f6a1855b2f9434e1399d565d2ed9df
 
 Package: assertthat
 Source: CRAN
@@ -46,13 +46,13 @@ Hash: ff2840dd9b0d563fc80377a5a45510cd
 
 Package: data.table
 Source: CRAN
-Version: 1.12.4
-Hash: 5015dd3f765a09d779b1f3405af2f61f
+Version: 1.12.6
+Hash: 4fbfebe60de9b5c065ba21f37c68e544
 
 Package: digest
 Source: CRAN
-Version: 0.6.21
-Hash: b75f091dd438a0ed4d858a3e415e054c
+Version: 0.6.22
+Hash: 824be063463b3709782ef29a3e8d7079
 
 Package: ellipsis
 Source: CRAN
@@ -67,8 +67,8 @@ Hash: f147621f72b561485bfffcae78c4f5d5
 
 Package: future
 Source: CRAN
-Version: 1.14.0
-Hash: be5e13b4f7a76297c720059f04845aeb
+Version: 1.15.0
+Hash: 0c417600bf231809142b436937897a6d
 Requires: digest, globals, listenv
 
 Package: ggplot2
@@ -147,24 +147,24 @@ Hash: 5ff5f2361851a49534c96caa2a8071c7
 Package: plyr
 Source: CRAN
 Version: 1.8.4
-Hash: 5c3737d7c1846e30d40c8c38110b5fcd
+Hash: 17953ad5e34a454974b9e44c5a094649
 Requires: Rcpp
 
 Package: reshape2
 Source: CRAN
 Version: 1.4.3
-Hash: b7ea8a2e7a9df39c2346e78bd83e26f8
+Hash: 07530ccc44ce1d2e5390d6ae41bafe03
 Requires: Rcpp, plyr, stringr
 
 Package: rlang
 Source: CRAN
-Version: 0.4.0
-Hash: eabda67321fe1d477ea641ddd5d84f00
+Version: 0.4.1
+Hash: 686b7c4593f009713b9df03a2bb33124
 
 Package: scales
 Source: CRAN
 Version: 1.0.0
-Hash: f4f1b13b6774ee3122a36466d1bc50b8
+Hash: 8b512f84c93a820d25221eaa1ca25ad8
 Requires: R6, RColorBrewer, Rcpp, labeling, munsell, viridisLite
 
 Package: stringi
@@ -208,7 +208,7 @@ Hash: d534108bcd5f34ec73e9eb523751ba20
 Package: xml2
 Source: CRAN
 Version: 1.2.2
-Hash: c5258a3beb15da46d4682eda667bf5ec
+Hash: c5ae4169830ed140e94045e1b7934267
 Requires: Rcpp
 
 Package: zeallot

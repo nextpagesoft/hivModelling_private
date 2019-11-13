@@ -3,7 +3,6 @@
 \docType{package}
 \name{hivModelling}
 \alias{hivModelling}
-\alias{hivModelling-package}
 \title{Evidence-Based Methods to Calculate HIV Incidence in a Given Population}
 \description{
 Calculates HIV incidence in a given population.

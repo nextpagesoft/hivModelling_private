@@ -4,8 +4,12 @@
 \alias{GetObjectDefinition}
 \title{GetObjectDefinition}
 \usage{
-GetObjectDefinition(objectName, path = system.file("ObjectDefinitions",
-  package = "hivModelling"), section = NULL, includeFileName = FALSE)
+GetObjectDefinition(
+  objectName,
+  path = system.file("ObjectDefinitions", package = "hivModelling"),
+  section = NULL,
+  includeFileName = FALSE
+)
 }
 \arguments{
 \item{objectName}{Name of the object. Required.}

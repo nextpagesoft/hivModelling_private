@@ -4,9 +4,18 @@
 \alias{PerformBootstrapFits}
 \title{PerformBootstrapFits}
 \usage{
-PerformBootstrapFits(bsCount = 20, context, data, mainResults,
-  maxNoFit = 30, ctol = 1e-06, ftol = 1e-05,
-  executionPlan = future::sequential, statusRefreshRate = 2, ...)
+PerformBootstrapFits(
+  bsCount = 20,
+  context,
+  data,
+  mainResults,
+  maxNoFit = 30,
+  ctol = 1e-06,
+  ftol = 1e-05,
+  executionPlan = future::sequential,
+  statusRefreshRate = 2,
+  ...
+)
 }
 \arguments{
 \item{bsCount}{Count of boostrap iterations. Default = \code{20}}
