@@ -65,6 +65,11 @@ Source: CRAN
 Version: 0.4.0
 Hash: f147621f72b561485bfffcae78c4f5d5
 
+Package: farver
+Source: CRAN
+Version: 2.0.1
+Hash: eb671f52c8ebb4b81617eba93abda72b
+
 Package: future
 Source: CRAN
 Version: 1.15.0
@@ -102,6 +107,12 @@ Package: lazyeval
 Source: CRAN
 Version: 0.2.2
 Hash: 563563691bea3cde6945a98996d7c166
+
+Package: lifecycle
+Source: CRAN
+Version: 0.1.0
+Hash: fd2ceffa778c010fab2df12b2eccd835
+Requires: glue, rlang
 
 Package: listenv
 Source: CRAN
@@ -163,9 +174,10 @@ Hash: 686b7c4593f009713b9df03a2bb33124
 
 Package: scales
 Source: CRAN
-Version: 1.0.0
-Hash: 8b512f84c93a820d25221eaa1ca25ad8
-Requires: R6, RColorBrewer, Rcpp, labeling, munsell, viridisLite
+Version: 1.1.0
+Hash: fa53af4e3ceba05fc79a31bde5962445
+Requires: R6, RColorBrewer, farver, labeling, lifecycle, munsell,
+    viridisLite
 
 Package: stringi
 Source: CRAN

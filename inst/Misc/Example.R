@@ -4,7 +4,6 @@ library(hivModelling)
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    RunInParallel = TRUE,
     ModelsToRun = c('INCIDENCE'),
     InputDataPath = '~/share/HIV test files/Data/test NL'
   ),
