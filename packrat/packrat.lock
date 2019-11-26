@@ -51,8 +51,8 @@ Hash: 4fbfebe60de9b5c065ba21f37c68e544
 
 Package: digest
 Source: CRAN
-Version: 0.6.22
-Hash: 824be063463b3709782ef29a3e8d7079
+Version: 0.6.23
+Hash: 7ec748e53ca45166e0824224421529ad
 
 Package: ellipsis
 Source: CRAN
@@ -65,10 +65,15 @@ Source: CRAN
 Version: 0.4.0
 Hash: f147621f72b561485bfffcae78c4f5d5
 
+Package: farver
+Source: CRAN
+Version: 2.0.1
+Hash: eb671f52c8ebb4b81617eba93abda72b
+
 Package: future
 Source: CRAN
-Version: 1.15.0
-Hash: 0c417600bf231809142b436937897a6d
+Version: 1.15.1
+Hash: 5973fb0744e5d3a3bc2f2a424187c66c
 Requires: digest, globals, listenv
 
 Package: ggplot2
@@ -102,6 +107,12 @@ Package: lazyeval
 Source: CRAN
 Version: 0.2.2
 Hash: 563563691bea3cde6945a98996d7c166
+
+Package: lifecycle
+Source: CRAN
+Version: 0.1.0
+Hash: fd2ceffa778c010fab2df12b2eccd835
+Requires: glue, rlang
 
 Package: listenv
 Source: CRAN
@@ -158,14 +169,15 @@ Requires: Rcpp, plyr, stringr
 
 Package: rlang
 Source: CRAN
-Version: 0.4.1
-Hash: 686b7c4593f009713b9df03a2bb33124
+Version: 0.4.2
+Hash: c5cfcde637bbff4e42edad2e69dac5c7
 
 Package: scales
 Source: CRAN
-Version: 1.0.0
-Hash: 8b512f84c93a820d25221eaa1ca25ad8
-Requires: R6, RColorBrewer, Rcpp, labeling, munsell, viridisLite
+Version: 1.1.0
+Hash: fa53af4e3ceba05fc79a31bde5962445
+Requires: R6, RColorBrewer, farver, labeling, lifecycle, munsell,
+    viridisLite
 
 Package: stringi
 Source: CRAN
