@@ -1,3 +1,8 @@
+Version 0.9.11 (2019/11/..)
+
+* Remove hard-coded years from ReadInputData
+
+
 Version 0.9.10 (2019/09/11)
 
 * Support loading data from zipped files/folders
