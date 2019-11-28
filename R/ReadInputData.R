@@ -74,10 +74,12 @@ ReadInputData <- function(context)
     }
   }
 
-  message('DEVELOPMENT NOTE: Years 1980:2017 are hardcoded "ReadInputData" function')
+  yearsList <- lapply(inputData, '[[', 'Year')
+  minYear <- min(sapply(yearsList, min))
+  maxYear <- max(sapply(yearsList, max))
 
   data <- data.table(
-    Year = 1980L:2017L,
+    Year = minYear:maxYear,
     N_HIV = 0,
     N_HIV_Stage_1 = 0,
     N_HIV_Stage_2 = 0,
