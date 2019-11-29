@@ -3,6 +3,7 @@
 export(CapWords)
 export(CreateOutputPlots)
 export(EstimateParameters)
+export(GetDeltaAndTc)
 export(GetInfoList)
 export(GetModelPop)
 export(GetObjectDefinition)
