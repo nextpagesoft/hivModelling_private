@@ -2,6 +2,13 @@ library(data.table)
 library(hivModelling)
 
 # RUN ----------------------------------------------------------------------------------------------
+intervals <- data.table(
+  StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
+  EndYear = c(1984L, 1996L, 2000L, 2005L, 2010L, 2017L),
+  Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
+  DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
+  ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+)
 context <- GetRunContext(
   settings = list(
     ModelsToRun = c('INCIDENCE'),
@@ -10,7 +17,8 @@ context <- GetRunContext(
   parameters = list(
     Models = list(
       INCIDENCE = list(
-        Country = 'NL'
+        Country = 'NL',
+        Intervals = intervals
       )
     )
   )

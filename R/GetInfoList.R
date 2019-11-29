@@ -46,9 +46,11 @@ GetInfoList <- function(
   # Param_Knots
   knotsDistance <- (info$ModelMaxYear - info$ModelMinYear) / (info$ModelNoKnots + 1)
 
-  knots <- matrix(0,
-                  info$SplineOrder + 1,
-                  info$ModelNoKnots + 2 * (info$SplineOrder + 1))
+  knots <- matrix(
+    0,
+    info$SplineOrder + 1,
+    info$ModelNoKnots + 2 * (info$SplineOrder + 1)
+  )
   myKnots <- NULL
   for (k in seq_len(info$SplineOrder + 1)) {
     knots[k, 1:k] <- info$ModelMinYear

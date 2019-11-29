@@ -28,15 +28,19 @@ list(
 
       FitAIDSMaxYear = 1995,
 
-      # Number of time intervals diagnosis matrix
-      NoTime = 7,
-
-      Tc = c(1980, 1984, 1984, 1996, 2000, 2005, 2010, 2017),
+      # Intervals for diagnosis matrix
+      Intervals = data.table(
+        StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
+        EndYear = c(1984L, 1996L, 2000L, 2005L, 2010L, 2017L),
+        Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
+        DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
+        ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+      ),
 
       # 'POISSON' or 'NEGATIVE_BINOMIAL'
       FitDistribution = 'NEGATIVE_BINOMIAL',
 
-      # Overdispersion
+      # Over-dispersion
       RDisp = 50,
 
       # Incidence curve --------------------------------------------------------

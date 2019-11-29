@@ -21,13 +21,11 @@ GetParamList <- function(
   param <- list(
     NoStage = incidenceParams$NoStage,
     FInit = incidenceParams$FInit,
-    NoTime = incidenceParams$NoTime,
     Mu = incidenceParams$Mu,
     AlphaP = incidenceParams$AlphaP,
     Qoppa = incidenceParams$Qoppa,
     Delta4Fac = incidenceParams$Delta4Fac,
     DeltaAIDS = incidenceParams$DeltaAIDS,
-    Tc = incidenceParams$Tc,
     NoDelta = incidenceParams$NoDelta,
     NoTheta = incidenceParams$NoTheta,
     NoThetaFix = incidenceParams$NoThetaFix,
@@ -38,22 +36,27 @@ GetParamList <- function(
     DefNoDiagTime = incidenceParams$DefNoDiagTime
   )
 
-  deltaM <- matrix(0, param$NoStage, param$NoTime)
+  res <- GetDeltaPAndTc(incidenceParams$Intervals)
+
+  # Time intervals for diagnosis matrix
+  tc <- res$Tc
+  deltaP <- res$DeltaP
+
+  noTime <- length(tc) - 1
+
+  deltaM <- matrix(0, param$NoStage, noTime)
   deltaM[param$NoStage, ] <- param$DeltaAIDS
-  deltaM[1:4, 2] <- 0.2
 
   theta <- rep(0, param$NoTheta + 2)
-
-  deltaP <- matrix(0, param$NoStage, param$NoTime)
-  deltaP[1:4, 2] <- 1
 
   thetaP <- rep(0, param$NoTheta + 2)
   thetaP[2:(param$NoTheta + 1)] <- 1
 
   param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
+  param[['Tc']] <- tc
   param[['DeltaP']] <- deltaP
-  param[['ThetaP']] <- thetaP
   param[['DeltaM']] <- deltaM
+  param[['ThetaP']] <- thetaP
   param[['Theta']] <- theta
   param[['NoStageTot']] <- param$NoStage + 1
 
