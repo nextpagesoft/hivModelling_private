@@ -3,47 +3,38 @@ list(
 
   Models = list(
     INCIDENCE = list(
-      # Set country for country specific parameters
-      Country = NULL,
 
-      FullModel = TRUE,
+      # Editable parameters ------------------------------------------------------------------------
+      ModelMinYear = 1980L,
 
-      ModelMinYear = 1980,
+      ModelMaxYear = 2016L,
 
-      ModelMaxYear = 2017,
+      FitPosMinYear = 1979L,
 
-      FitPosMinYear = 1979,
+      FitPosMaxYear = 1979L,
 
-      FitPosMaxYear = 1979,
+      FitPosCD4MinYear = 1984L,
 
-      FitPosCD4MinYear = 1984,
+      FitPosCD4MaxYear = 2016L,
 
-      FitPosCD4MaxYear = 2016,
+      FitAIDSMinYear = 1980L,
 
-      FitAIDSPosMinYear = 1996,
+      FitAIDSMaxYear = 1995L,
 
-      FitAIDSPosMaxYear = 2016,
+      FitAIDSPosMinYear = 1996L,
 
-      FitAIDSMinYear = 1980,
-
-      FitAIDSMaxYear = 1995,
+      FitAIDSPosMaxYear = 2016L,
 
       # Intervals for diagnosis matrix
       Intervals = data.table(
         StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
-        EndYear = c(1984L, 1996L, 2000L, 2005L, 2010L, 2017L),
         Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
-        DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
-        ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+        ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
+        DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
       ),
 
-      # 'POISSON' or 'NEGATIVE_BINOMIAL'
-      FitDistribution = 'NEGATIVE_BINOMIAL',
-
-      # Over-dispersion
-      RDisp = 50,
-
-      # Incidence curve --------------------------------------------------------
+      # Set country for country specific parameters
+      Country = NULL,
 
       # Spline: number of knots
       ModelNoKnots = 6,
@@ -51,10 +42,25 @@ list(
       # Require incidence to be zero at start of epidemic
       StartIncZero = TRUE,
 
+      # 'POISSON' or 'NEGATIVE_BINOMIAL'
+      FitDistribution = 'NEGATIVE_BINOMIAL',
+
+      # Over-dispersion
+      RDisp = 50,
+
+      Delta4Fac = 0,
+
+      # Correction for incidence at end of observation interval (TRUE = yes;
+      # FALSE = no) by extending spline base beyond the maximum year and fixing
+      # the parameter associated with the last spline function to 0.
+      MaxIncCorr = TRUE,
+
       # B-splines: smooth incidence curve at the end of the observation interval
       SplineType = 'B-SPLINE',
 
-      # Non editable model parameters ------------------------------------------
+      FullData = TRUE,
+
+      # Non editable parameters --------------------------------------------------------------------
 
       SplineOrder = 4,
 
@@ -71,14 +77,7 @@ list(
 
       AlphaP = 1.0 / (2.90 / 12),
 
-      Delta4Fac = 0,
-
       DeltaAIDS = 12,
-
-      # Correction for incidence at end of observation interval (TRUE = yes;
-      # FALSE = no) by extending spline base beyond the maximum year and fixing
-      # the parameter associated with the last spline function to 0.
-      MaxIncCorr = TRUE,
 
       NoDelta = 1,
 

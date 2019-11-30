@@ -4,10 +4,12 @@
 \alias{GetDeltaPAndTc}
 \title{GetDeltaPAndTc}
 \usage{
-GetDeltaPAndTc(intervals, noStage = 5)
+GetDeltaPAndTc(intervals, maxYear, noStage = 5)
 }
 \arguments{
 \item{intervals}{data.frame with specifications of intervals. Required.}
+
+\item{maxYear}{Integer denoting last year for modelling. Required.}
 
 \item{noStage}{Number of CD4 progression stages, including AIDS. Optional.
 Default = 5}
@@ -21,11 +23,10 @@ Get \code{Delta} and \code{Tc} parameters based on intervals specification.
 \examples{
 intervals <- data.table::data.table(
   StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
-  EndYear = c(1984L, 1996L, 2000L, 2005L, 2010L, 2017L),
   Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
   DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
   ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
 )
-GetDeltaPAndTc(intervals)
+GetDeltaPAndTc(intervals, 2016L)
 
 }

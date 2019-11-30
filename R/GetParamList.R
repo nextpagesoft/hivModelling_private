@@ -36,7 +36,11 @@ GetParamList <- function(
     DefNoDiagTime = incidenceParams$DefNoDiagTime
   )
 
-  res <- GetDeltaPAndTc(incidenceParams$Intervals)
+  res <- GetDeltaPAndTc(
+    intervals = incidenceParams$Intervals,
+    maxYear = incidenceParams$ModelMaxYear,
+    noStage = incidenceParams$NoStage
+  )
 
   # Time intervals for diagnosis matrix
   tc <- res$Tc

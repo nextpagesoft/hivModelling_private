@@ -3,6 +3,7 @@
 #' Get \code{Delta} and \code{Tc} parameters based on intervals specification.
 #'
 #' @param intervals data.frame with specifications of intervals. Required.
+#' @param maxYear Integer denoting last year for modelling. Required.
 #' @param noStage Number of CD4 progression stages, including AIDS. Optional.
 #'   Default = 5
 #'
@@ -12,16 +13,16 @@
 #' @examples
 #' intervals <- data.table::data.table(
 #'   StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
-#'   EndYear = c(1984L, 1996L, 2000L, 2005L, 2010L, 2017L),
 #'   Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
 #'   DiffByCD4 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
 #'   ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
 #' )
-#' GetDeltaPAndTc(intervals)
+#' GetDeltaPAndTc(intervals, 2016L)
 #'
 #' @export
 GetDeltaPAndTc <- function(
   intervals,
+  maxYear,
   noStage = 5
 ) {
   countIntervals <- nrow(intervals) + sum(intervals$Jump)
@@ -63,7 +64,7 @@ GetDeltaPAndTc <- function(
     tc[tmpColIdx] <- interval$StartYear
   }
 
-  tc[tmpColIdx + 1] <- interval$EndYear
+  tc[tmpColIdx + 1] <- maxYear + 1
 
   return(list(
     DeltaP = deltaP,

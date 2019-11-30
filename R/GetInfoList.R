@@ -23,7 +23,7 @@ GetInfoList <- function(
   info <- list(
     Country = incidenceParams$Country,
     ModelMinYear = incidenceParams$ModelMinYear,
-    ModelMaxYear = incidenceParams$ModelMaxYear,
+    ModelMaxYear = incidenceParams$ModelMaxYear + 1,
     FitPosMinYear = incidenceParams$FitPosMinYear,
     FitPosMaxYear = incidenceParams$FitPosMaxYear,
     FitPosCD4MinYear = incidenceParams$FitPosCD4MinYear,

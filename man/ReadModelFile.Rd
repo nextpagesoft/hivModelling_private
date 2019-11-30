@@ -10,7 +10,7 @@ ReadModelFile(context)
 \item{context}{List of parameters. Required.}
 }
 \value{
-context list object
+NULL (invisibly)
 }
 \description{
 Reads XML model file

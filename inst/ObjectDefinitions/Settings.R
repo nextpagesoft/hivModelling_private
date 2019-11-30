@@ -1,6 +1,8 @@
 list(
   Name = 'Settings',
 
+  ModelFilePath = NULL,
+
   InputDataPath = NULL,
 
   OutputResultsPath = NULL,
