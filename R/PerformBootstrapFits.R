@@ -2,10 +2,10 @@
 #'
 #' Performs multiple bootstrap fits
 #'
-#' @param bsCount Count of boostrap iterations. Default = \code{20}
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
-#' @param mainResults Main results
+#' @param mainResults Main results. Required.
+#' @param bsCount Count of boostrap iterations. Default = \code{20}
 #' @param maxNoFit Maximum number of optimization iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
@@ -26,10 +26,10 @@
 #'
 #' @export
 PerformBootstrapFits <- function(
-  bsCount = 20,
   context,
   data,
   mainResults,
+  bsCount = 20,
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,

@@ -3,75 +3,40 @@ library(hivModelling)
 
 # RUN ----------------------------------------------------------------------------------------------
 
-# context <- GetRunContext(
-#   settings = list(
-#     InputDataPath = '~/share/HIV test files/Data/test NL.zip'
-#   ),
-#   parameters = list(
-#     INCIDENCE = list(
-#       MinYear = 1980L,
-#       MaxYear = 2016L,
-#       MinFitPos = 1979L,
-#       MaxFitPos = 1979L,
-#       MinFitCD4 = 1984L,
-#       MaxFitCD4 = 2016L,
-#       MinFitAIDS = 1980L,
-#       MaxFitAIDS = 1995L,
-#       MinFitHIVAIDS = 1996L,
-#       MaxFitHIVAIDS = 2016L,
-#       Intervals = data.table(
-#         StartYear        = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
-#         Jump             = c(FALSE, TRUE,  FALSE, FALSE, FALSE, FALSE),
-#         ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
-#         DiffByCD4        = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
-#       ),
-#       Country = 'NL'
-#     )
-#   )
-# )
-
-context <- GetRunContext(settings = list(InputDataPath = '~/share/HIV test files/Data/test NL.zip'))
+context <- GetRunContext(
+  settings = list(
+    InputDataPath = '~/share/HIV test files/Data/test NL - 2 populations'
+  )
+)
 
 data <- ReadInputData(context)
 
-mainResults <- PerformMainFit(context, data)
+popData <- GetPopulationData(context, data)
 
-# Algorithms checked on a single boostrap iteration (only for general comparison, results differ
-# from iteration to iteration):
-# NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
-# NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
-# NLOPT_LN_SBPLX        - very slow, interrupted
-# NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
-# NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
-# NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
-# NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
-bsResultsList <- PerformBootstrapFits(
-  bsCount = 20,
-  context,
-  data,
-  mainResults,
-  algorithm = 'NLOPT_LN_BOBYQA',
-  executionPlan = future::multiprocess
-)
+mainResults <- PerformMainFit(context, popData)
 
-plots <- CreateOutputPlots(mainResults)
+bsResultsList <- PerformBootstrapFits(context, popData, mainResults, bsCount = 20)
+
 plots <- CreateOutputPlots(mainResults, bsResultsList)
 
+# SAVE OUTPUTS -------------------------------------------------------------------------------------
+
 # Save results in csv file
-data.table::fwrite(
+fwrite(
   mainResults$MainOutputs,
   '~/share/HIV test files/Results/FUllData/Result_main.csv',
   sep = ','
 )
 
-data.table::fwrite(
+fwrite(
   rbindlist(lapply(bsResultsList, '[[', 'MainOutputs')),
   '~/share/HIV test files/Results/FUllData/Result_BS.csv',
   sep = ','
 )
 
-# RECONCILIATION -----------------------------------------------------------------------------------
-# Reconcile against the Windows version
+# RECONCILE ----------------------------------------------------------------------------------------
+
+# Reconcile against the desktop version
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
 oldVer <- fread('~/share/HIV test files/Results/FullData/pop_0_Result_main.csv')

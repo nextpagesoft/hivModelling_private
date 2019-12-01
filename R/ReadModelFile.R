@@ -18,10 +18,27 @@ ReadModelFile <- function(context)
   model <- NULL
 
   inputDataPath <- context$Settings$InputDataPath
+  if (is.null(inputDataPath)) {
+    return(NULL)
+  }
+
   modelFilePath <- context$Settings$ModelFilePath
   if (!is.null(modelFilePath)) {
+    # Model file provided directly
     model <- as_list(read_xml(modelFilePath))
+  } else if (isTRUE(file.info(inputDataPath)$isdir)) {
+    # Mode file included in directory with data files
+    modelFilePath <- list.files(
+      inputDataPath,
+      pattern = '\\.xml$',
+      all.files = TRUE,
+      full.names = TRUE
+    )[1]
+    if (!is.na(modelFilePath)) {
+      model <- as_list(read_xml(modelFilePath))
+    }
   } else if (tolower(tools::file_ext(inputDataPath)) == 'zip') {
+    # Mode file included in zip file with data files
     fileList <- unzip(inputDataPath, list = TRUE)
     fileExts <- sapply(fileList$Name, tools::file_ext)
     modelFilePath <- names(fileExts)[tolower(fileExts) == 'xml'][1]
@@ -30,20 +47,36 @@ ReadModelFile <- function(context)
       model <- as_list(read_xml(modelConn))
     }
   }
+
   if (is.null(model)) {
     return(NULL)
   }
 
   message('Model file "', modelFilePath, '" loaded')
 
-  version <- model$Model$FileVersion[[1]]
+  version <- as.integer(model$Model$FileVersion[[1]])
   if (version != 2) {
     warning('Version ', version, ' of model files is not supported')
   }
 
-  incModel <- model$Model$IncidenceModel
+  # Load risk groups
+  riskGroups <- NULL
+  if (length(model$Model$Meta$RiskGroups) > 0) {
+    riskGroups <- list()
+    riskGroupNames <- unname(sapply(sapply(model$Model$Meta$RiskGroups, '[[', 'Name'), '[[', 1))
+    riskGroups$PopulationSets <- setNames(lapply(model$Model$Meta$RiskGroups, function(riskGroup) {
+      populations <- unname(sapply(sapply(riskGroup$RiskCategories, '[[', 'Name'), '[[', 1))
+      selected <- as.logical(unname(sapply(sapply(riskGroup$RiskCategories, '[[', 'IsSelected'), '[[', 1)))
+      populations[selected]
+    }), riskGroupNames)
+    riskGroups$Selected <- riskGroupNames[length(riskGroupNames)]
+  }
 
+  incModel <- model$Model$IncidenceModel
   model <- list(
+    Settings = list(
+      RiskGroups = riskGroups
+    ),
     Parameters = list(
       INCIDENCE = list(
         ModelMinYear = as.integer(incModel$MinYear[[1]]),
@@ -64,7 +97,7 @@ ReadModelFile <- function(context)
             DiffByCD4        = as.logical(interval$DifferentByCD4[[1]])
           )
         })),
-        Country = incModel$Country[[1]],
+        Country = toupper(incModel$Country[[1]]),
         ModelNoKnots = as.integer(incModel$KnotsCount[[1]]),
         StartIncZero = as.logical(incModel$StartIncZero[[1]]),
         FitDistribution = ifelse(

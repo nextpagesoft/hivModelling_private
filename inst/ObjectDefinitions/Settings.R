@@ -3,5 +3,7 @@ list(
 
   ModelFilePath = NULL,
 
-  InputDataPath = NULL
+  InputDataPath = NULL,
+
+  RiskGroups = NULL
 )

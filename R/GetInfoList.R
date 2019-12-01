@@ -53,7 +53,7 @@ GetInfoList <- function(
   )
   myKnots <- NULL
   for (k in seq_len(info$SplineOrder + 1)) {
-    knots[k, 1:k] <- info$ModelMinYear
+    knots[k, seq_len(k)] <- info$ModelMinYear
     knots[k, (k + 1):(k + info$ModelNoKnots)] <-
       info$ModelMinYear +
       ((k + 1):(k + info$ModelNoKnots) - k) * knotsDistance

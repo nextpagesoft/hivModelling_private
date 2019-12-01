@@ -5,10 +5,10 @@
 \title{PerformBootstrapFits}
 \usage{
 PerformBootstrapFits(
-  bsCount = 20,
   context,
   data,
   mainResults,
+  bsCount = 20,
   maxNoFit = 30,
   ctol = 1e-06,
   ftol = 1e-05,
@@ -18,13 +18,13 @@ PerformBootstrapFits(
 )
 }
 \arguments{
-\item{bsCount}{Count of boostrap iterations. Default = \code{20}}
-
 \item{context}{List of parameters. Required.}
 
 \item{data}{Input data as data.table. Required.}
 
-\item{mainResults}{Main results}
+\item{mainResults}{Main results. Required.}
+
+\item{bsCount}{Count of boostrap iterations. Default = \code{20}}
 
 \item{maxNoFit}{Maximum number of optimization iterations. Optional. Default = 30.}
 

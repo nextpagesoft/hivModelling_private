@@ -23,7 +23,7 @@
 PerformMainFit <- function(
   context,
   data,
-  maxNoFit = 30,
+  maxNoFit = 30L,
   ctol = 1e-6,
   ftol = 1e-5,
   ...

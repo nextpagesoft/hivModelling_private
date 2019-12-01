@@ -33,7 +33,7 @@ list(
     ),
 
     # Set country for country specific parameters
-    Country = NULL,
+    Country = 'OTHER',
 
     # Spline: number of knots
     ModelNoKnots = 6,
