@@ -3,58 +3,38 @@ library(hivModelling)
 
 # RUN ----------------------------------------------------------------------------------------------
 
-intervals <- data.table(
-  StartYear        = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
-  Jump             = c(FALSE, TRUE,  FALSE, FALSE, FALSE, FALSE),
-  ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
-  DiffByCD4        = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
-)
-
-context <- GetRunContext(
-  settings = list(
-    InputDataPath = '~/share/HIV test files/Data/test NL.zip',
-    ModelsToRun = c('INCIDENCE')
-  ),
-  parameters = list(
-    Models = list(
-      INCIDENCE = list(
-        MinYear = 1980L,
-        MaxYear = 2016L,
-        MinFitPos = 1979L,
-        MaxFitPos = 1979L,
-        MinFitCD4 = 1984L,
-        MaxFitCD4 = 2016L,
-        MinFitAIDS = 1980L,
-        MaxFitAIDS = 1995L,
-        MinFitHIVAIDS = 1996L,
-        MaxFitHIVAIDS = 2016L,
-        Intervals = intervals,
-        Country = 'NL'
-      )
-    )
-  )
-)
-
 # context <- GetRunContext(
 #   settings = list(
-#     RunInParallel = TRUE,
-#     ModelsToRun = c('INCIDENCE'),
-#     InputDataPath = '~/share/HIV test files/Data/test Ard'
+#     InputDataPath = '~/share/HIV test files/Data/test NL.zip'
 #   ),
 #   parameters = list(
-#     Models = list(
-#       INCIDENCE = list(
-#         Country = 'NL',
-#         FitDistribution = 'POISSON'
-#       )
+#     INCIDENCE = list(
+#       MinYear = 1980L,
+#       MaxYear = 2016L,
+#       MinFitPos = 1979L,
+#       MaxFitPos = 1979L,
+#       MinFitCD4 = 1984L,
+#       MaxFitCD4 = 2016L,
+#       MinFitAIDS = 1980L,
+#       MaxFitAIDS = 1995L,
+#       MinFitHIVAIDS = 1996L,
+#       MaxFitHIVAIDS = 2016L,
+#       Intervals = data.table(
+#         StartYear        = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
+#         Jump             = c(FALSE, TRUE,  FALSE, FALSE, FALSE, FALSE),
+#         ChangeInInterval = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
+#         DiffByCD4        = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+#       ),
+#       Country = 'NL'
 #     )
 #   )
 # )
 
+context <- GetRunContext(settings = list(InputDataPath = '~/share/HIV test files/Data/test NL.zip'))
+
 data <- ReadInputData(context)
 
 mainResults <- PerformMainFit(context, data)
-# mainResults <- PerformMainFit(context, data, maxNoFit = 2, verbose = TRUE)
 
 # Algorithms checked on a single boostrap iteration (only for general comparison, results differ
 # from iteration to iteration):

@@ -16,7 +16,7 @@
 GetParamList <- function(
   context
 ) {
-  incidenceParams <- context$Parameters$Models$INCIDENCE
+  incidenceParams <- context$Parameters$INCIDENCE
 
   param <- list(
     NoStage = incidenceParams$NoStage,

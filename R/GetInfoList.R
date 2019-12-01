@@ -18,7 +18,7 @@ GetInfoList <- function(
 ) {
   VERY_SML <- 1e-20
 
-  incidenceParams <- context$Parameters$Models$INCIDENCE
+  incidenceParams <- context$Parameters$INCIDENCE
 
   info <- list(
     Country = incidenceParams$Country,

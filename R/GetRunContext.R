@@ -28,5 +28,10 @@ GetRunContext <- function(...)
 
   context <- modifyList(defaultContext, args)
 
+  incidenceParams <- ReadModelFile(context)
+  if (!is.null(incidenceParams)) {
+    context <- modifyList(context, incidenceParams)
+  }
+
   return(context)
 }
