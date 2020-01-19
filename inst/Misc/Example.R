@@ -5,7 +5,7 @@ library(hivModelling)
 
 context <- GetRunContext(
   settings = list(
-    InputDataPath = '~/share/HIV test files/Data/test NL - 2 populations'
+    InputDataPath = '~/share/HIV test files/Data/test NL.zip'
   )
 )
 
