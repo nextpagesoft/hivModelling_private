@@ -60,10 +60,10 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "2.0.0",
+      "Version": "2.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f41a3aa27b911750a6526b450d0b8ea4"
+      "Hash": "5173d8ab28680cf263636b110f4f3220"
     },
     "codetools": {
       "Package": "codetools",
@@ -109,24 +109,24 @@
     },
     "fansi": {
       "Package": "fansi",
-      "Version": "0.4.0",
+      "Version": "0.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "b31d9e5d051553d1177083aeba04b5b9"
+      "Hash": "7fce217eaaf8016e72065e85c73027b5"
     },
     "farver": {
       "Package": "farver",
-      "Version": "2.0.1",
+      "Version": "2.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e1e33215c942e78d2128221079b5dc35"
+      "Hash": "dad6793a5a1f73c8e91f1a1e3e834b05"
     },
     "future": {
       "Package": "future",
-      "Version": "1.15.1",
+      "Version": "1.16.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "359c17ff42bf8d352e25ce4499909b48"
+      "Hash": "20c20385da360f28c07364f2d099a6d7"
     },
     "ggplot2": {
       "Package": "ggplot2",
@@ -277,10 +277,10 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.4.3",
+      "Version": "1.4.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "74a50760af835563fb2c124e66aa134e"
+      "Hash": "ced3b63472796155f74abc4eb5266c78"
     },
     "stringr": {
       "Package": "stringr",
