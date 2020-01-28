@@ -51,13 +51,6 @@
       "Repository": "CRAN",
       "Hash": "50c838a310445e954bc13f26f26a6ecf"
     },
-    "backports": {
-      "Package": "backports",
-      "Version": "1.1.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e9f705633dc932bfd5b02b17a5053a06"
-    },
     "cli": {
       "Package": "cli",
       "Version": "2.0.1",
@@ -263,10 +256,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.2",
+      "Version": "0.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ff31d958a041593f58ba04fc637d90dd"
+      "Hash": "5527892f8ca320dd4d2efb5aa4e3bd89"
     },
     "scales": {
       "Package": "scales",
@@ -305,10 +298,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.2.1",
+      "Version": "0.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5c2d0fe441406cba811b46708ea28e41"
+      "Hash": "a1de558a76d2843a10f766209b9a545f"
     },
     "viridisLite": {
       "Package": "viridisLite",
@@ -330,13 +323,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "63ad35854e01d8b59ca18095b5145bb7"
-    },
-    "zeallot": {
-      "Package": "zeallot",
-      "Version": "0.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ee9b643aa8331c45d8d82eb3a137c9bc"
     }
   }
 }
