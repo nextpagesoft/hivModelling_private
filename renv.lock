@@ -256,10 +256,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.3",
+      "Version": "0.4.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5527892f8ca320dd4d2efb5aa4e3bd89"
+      "Hash": "09a36f36a13436be327dad3d000c8dd3"
     },
     "scales": {
       "Package": "scales",
