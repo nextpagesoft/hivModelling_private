@@ -33,7 +33,7 @@ ReadInputData <- function(context)
 
   inputDataPath <- context$Settings$InputDataPath
 
-  inputData <- list()
+  inputData <- NULL
   if (!is.null(inputDataPath) && file.exists(inputDataPath)) {
     # Unzip zip file
     if (!isTRUE(file.info(inputDataPath)$isdir)) {
@@ -85,6 +85,10 @@ ReadInputData <- function(context)
 
       message(sprintf('File %s read\n', fileNames))
     }
+  }
+
+  if (is.null(inputData)) {
+    return(NULL)
   }
 
   yearsList <- lapply(inputData[[1]], '[[', 'Year')

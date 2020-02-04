@@ -18,7 +18,7 @@ GetRunContext <- function(...)
 
   if (length(names(args)) > 0) {
     names(args) <- CapWords(names(args))
-    stopifnot(names(args) %in% c('Settings', 'Parameters'))
+    stopifnot(names(args) %in% c('Settings', 'Parameters', 'Data'))
   }
 
   defaultContext <- list(
@@ -33,6 +33,13 @@ GetRunContext <- function(...)
     context$Parameters$INCIDENCE$Intervals <- incidenceParams$Parameters$INCIDENCE$Intervals
     context <- modifyList(context, incidenceParams)
   }
+
+  data <- ReadInputData(context)
+  context <- modifyList(
+    context,
+    list(Data = data),
+    keep.null = TRUE
+  )
 
   return(context)
 }

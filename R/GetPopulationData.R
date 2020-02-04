@@ -3,7 +3,8 @@
 #' Get data for combinations of populations
 #'
 #' @param context List of parameters. Required.
-#' @param data Input data as data.table. Required.
+#' @param populationSet Character vector of names of populations to aggregate in the ouptu data set.
+#'   Default = \code{NULL}.
 #'
 #' @return
 #' Data set as data.table object
@@ -16,13 +17,17 @@
 #' @export
 GetPopulationData <- function(
   context,
-  data
+  populationSet = NULL
 ) {
   `.` <- NULL
   Year <- NULL
 
-  populationSet <-
-    context$Settings$RiskGroups$PopulationSets[[context$Settings$RiskGroups$Selected]]
+  data <- context$Data
+
+  if (is.null(populationSet)) {
+    populationSet <-
+      context$Settings$RiskGroups$PopulationSets[[context$Settings$RiskGroups$Selected]]
+  }
 
   if (length(populationSet) == 0) {
     message('No populations have been selected from input data. All populations will be aggregated.')

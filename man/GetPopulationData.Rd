@@ -4,12 +4,13 @@
 \alias{GetPopulationData}
 \title{GetPopulationData}
 \usage{
-GetPopulationData(context, data)
+GetPopulationData(context, populationSet = NULL)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
 
-\item{data}{Input data as data.table. Required.}
+\item{populationSet}{Character vector of names of populations to aggregate in the ouptu data set.
+Default = \code{NULL}.}
 }
 \value{
 Data set as data.table object

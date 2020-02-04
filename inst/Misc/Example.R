@@ -9,9 +9,7 @@ context <- GetRunContext(
   )
 )
 
-data <- ReadInputData(context)
-
-popData <- GetPopulationData(context, data)
+popData <- GetPopulationData(context)
 
 mainResults <- PerformMainFit(context, popData)
 
