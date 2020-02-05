@@ -4,10 +4,12 @@
 \alias{ReadModelFile}
 \title{ReadModelFile}
 \usage{
-ReadModelFile(context)
+ReadModelFile(modelFilePath = NULL, inputDataPath = NULL)
 }
 \arguments{
-\item{context}{List of parameters. Required.}
+\item{modelFilePath}{Model file path. Optional. Default = NULL.}
+
+\item{inputDataPath}{Input data path. Optional. Default = NULL}
 }
 \value{
 NULL (invisibly)

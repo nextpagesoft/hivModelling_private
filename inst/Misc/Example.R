@@ -9,6 +9,11 @@ context <- GetRunContext(
   )
 )
 
+# data <- readRDS('~/share/HIV Bootstrap/BE_aggregated.rds')
+# context <- GetRunContext(
+#   data = data[[1]]
+# )
+
 popData <- GetPopulationData(context)
 
 mainResults <- PerformMainFit(context, popData)

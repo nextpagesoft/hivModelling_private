@@ -2,7 +2,8 @@
 #'
 #' Reads XML model file
 #'
-#' @param context List of parameters. Required.
+#' @param modelFilePath Model file path. Optional. Default = NULL.
+#' @param inputDataPath Input data path. Optional. Default = NULL
 #'
 #' @return
 #' NULL (invisibly)
@@ -13,16 +14,16 @@
 #' }
 #'
 #' @export
-ReadModelFile <- function(context)
-{
+ReadModelFile <- function(
+  modelFilePath = NULL,
+  inputDataPath = NULL
+) {
   model <- NULL
 
-  inputDataPath <- context$Settings$InputDataPath
   if (is.null(inputDataPath)) {
     return(NULL)
   }
 
-  modelFilePath <- context$Settings$ModelFilePath
   if (!is.null(modelFilePath)) {
     # Model file provided directly
     model <- as_list(read_xml(modelFilePath))

@@ -4,20 +4,20 @@
 \alias{ReadInputData}
 \title{ReadInputData}
 \usage{
-ReadInputData(context)
+ReadInputData(inputDataPath)
 }
 \arguments{
-\item{context}{List of parameters. Required.}
+\item{inputDataPath}{Input data path}
 }
 \value{
-Input data as data.table
+Input data as list
 }
 \description{
 Description
 }
 \examples{
 \dontrun{
-ReadInputData(context)
+ReadInputData(inputDataPath)
 }
 
 }
