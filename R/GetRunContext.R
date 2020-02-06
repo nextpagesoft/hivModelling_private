@@ -14,31 +14,41 @@
 #' @export
 GetRunContext <- function(...)
 {
-  # Check provided arguments
+  # Prepare provided arguments
   args <- list(...)
   if (length(names(args)) > 0) {
     names(args) <- CapWords(names(args))
     stopifnot(names(args) %in% c('Settings', 'Parameters', 'Data'))
   }
 
-  # Define default context
-  defaultContext <- list(
+  # Define default context (lowest priority)
+  context <- list(
     Settings   = GetObjectDefinition('Settings'),
-    Parameters = GetObjectDefinition('Parameters')
+    Parameters = GetObjectDefinition('Parameters'),
+    Data = NULL,
+    PreprocessedData = NULL
   )
 
-  # Incorporate provided arguments
-  context <- modifyList(defaultContext, args)
+  # Extract paths from arguments
+  if (!is.null(args$Settings$ModelFilePath)) {
+    context$Settings$ModelFilePath <- args$Settings$ModelFilePath
+  }
+  if (!is.null(args$Settings$InputDataPath)) {
+    context$Settings$InputDataPath <- args$Settings$InputDataPath
+  }
 
-  # Read model settings file, if exists
-  incidenceParams <- ReadModelFile(
-    context$Settings$ModelFilePath,
-    context$Settings$InputDataPath
-  )
+  # Override default context with parameters from the model file (average priority)
+  incidenceParams <- ReadModelFile(context$Settings$ModelFilePath, context$Settings$InputDataPath)
   if (!is.null(incidenceParams)) {
     context$Parameters$INCIDENCE$Intervals <- incidenceParams$Parameters$INCIDENCE$Intervals
     context <- modifyList(context, incidenceParams)
   }
+
+  # Override any settings with those provided directly to this function (highest priority)
+  if (!is.null(args$Parameters$INCIDENCE$Intervals)) {
+    context$Parameters$INCIDENCE$Intervals <- args$Parameters$INCIDENCE$Intervals
+  }
+  context <- modifyList(context, args)
 
   # Read input data
   if (is.null(context$Data)) {
@@ -49,6 +59,9 @@ GetRunContext <- function(...)
       keep.null = TRUE
     )
   }
+
+  # Determine settings from data
+  ValidateData(context$Data)
 
   # Preprocess input data
   preprocessedData <- PreprocessInputData(context$Data)

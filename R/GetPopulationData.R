@@ -22,7 +22,7 @@ GetPopulationData <- function(
   `.` <- NULL
   Year <- NULL
 
-  data <- context$Data
+  data <- context$PreprocessedData
 
   if (is.null(populationSet)) {
     populationSet <-
