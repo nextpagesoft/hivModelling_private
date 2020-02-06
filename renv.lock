@@ -207,10 +207,10 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-143",
+      "Version": "3.1-144",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "7518d3b54a24f9291735a25467997858"
+      "Hash": "e80d41932d3cc235ccbbbb9732ae162e"
     },
     "nloptr": {
       "Package": "nloptr",
