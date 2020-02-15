@@ -64,7 +64,11 @@ GetRunContext <- function(...)
   ValidateData(context$Data)
 
   # Preprocess input data
-  preprocessedData <- PreprocessInputData(context$Data)
+  preprocessedData <- PreprocessInputData(
+    context$Data,
+    minYear = context$Parameters$INCIDENCE$ModelMinYear,
+    maxYear = context$Parameters$INCIDENCE$ModelMaxYear
+  )
 
   context <- modifyList(
     context,

@@ -28,8 +28,8 @@ PerformMainFit <- function(
   ftol = 1e-5,
   ...
 ) {
-  param <- GetParamList(context)
   info <- GetInfoList(context)
+  param <- GetParamList(context, info)
   probSurv1996 <- GetProvSurv96(param, info)
 
   tmpModelFitDist <- info$ModelFitDist
@@ -70,8 +70,8 @@ PerformMainFit <- function(
     if (!converged) {
       message(sprintf('Fit did NOT converge, goodness-of-fit: %f\n', lastResults$LLTotal))
       context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
-      param <- GetParamList(context)
       info <- GetInfoList(context)
+      param <- GetParamList(context, info)
       probSurv1996 <- GetProvSurv96(param, info)
     } else {
       message(sprintf('Fit converged, goodness-of-fit: %f\n', lastResults$LLTotal))
@@ -79,7 +79,12 @@ PerformMainFit <- function(
   }
 
   message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), beta[seq_len(param$NoDelta)]))
-  message(sprintf('theta[%d]: %f\n', seq_len(param$NoTheta), thetaF[seq_len(param$NoTheta)]))
+  message(sprintf(
+    'theta[%d]: %f\t- %s\n',
+    seq_along(param$Theta),
+    param$Theta,
+    ifelse(param$ThetaP, 'USED', 'NOT USED')
+  ))
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial
@@ -119,7 +124,8 @@ PerformMainFit <- function(
     Converged = converged,
     P = p,
     Beta = beta,
-    Theta = param$theta,
+    Theta = param$Theta,
+    ThetaP = param$ThetaP,
     ThetaF = thetaF,
     DeltaM = param$DeltaM,
     Info = info,

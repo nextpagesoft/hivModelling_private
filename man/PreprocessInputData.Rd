@@ -4,10 +4,14 @@
 \alias{PreprocessInputData}
 \title{PreprocessInputData}
 \usage{
-PreprocessInputData(inputData)
+PreprocessInputData(inputData, minYear = 1980L, maxYear = year(Sys.time()))
 }
 \arguments{
 \item{inputData}{List of input data. Required.}
+
+\item{minYear}{Model start year.}
+
+\item{maxYear}{Model end year.}
 }
 \value{
 Input data as data.table

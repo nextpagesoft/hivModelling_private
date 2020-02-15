@@ -1,4 +1,14 @@
-Version 0.9.11 (2019/11/..)
+Version 0.9.12 (2020/02/15)
+
+* Support intervals specification as input
+* Support loading XML models
+* Support risk groups processing
+* Support data specified directly in context
+* Support fitting model to provided "beta" and "theta" parameters
+* Properly initialize "param" and "info" objects for non-NL data
+
+
+Version 0.9.11 (2019/11/27)
 
 * Remove hard-coded years from ReadInputData
 

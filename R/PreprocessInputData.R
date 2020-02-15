@@ -3,6 +3,8 @@
 #' Description
 #'
 #' @param inputData List of input data. Required.
+#' @param minYear Model start year.
+#' @param maxYear Model end year.
 #'
 #' @return
 #' Input data as data.table
@@ -13,8 +15,11 @@
 #' }
 #'
 #' @export
-PreprocessInputData <- function(inputData)
-{
+PreprocessInputData <- function(
+  inputData,
+  minYear = 1980L,
+  maxYear = year(Sys.time())
+) {
   # CRAN checks
   `.` <- NULL
   Year <- NULL
@@ -57,8 +62,6 @@ PreprocessInputData <- function(inputData)
   }), populationNames)
 
   yearsList <- lapply(inputData[[1]], '[[', 'Year')
-  minYear <- min(sapply(yearsList, min))
-  maxYear <- max(sapply(yearsList, max))
 
   WorkFunc <- function(inputData) {
     data <- data.table(

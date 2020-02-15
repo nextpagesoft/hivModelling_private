@@ -4,14 +4,12 @@
 \alias{GetParameterVector}
 \title{GetParameterVector}
 \usage{
-GetParameterVector(beta, thetaF, param)
+GetParameterVector(beta, thetaF)
 }
 \arguments{
 \item{beta}{Numeric vector}
 
 \item{thetaF}{Numeric vector}
-
-\item{param}{List of parameters}
 }
 \value{
 numeric vector
@@ -21,7 +19,7 @@ Get \code{param} vector initialized from inputs
 }
 \examples{
 \dontrun{
-GetParameterVector(beta, thetaF, param)
+GetParameterVector(beta, thetaF)
 }
 
 }

@@ -41,6 +41,7 @@ CreateOutputPlots <- function(
   N_Alive_Diag_M <- NULL
   N_Und <- NULL
   N_Und_Alive_p <- NULL
+  D_Avg_Time <- D_Avg_Time_LB <- D_Avg_Time_UB <- NULL
   N_CD4_1_Obs_M_LB <- N_CD4_1_Obs_M_UB <- N_CD4_2_Obs_M_LB <- N_CD4_2_Obs_M_UB <-
     N_CD4_3_Obs_M_LB <- N_CD4_3_Obs_M_UB <- N_CD4_4_Obs_M_LB <- N_CD4_4_Obs_M_UB <- N_Dead_U <-
     N_HIV_Obs_M_LB <- N_HIV_Obs_M_UB <- Run <- NULL
@@ -62,6 +63,7 @@ CreateOutputPlots <- function(
     N_AIDS_D, N_AIDS_M,
     N_Inf_M,
     t_diag,
+    D_Avg_Time,
     N_Alive, N_Alive_Diag_M, N_Und,
     N_Und_Alive_p
   )]
@@ -79,6 +81,7 @@ CreateOutputPlots <- function(
         N_AIDS_M_LB, N_AIDS_M_UB,
         N_Inf_M_LB, N_Inf_M_UB,
         t_diag_LB, t_diag_UB,
+        D_Avg_Time_LB, D_Avg_Time_UB,
         N_Alive_LB, N_Alive_UB, N_Alive_Diag_M_LB, N_Alive_Diag_M_UB, N_Und_LB, N_Und_UB,
         N_Und_Alive_p_LB, N_Und_Alive_p_UB
       )
@@ -173,7 +176,8 @@ CreateOutputPlots <- function(
   plots[['HIV/AIDS diagnoses']] <- GetPlot(dt, 'N_HIVAIDS_D', 'N_HIVAIDS_Obs_M', 'HIV/AIDS diagnoses')
   plots[['AIDS diagnoses, total']] <- GetPlot(dt, 'N_AIDS_D', 'N_AIDS_M', 'AIDS diagnoses, total')
   plots[['HIV infections per year']] <- GetPlot(dt, NULL, 'N_Inf_M', 'HIV infections per year')
-  plots[['Time to diagnosis']] <- GetPlot(dt, NULL, 't_diag', 'Time to diagnosis')
+  plots[['Time to diagnosis, by year of infection']] <- GetPlot(dt, NULL, 't_diag', 'Time to diagnosis, by year of infection')
+  plots[['Time to diagnosis, by year of diagnosis']] <- GetPlot(dt, NULL, 'D_Avg_Time', 'Time to diagnosis, by year of diagnosis')
   plots[['Total number of HIV-infected']] <- pTotalHIVInf
   plots[['Proportion undiagnosed of all those alive']] <- GetPlot(dt, NULL, 'N_Und_Alive_p', 'Proportion undiagnosed of all those alive')
 

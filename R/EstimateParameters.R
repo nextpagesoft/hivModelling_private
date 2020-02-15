@@ -76,7 +76,7 @@ EstimateParameters <- function(
       for (j in seq_len(jMax + 1) - 1) {
         # Assume all theta's the same (range: 1 to 10^j_max)
         thetaF <- rep((j + 1) * 10 ^ j, param$NoTheta)
-        p <- GetParameterVector(beta, thetaF, param)
+        p <- GetParameterVector(beta, thetaF)
         res <- FitLLTotal(p, probSurv1996, param, info, data)
         ll <- res$LLTotal
 
@@ -94,7 +94,7 @@ EstimateParameters <- function(
   } else {
     beta <- mainResults$Beta
     thetaF <- mainResults$ThetaF
-    pParam <- GetParameterVector(beta, thetaF, param)
+    pParam <- GetParameterVector(beta, thetaF)
     res <- FitLLTotal(pParam, probSurv1996, param, info, data)
     iterResults[[iter]] <- list(
       P = pParam,

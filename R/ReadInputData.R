@@ -36,7 +36,7 @@ ReadInputData <- function(inputDataPath)
       # Read directory
       fileNames <- list.files(
         inputDataPath,
-        pattern = '.csv',
+        pattern = '(HIV|HIVAIDS|AIDS|Dead|HIV_CD4_[1-4])\\.csv$',
         full.names = TRUE,
         ignore.case = FALSE
       )

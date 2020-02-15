@@ -40,12 +40,14 @@ FitLLTotal <- function(
              'Year'))
 
   # Changes made by reference
-  probCD4 <- data$Prob_CD4[-nrow(data)]
-  ModelAnnualNumbers(modelResults, probSurv1996, probCD4)
+  ModelAnnualNumbers(modelResults, probSurv1996, data$Prob_CD4)
 
-  lambdaPenalty <- ifelse(minLambda < 0,
-                          VERY_LRG,
-                          0)
+  if (minLambda < 0) {
+    lambdaPenalty <- VERY_LRG
+  } else {
+    lambdaPenalty <- 0
+  }
+
   llTotal <-
     lambdaPenalty +
     FitLLPosCD4(modelResults, group = 1, info, data, param) +

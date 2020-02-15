@@ -3,7 +3,7 @@ list(
 
   INCIDENCE = list(
 
-    # Editable parameters ------------------------------------------------------------------------
+    # Editable parameters --------------------------------------------------------------------------
     ModelMinYear = 1980L,
 
     ModelMaxYear = 2016L,
@@ -59,7 +59,7 @@ list(
 
     FullData = TRUE,
 
-    # Non editable parameters --------------------------------------------------------------------
+    # Non editable parameters ----------------------------------------------------------------------
 
     SplineOrder = 4,
 
@@ -78,9 +78,9 @@ list(
 
     DeltaAIDS = 12,
 
-    NoDelta = 1,
-
-    NoTheta = 8,
+    # NoDelta = 1,
+    #
+    # NoTheta = 8,
 
     NoThetaFix = 0,
 

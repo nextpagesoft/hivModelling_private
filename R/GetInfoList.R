@@ -37,7 +37,8 @@ GetInfoList <- function(
     ModelNoKnots = incidenceParams$ModelNoKnots,
     SplineType = incidenceParams$SplineType,
     SplineOrder = incidenceParams$SplineOrder,
-    MaxIncCorr = incidenceParams$MaxIncCorr
+    MaxIncCorr = incidenceParams$MaxIncCorr,
+    StartIncZero = incidenceParams$StartIncZero
   )
 
   info[['ModelNoYears']] <- info$ModelMaxYear - info$ModelMinYear + 1

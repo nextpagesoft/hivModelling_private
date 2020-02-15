@@ -3,18 +3,20 @@
 #' Get \code{param} list object.
 #'
 #' @param context List of parameters. Required.
+#' @param info List of info parameters. Required.
 #'
 #' @return
 #' list
 #'
 #' @examples
 #' \dontrun{
-#' GetParamList(context)
+#' GetParamList(context, info)
 #' }
 #'
 #' @export
 GetParamList <- function(
-  context
+  context,
+  info
 ) {
   incidenceParams <- context$Parameters$INCIDENCE
 
@@ -26,8 +28,6 @@ GetParamList <- function(
     Qoppa = incidenceParams$Qoppa,
     Delta4Fac = incidenceParams$Delta4Fac,
     DeltaAIDS = incidenceParams$DeltaAIDS,
-    NoDelta = incidenceParams$NoDelta,
-    NoTheta = incidenceParams$NoTheta,
     NoThetaFix = incidenceParams$NoThetaFix,
     Smoothing1 = incidenceParams$Smoothing1,
     Smoothing2 = incidenceParams$Smoothing2,
@@ -36,32 +36,44 @@ GetParamList <- function(
     DefNoDiagTime = incidenceParams$DefNoDiagTime
   )
 
+  # Time intervals for diagnosis matrix
   res <- GetDeltaPAndTc(
     intervals = incidenceParams$Intervals,
     maxYear = incidenceParams$ModelMaxYear,
     noStage = incidenceParams$NoStage
   )
-
-  # Time intervals for diagnosis matrix
   tc <- res$Tc
   deltaP <- res$DeltaP
-
   noTime <- length(tc) - 1
 
   deltaM <- matrix(0, param$NoStage, noTime)
+  deltaM[deltaP != 0] <- 0.2
   deltaM[param$NoStage, ] <- param$DeltaAIDS
 
-  theta <- rep(0, param$NoTheta + 2)
+  # Initialize all thetaP at 1, i.e. no spline weight fixed
+  thetaP <- rep(1, info$ModelSplineN)
+  if (info$StartIncZero) {
+    # Incidence required to start at zero
+    thetaP[1] <- 0
+  }
+  if (info$SplineType == 'B-SPLINE') {
+    if (info$MaxIncCorr) {
+      thetaP[info$ModelSplineN] <- 0
+    }
 
-  thetaP <- rep(0, param$NoTheta + 2)
-  thetaP[2:(param$NoTheta + 1)] <- 1
+    thetaP[seq_len(param$NoThetaFix)] <- 0
+  }
+
+  theta <- rep(0, info$ModelSplineN)
 
   param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
   param[['Tc']] <- tc
   param[['DeltaP']] <- deltaP
   param[['DeltaM']] <- deltaM
+  param[['NoDelta']] <- max(max(deltaP))
   param[['ThetaP']] <- thetaP
   param[['Theta']] <- theta
+  param[['NoTheta']] <- sum(thetaP)
   param[['NoStageTot']] <- param$NoStage + 1
 
   return(param)

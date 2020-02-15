@@ -4,24 +4,23 @@
 #'
 #' @param beta Numeric vector
 #' @param thetaF Numeric vector
-#' @param param List of parameters
 #'
 #' @return
 #' numeric vector
 #'
 #' @examples
 #' \dontrun{
-#' GetParameterVector(beta, thetaF, param)
+#' GetParameterVector(beta, thetaF)
 #' }
 #'
 #' @export
 GetParameterVector <- function(
   beta,
-  thetaF,
-  param
+  thetaF
 ) {
-  p <- rep(0, param$NoDelta + param$NoTheta)
-  p[seq_len(param$NoDelta)] <- beta[seq_len(param$NoDelta)]
-  p[param$NoDelta + seq_len(param$NoTheta)] <- thetaF[seq_len(param$NoTheta)]
+  p <- c(beta, thetaF)
+  # p <- rep(0, param$NoDelta + param$NoTheta)
+  # p[seq_len(param$NoDelta)] <- beta[seq_len(param$NoDelta)]
+  # p[param$NoDelta + seq_len(param$NoTheta)] <- thetaF[seq_len(param$NoTheta)]
   return(p)
 }
