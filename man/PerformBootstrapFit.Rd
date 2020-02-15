@@ -12,7 +12,7 @@ PerformBootstrapFit(
   maxNoFit = 30,
   ctol = 1e-06,
   ftol = 1e-05,
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
@@ -32,7 +32,8 @@ Optional. Default = 1e-6.}
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
 
-\item{...}{Additional arguments passed to amoeba function. Optional.}
+\item{verbose}{Logical indicating to print detailed info during fitting. Optional.
+Default = \code{FALSE}}
 }
 \value{
 Results list object
@@ -42,7 +43,7 @@ Perform bootstrap fit
 }
 \examples{
 \dontrun{
-PerformBootstrapFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE)
+PerformBootstrapFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = FALSE)
 }
 
 }

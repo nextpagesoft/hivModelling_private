@@ -2,12 +2,12 @@
 #'
 #' Estimate parameters
 #'
-#' @param runType String indicating type of run, either 'MAIN' or 'BOOSTRAP'
-#' @param mainResults Main results
+#' @param runType String indicating type of run, either 'MAIN', 'MAIN_WITH_INIT' or 'BOOSTRAP'
 #' @param probSurv1996  Test
 #' @param param List of parameters. Required.
 #' @param info List of parameters. Required.#'
 #' @param data Input data as data.table. Required.
+#' @param mainResults Main results
 #' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
@@ -15,29 +15,32 @@
 #'   Default = 1e-5.
 #' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for boostrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
-#' @param ... Additional arguments passed to amoeba function. Optional.
+#' @param verbose Logical indicating to print detailed info during fitting. Optional.
+#'   Default = \code{FALSE}
 #'
 #' @return
 #' NULL (invisibly)
 #'
 #' @examples
 #' \dontrun{
-#' EstimateParameters(runType, mainResults, probSurv1996, param, info, data, maxNoFit, ctol, ftol)
+#' EstimateParameters(
+#'   runType, mainResults, probSurv1996, param, info, data, maxNoFit, ctol, ftol, verbose
+#' )
 #' }
 #'
 #' @export
 EstimateParameters <- function(
   runType,
-  mainResults = NULL,
   probSurv1996,
   param,
   info,
   data,
+  mainResults = NULL,
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
-  ...
+  verbose = FALSE
 ) {
   OptimFunc <- function(p) {
     res <- FitLLTotal(p, probSurv1996, param, info, data)
@@ -91,7 +94,7 @@ EstimateParameters <- function(
         }
       }
     }
-  } else {
+  } else if (runType == 'MAIN_WITH_INIT') {
     beta <- mainResults$Beta
     thetaF <- mainResults$ThetaF
     pParam <- GetParameterVector(beta, thetaF)
@@ -101,6 +104,18 @@ EstimateParameters <- function(
       LLTotal = res$LLTotal,
       ModelResults = res$ModelResults
     )
+  } else if (runType == 'BOOTSTRAP') {
+    beta <- mainResults$Beta
+    thetaF <- mainResults$ThetaF
+    pParam <- GetParameterVector(beta, thetaF)
+    res <- FitLLTotal(pParam, probSurv1996, param, info, data)
+    iterResults[[iter]] <- list(
+      P = pParam,
+      LLTotal = res$LLTotal,
+      ModelResults = res$ModelResults
+    )
+  } else {
+    stop('EstimatedParameters: Unsupported estimation run type')
   }
   message('  Run time: ', format(Sys.time() - startTime))
 
@@ -115,9 +130,9 @@ EstimateParameters <- function(
 
     startTime <- Sys.time()
 
-    if (runType == 'MAIN') {
+    if (runType %in% c('MAIN', 'MAIN_WITH_INIT')) {
       message('--- Iteration ', iter, ': Amoeba')
-      res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, ...)
+      res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
     } else {
       message('--- Iteration ', iter, ': ', algorithm)
 

@@ -14,7 +14,7 @@ PerformBootstrapFits(
   ftol = 1e-05,
   executionPlan = future::sequential,
   statusRefreshRate = 2,
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
@@ -39,7 +39,8 @@ Default = future::sequential.}
 
 \item{statusRefreshRate}{Number of seconds to next refresh of job status. Optional. Default = 2.}
 
-\item{...}{Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.}
+\item{verbose}{Logical indicating to print detailed info during fitting. Optional.
+Default = \code{FALSE}}
 }
 \value{
 list object containing context, data and model objects

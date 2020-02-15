@@ -7,7 +7,7 @@ FitAmoeba <- function(
   param,
   info,
   data,
-  ...
+  verbose = FALSE
 ) {
   pFit <- c(rep(0.1, param$NoDelta),
             rep(200, param$NoTheta))
@@ -41,7 +41,7 @@ FitAmoeba <- function(
                 param,
                 info,
                 data,
-                ...)
+                verbose)
 
   return(res)
 }

@@ -6,22 +6,20 @@
 \usage{
 EstimateParameters(
   runType,
-  mainResults = NULL,
   probSurv1996,
   param,
   info,
   data,
+  mainResults = NULL,
   maxNoFit = 30,
   ctol = 1e-06,
   ftol = 1e-05,
   algorithm = "NLOPT_LN_BOBYQA",
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
-\item{runType}{String indicating type of run, either 'MAIN' or 'BOOSTRAP'}
-
-\item{mainResults}{Main results}
+\item{runType}{String indicating type of run, either 'MAIN', 'MAIN_WITH_INIT' or 'BOOSTRAP'}
 
 \item{probSurv1996}{Test}
 
@@ -30,6 +28,8 @@ EstimateParameters(
 \item{info}{List of parameters. Required.#'}
 
 \item{data}{Input data as data.table. Required.}
+
+\item{mainResults}{Main results}
 
 \item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
 
@@ -42,7 +42,8 @@ Default = 1e-5.}
 \item{algorithm}{Name of optimization algorithm from package \code{nloptr} to use for boostrap
 iterations. Default = 'NLOPT_LN_BOBYQA'}
 
-\item{...}{Additional arguments passed to amoeba function. Optional.}
+\item{verbose}{Logical indicating to print detailed info during fitting. Optional.
+Default = \code{FALSE}}
 }
 \value{
 NULL (invisibly)
@@ -52,7 +53,9 @@ Estimate parameters
 }
 \examples{
 \dontrun{
-EstimateParameters(runType, mainResults, probSurv1996, param, info, data, maxNoFit, ctol, ftol)
+EstimateParameters(
+  runType, mainResults, probSurv1996, param, info, data, maxNoFit, ctol, ftol, verbose
+)
 }
 
 }

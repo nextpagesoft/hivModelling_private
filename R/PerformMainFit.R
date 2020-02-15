@@ -9,7 +9,8 @@
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
-#' @param ... Additional arguments passed to amoeba function. Optional.
+#' @param verbose Logical indicating to print detailed info during fitting. Optional.
+#'   Default = \code{FALSE}
 #'
 #' @return
 #' Results list object
@@ -26,7 +27,7 @@ PerformMainFit <- function(
   maxNoFit = 30L,
   ctol = 1e-6,
   ftol = 1e-5,
-  ...
+  verbose = FALSE
 ) {
   info <- GetInfoList(context)
   param <- GetParamList(context, info)
@@ -47,8 +48,10 @@ PerformMainFit <- function(
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
-        runType = 'MAIN', mainResults = NULL,
-        probSurv1996, param, info, data, maxNoFit, ctol, ftol, ...
+        runType = 'MAIN',
+        probSurv1996, param, info, data,
+        mainResults = NULL,
+        maxNoFit, ctol, ftol, verbose
       )
 
       p <- res$P

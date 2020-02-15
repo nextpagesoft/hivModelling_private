@@ -14,7 +14,8 @@
 #' @param executionPlan Execution plan for the job planner (see package 'future'). Optional.
 #'   Default = future::sequential.
 #' @param statusRefreshRate Number of seconds to next refresh of job status. Optional. Default = 2.
-#' @param ... Additional arguments passed to \code{\link{PerformBootstrapFit}} function. Optional.
+#' @param verbose Logical indicating to print detailed info during fitting. Optional.
+#'   Default = \code{FALSE}
 #'
 #' @return
 #' list object containing context, data and model objects
@@ -35,7 +36,7 @@ PerformBootstrapFits <- function(
   ftol = 1e-5,
   executionPlan = future::sequential,
   statusRefreshRate = 2,
-  ...
+  verbose = FALSE
 ) {
   # Set execution plan
   future::plan(executionPlan)
@@ -44,7 +45,7 @@ PerformBootstrapFits <- function(
   jobs <- lapply(seq_len(bsCount), function(idx) {
     message(sprintf('Performing iteration %d', idx))
     future::future({
-      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, ...)
+      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, verbose)
     })
   })
 

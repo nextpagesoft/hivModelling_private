@@ -4,7 +4,14 @@
 \alias{PerformMainFit}
 \title{PerformMainFit}
 \usage{
-PerformMainFit(context, data, maxNoFit = 30L, ctol = 1e-06, ftol = 1e-05, ...)
+PerformMainFit(
+  context,
+  data,
+  maxNoFit = 30L,
+  ctol = 1e-06,
+  ftol = 1e-05,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{context}{List of parameters. Required.}
@@ -19,7 +26,8 @@ Optional. Default = 1e-6.}
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
 
-\item{...}{Additional arguments passed to amoeba function. Optional.}
+\item{verbose}{Logical indicating to print detailed info during fitting. Optional.
+Default = \code{FALSE}}
 }
 \value{
 Results list object

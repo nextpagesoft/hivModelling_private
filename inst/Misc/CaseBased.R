@@ -2,19 +2,25 @@ library(data.table)
 library(hivModelling)
 library(hivEstimatesAccuracy)
 
-# caseBasedData <- fread('~/share/HIV Bootstrap/Dummy_case_based.csv')
-# hivModelDataSets <- PrepareDataSetsForModel(caseBasedData, by = c('Gender', 'Transmission'))
-# saveRDS(hivModelDataSets, file = '~/share/HIV Bootstrap/Dummy_aggregated.rds')
-# hivModelDataSets <- readRDS(file = '~/share/HIV Bootstrap/Dummy_aggregated.rds')
-
+# Load case-based data set with no missings
 caseBasedData <- fread('~/share/HIV Bootstrap/BE_case_based.csv')
-hivModelDataSets <- PrepareDataSetsForModel(caseBasedData, by = c('Gender', 'Transmission'))
-WriteZipFile(hivModelDataSets, '~/share/HIV Bootstrap/BE_aggregated.zip')
-# saveRDS(hivModelDataSets, file = '~/share/HIV Bootstrap/BE_aggregated.rds')
-# hivModelDataSets <- readRDS(file = '~/share/HIV Bootstrap/BE_aggregated.rds')
 
+# LOOP
+
+# 1. Boostrap case-based data
+indices <- sample(nrow(caseBasedData), replace = TRUE)
+sampleCaseBasedData <- caseBasedData[indices]
+
+# 2. Create aggregated data set
+hivModelDataSet <- PrepareDataSetsForModel(
+  sampleCaseBasedData,
+  strata = c('Gender', 'Transmission'),
+  splitBy = NULL
+)
+
+# Create context
 context <- GetRunContext(
-  data = hivModelDataSets[[1]],
+  data = hivModelDataSet,
   parameters = list(
     INCIDENCE = list(
       ModelMinYear = 1980,
@@ -27,6 +33,8 @@ context <- GetRunContext(
       FitAIDSMaxYear = 1995,
       FitAIDSPosMinYear = 1985,
       FitAIDSPosMaxYear = 2015,
+      ModelNoKnots = 4,
+      FitDistribution = 'POISSON',
       Intervals = data.table(
         StartYear = c(1980L, 1984L, 1992L, 2000L, 2008L),
         Jump = c(FALSE, TRUE, TRUE, TRUE, TRUE),
@@ -37,8 +45,11 @@ context <- GetRunContext(
   )
 )
 
-populationData <- GetPopulationData(context)
+# 4. Create final data set for the model
+data <- GetPopulationData(context)
 
-mainResults <- PerformMainFit(context, populationData)
+# 5. Fit the model
+mainResults <- PerformMainFit(context, data)
 
+# 6. Create plots
 plots <- CreateOutputPlots(mainResults)

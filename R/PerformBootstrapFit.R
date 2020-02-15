@@ -11,14 +11,15 @@
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
-#' @param ... Additional arguments passed to amoeba function. Optional.
+#' @param verbose Logical indicating to print detailed info during fitting. Optional.
+#'   Default = \code{FALSE}
 #'
 #' @return
 #' Results list object
 #'
 #' @examples
 #' \dontrun{
-#' PerformBootstrapFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE)
+#' PerformBootstrapFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = FALSE)
 #' }
 #'
 #' @export
@@ -30,7 +31,7 @@ PerformBootstrapFit <- function(
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
-  ...
+  verbose = FALSE
 ) {
 
   # CRAN checks workaround
@@ -105,8 +106,8 @@ PerformBootstrapFit <- function(
 
   # Perform fit on the generated data
   res <- EstimateParameters(
-    runType = 'BOOTSTRAP', mainResults, probSurv1996, param, info, dataBS, maxNoFit, ctol, ftol,
-    ...
+    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBS, mainResults, maxNoFit, ctol, ftol,
+    verbose
   )
 
   p <- res$P
