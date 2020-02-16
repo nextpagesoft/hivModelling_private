@@ -16,9 +16,12 @@
 ReadInputData <- function(inputDataPath)
 {
   inputData <- NULL
-  if (!is.null(inputDataPath) && file.exists(inputDataPath)) {
+
+  pathInfo <- file.info(inputDataPath)
+
+  if (!is.na(pathInfo$mode)) {
     # Unzip zip file
-    if (!isTRUE(file.info(inputDataPath)$isdir)) {
+    if (!isTRUE(pathInfo$isdir)) {
       inDir <- tempfile()
       dir.create(inDir, recursive = TRUE)
       on.exit({
