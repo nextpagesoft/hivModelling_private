@@ -14,6 +14,8 @@
 #' @param executionPlan Execution plan for the job planner (see package 'future'). Optional.
 #'   Default = future::sequential.
 #' @param statusRefreshRate Number of seconds to next refresh of job status. Optional. Default = 2.
+#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+#'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param verbose Logical indicating to print detailed info during fitting. Optional.
 #'   Default = \code{FALSE}
 #'
@@ -36,6 +38,7 @@ PerformBootstrapFits <- function(
   ftol = 1e-5,
   executionPlan = future::sequential,
   statusRefreshRate = 2,
+  algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
   # Set execution plan
@@ -45,7 +48,7 @@ PerformBootstrapFits <- function(
   jobs <- lapply(seq_len(bsCount), function(idx) {
     message(sprintf('Performing iteration %d', idx))
     future::future({
-      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, verbose)
+      PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, algorithm, verbose)
     })
   })
 

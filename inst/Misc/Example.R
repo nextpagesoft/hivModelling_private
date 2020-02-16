@@ -30,10 +30,17 @@ modelOutputs <- GetModelOutputs(model, data)
 # Create output plots
 plots <- CreateOutputPlots(modelOutputs)
 
-mainResults <- PerformMainFit(context, data)
-plots <- CreateOutputPlots(mainResults, bsResultsList = NULL)
 
-bsResultsList <- PerformBootstrapFits(context, data, mainResults, bsCount = 20)
+
+mainResults <- PerformMainFit(context, data)
+# mainResults <- PerformMainFit(context, data, model$Param, model$Info)
+bsResultsList <- PerformBootstrapFits(
+  context,
+  data,
+  mainResults,
+  bsCount = 20,
+  executionPlan = future::multiprocess
+)
 plots <- CreateOutputPlots(mainResults, bsResultsList)
 
 # SAVE OUTPUTS -------------------------------------------------------------------------------------

@@ -22,12 +22,25 @@ FitModel <- function(beta, theta, context, data)
   probSurv1996 <- GetProvSurv96(param, info)
 
   # Assuming all theta's are estimated
-  param$Theta <- theta
-  param$NoTheta <- length(param$Theta)
-  param$ThetaP <- rep(1, param$NoTheta)
+  thetaP <- rep(1, info$ModelSplineN)
+  if (info$StartIncZero) {
+    # Incidence required to start at zero
+    thetaP[1] <- 0
+  }
+  if (info$SplineType == 'B-SPLINE') {
+    if (info$MaxIncCorr) {
+      thetaP[info$ModelSplineN] <- 0
+    }
 
-  thetaF <- param$Theta[param$ThetaP != 0]
-  p <- GetParameterVector(beta, thetaF)
+    thetaP[seq_len(param$NoThetaFix)] <- 0
+  }
+  param$ThetaP <- thetaP
+  param$Theta <- theta
+  param$NoTheta <- sum(thetaP)
+  param$Beta <- beta
+  param$ThetaF <- param$Theta[param$ThetaP != 0]
+
+  p <- GetParameterVector(param$Beta, param$ThetaF)
   param$DeltaM <- GetParamDeltaM(p, param)
 
   fitResults <- FitLLTotal(p, probSurv1996, param, info, data)

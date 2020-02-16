@@ -50,6 +50,9 @@ GetParamList <- function(
   deltaM[deltaP != 0] <- 0.2
   deltaM[param$NoStage, ] <- param$DeltaAIDS
 
+  noDelta <- max(max(deltaP))
+  beta <- rep(0, noDelta)
+
   # Initialize all thetaP at 1, i.e. no spline weight fixed
   thetaP <- rep(1, info$ModelSplineN)
   if (info$StartIncZero) {
@@ -65,14 +68,17 @@ GetParamList <- function(
   }
 
   theta <- rep(0, info$ModelSplineN)
+  thetaF <- rep(0, sum(thetaP))
 
   param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
   param[['Tc']] <- tc
   param[['DeltaP']] <- deltaP
   param[['DeltaM']] <- deltaM
-  param[['NoDelta']] <- max(max(deltaP))
+  param[['NoDelta']] <- noDelta
+  param[['Beta']] <- beta
   param[['ThetaP']] <- thetaP
   param[['Theta']] <- theta
+  param[['ThetaF']] <- thetaF
   param[['NoTheta']] <- sum(thetaP)
   param[['NoStageTot']] <- param$NoStage + 1
 

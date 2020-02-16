@@ -11,6 +11,8 @@
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
+#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+#'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param verbose Logical indicating to print detailed info during fitting. Optional.
 #'   Default = \code{FALSE}
 #'
@@ -31,6 +33,7 @@ PerformBootstrapFit <- function(
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
+  algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
 
@@ -106,14 +109,12 @@ PerformBootstrapFit <- function(
 
   # Perform fit on the generated data
   res <- EstimateParameters(
-    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBS, mainResults, maxNoFit, ctol, ftol,
-    verbose
+    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBS, maxNoFit, ctol, ftol,
+    algorithm, verbose
   )
 
   p <- res$P
   converged <- res$Converged
-  beta <- res$Beta
-  thetaF <- res$ThetaF
   param <- res$Param
   info <- res$Info
   iterResults <- res$IterResults
@@ -129,10 +130,6 @@ PerformBootstrapFit <- function(
   return(list(
     Converged = converged,
     P = p,
-    Beta = beta,
-    Theta = param$theta,
-    ThetaF = thetaF,
-    DeltaM = param$DeltaM,
     Info = info,
     Param = param,
     Statistics = statRes,

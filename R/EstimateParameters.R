@@ -2,18 +2,17 @@
 #'
 #' Estimate parameters
 #'
-#' @param runType String indicating type of run, either 'MAIN', 'MAIN_WITH_INIT' or 'BOOSTRAP'
+#' @param runType String indicating type of run, either 'MAIN' or 'BOOTSTRAP'
 #' @param probSurv1996  Test
 #' @param param List of parameters. Required.
 #' @param info List of parameters. Required.#'
 #' @param data Input data as data.table. Required.
-#' @param mainResults Main results
 #' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
-#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for boostrap
+#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param verbose Logical indicating to print detailed info during fitting. Optional.
 #'   Default = \code{FALSE}
@@ -23,9 +22,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' EstimateParameters(
-#'   runType, mainResults, probSurv1996, param, info, data, maxNoFit, ctol, ftol, verbose
-#' )
+#' EstimateParameters(runType, probSurv1996, param, info, data, maxNoFit, ctol, ftol, verbose)
 #' }
 #'
 #' @export
@@ -35,7 +32,6 @@ EstimateParameters <- function(
   param,
   info,
   data,
-  mainResults = NULL,
   maxNoFit = 30,
   ctol = 1e-6,
   ftol = 1e-5,
@@ -76,6 +72,7 @@ EstimateParameters <- function(
         beta[(defNoCD4 + 1):param$NoDelta] <- 0
       }
 
+
       for (j in seq_len(jMax + 1) - 1) {
         # Assume all theta's the same (range: 1 to 10^j_max)
         thetaF <- rep((j + 1) * 10 ^ j, param$NoTheta)
@@ -94,19 +91,9 @@ EstimateParameters <- function(
         }
       }
     }
-  } else if (runType == 'MAIN_WITH_INIT') {
-    beta <- mainResults$Beta
-    thetaF <- mainResults$ThetaF
-    pParam <- GetParameterVector(beta, thetaF)
-    res <- FitLLTotal(pParam, probSurv1996, param, info, data)
-    iterResults[[iter]] <- list(
-      P = pParam,
-      LLTotal = res$LLTotal,
-      ModelResults = res$ModelResults
-    )
-  } else if (runType == 'BOOTSTRAP') {
-    beta <- mainResults$Beta
-    thetaF <- mainResults$ThetaF
+  } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
+    beta <- param$Beta
+    thetaF <- param$ThetaF
     pParam <- GetParameterVector(beta, thetaF)
     res <- FitLLTotal(pParam, probSurv1996, param, info, data)
     iterResults[[iter]] <- list(
@@ -152,7 +139,7 @@ EstimateParameters <- function(
         opts = list(
           algorithm = algorithm,
           ftol_abs = ftol,
-          maxeval = 5e+4
+          maxeval = 50000
         )
       )
 
@@ -181,14 +168,12 @@ EstimateParameters <- function(
   thetaF <- lastResults$P[param$NoDelta + seq_len(param$NoTheta)]
   param$Theta <- GetParamTheta(lastResults$P, param, info)
   param$DeltaM <- GetParamDeltaM(lastResults$P, param)
+  param$ThetaF <- thetaF
+  param$Beta <- beta
 
   invisible(list(
     Converged = converged,
     P = lastResults$P,
-    Beta = beta,
-    Theta = param$Theta,
-    ThetaF = thetaF,
-    DeltaM = param$DeltaM,
     Info = info,
     Param = param,
     Data = data,

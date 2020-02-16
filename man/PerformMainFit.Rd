@@ -7,9 +7,12 @@
 PerformMainFit(
   context,
   data,
+  param = NULL,
+  info = NULL,
   maxNoFit = 30L,
   ctol = 1e-06,
   ftol = 1e-05,
+  algorithm = "NLOPT_LN_BOBYQA",
   verbose = FALSE
 )
 }
@@ -18,6 +21,10 @@ PerformMainFit(
 
 \item{data}{Input data as data.table. Required.}
 
+\item{param}{List of parameters. Optional. Default = NULL.}
+
+\item{info}{List of parameters. Optional. Default = NULL.}
+
 \item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
 
 \item{ctol}{Minium required deviance in consecutive lambda estimations.
@@ -25,6 +32,9 @@ Optional. Default = 1e-6.}
 
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
+
+\item{algorithm}{Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+iterations. Default = 'NLOPT_LN_BOBYQA'}
 
 \item{verbose}{Logical indicating to print detailed info during fitting. Optional.
 Default = \code{FALSE}}
@@ -37,7 +47,9 @@ Perform main fit
 }
 \examples{
 \dontrun{
-PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE)
+PerformMainFit(
+  context, data, param, info, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE
+)
 }
 
 }

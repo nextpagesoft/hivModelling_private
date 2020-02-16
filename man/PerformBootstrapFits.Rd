@@ -14,6 +14,7 @@ PerformBootstrapFits(
   ftol = 1e-05,
   executionPlan = future::sequential,
   statusRefreshRate = 2,
+  algorithm = "NLOPT_LN_BOBYQA",
   verbose = FALSE
 )
 }
@@ -38,6 +39,9 @@ Default = 1e-5.}
 Default = future::sequential.}
 
 \item{statusRefreshRate}{Number of seconds to next refresh of job status. Optional. Default = 2.}
+
+\item{algorithm}{Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+iterations. Default = 'NLOPT_LN_BOBYQA'}
 
 \item{verbose}{Logical indicating to print detailed info during fitting. Optional.
 Default = \code{FALSE}}

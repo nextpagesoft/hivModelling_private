@@ -12,6 +12,7 @@ PerformBootstrapFit(
   maxNoFit = 30,
   ctol = 1e-06,
   ftol = 1e-05,
+  algorithm = "NLOPT_LN_BOBYQA",
   verbose = FALSE
 )
 }
@@ -31,6 +32,9 @@ Optional. Default = 1e-6.}
 
 \item{ftol}{Minium required deviance in amoeba calculations. Optional.
 Default = 1e-5.}
+
+\item{algorithm}{Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+iterations. Default = 'NLOPT_LN_BOBYQA'}
 
 \item{verbose}{Logical indicating to print detailed info during fitting. Optional.
 Default = \code{FALSE}}

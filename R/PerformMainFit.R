@@ -4,11 +4,15 @@
 #'
 #' @param context List of parameters. Required.
 #' @param data Input data as data.table. Required.
+#' @param param List of parameters. Optional. Default = NULL.
+#' @param info List of parameters. Optional. Default = NULL.
 #' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
 #'   Default = 1e-5.
+#' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
+#'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param verbose Logical indicating to print detailed info during fitting. Optional.
 #'   Default = \code{FALSE}
 #'
@@ -17,20 +21,36 @@
 #'
 #' @examples
 #' \dontrun{
-#' PerformMainFit(context, data, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE)
+#' PerformMainFit(
+#'   context, data, param, info, maxNoFit = 2, ctol = 1e-6, ftol = 1e-5, verbose = TRUE
+#' )
 #' }
 #'
 #' @export
 PerformMainFit <- function(
   context,
   data,
+  param = NULL,
+  info = NULL,
   maxNoFit = 30L,
   ctol = 1e-6,
   ftol = 1e-5,
+  algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
-  info <- GetInfoList(context)
-  param <- GetParamList(context, info)
+  if (is.null(info) || is.null(param)) {
+    runType <- 'MAIN'
+    info <- GetInfoList(context)
+    param <- GetParamList(context, info)
+    message('Run type: ', runType, ' - all initial parameters will be determined from context')
+  } else {
+    runType <- 'MAIN_WITH_INIT'
+    message(
+      'Run type: ',
+      runType,
+      ' - all initial parameters will be determined from provided "info" and "param" objects'
+    )
+  }
   probSurv1996 <- GetProvSurv96(param, info)
 
   tmpModelFitDist <- info$ModelFitDist
@@ -48,16 +68,13 @@ PerformMainFit <- function(
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
-        runType = 'MAIN',
+        runType = runType,
         probSurv1996, param, info, data,
-        mainResults = NULL,
         maxNoFit, ctol, ftol, verbose
       )
 
       p <- res$P
       converged <- res$Converged
-      beta <- res$Beta
-      thetaF <- res$ThetaF
       param <- res$Param
       info <- res$Info
 
@@ -81,12 +98,12 @@ PerformMainFit <- function(
     }
   }
 
-  message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), beta[seq_len(param$NoDelta)]))
+  message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]))
   message(sprintf(
     'theta[%d]: %f\t- %s\n',
     seq_along(param$Theta),
     param$Theta,
-    ifelse(param$ThetaP, 'USED', 'NOT USED')
+    ifelse(param$ThetaP, 'FIXED', 'NOT FIXED')
   ))
 
   info$ModelFitDist <- tmpModelFitDist
@@ -126,11 +143,6 @@ PerformMainFit <- function(
   return(list(
     Converged = converged,
     P = p,
-    Beta = beta,
-    Theta = param$Theta,
-    ThetaP = param$ThetaP,
-    ThetaF = thetaF,
-    DeltaM = param$DeltaM,
     Info = info,
     Param = param,
     Statistics = statRes,
