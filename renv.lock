@@ -158,10 +158,10 @@
     },
     "lattice": {
       "Package": "lattice",
-      "Version": "0.20-38",
+      "Version": "0.20-40",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "848f8c593fd1050371042d18d152e3d7"
+      "Hash": "61339152c288b871facca5f68f401f89"
     },
     "lazyeval": {
       "Package": "lazyeval",
@@ -270,10 +270,10 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.4.5",
+      "Version": "1.4.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ced3b63472796155f74abc4eb5266c78"
+      "Hash": "e99d8d656980d2dd416a962ae55aec90"
     },
     "stringr": {
       "Package": "stringr",
@@ -298,10 +298,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.2.2",
+      "Version": "0.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a1de558a76d2843a10f766209b9a545f"
+      "Hash": "2c0f41d87be7a186139a6d3d5215848e"
     },
     "viridisLite": {
       "Package": "viridisLite",
