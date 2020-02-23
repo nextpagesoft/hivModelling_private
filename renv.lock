@@ -88,10 +88,10 @@
     },
     "digest": {
       "Package": "digest",
-      "Version": "0.6.24",
+      "Version": "0.6.25",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dc0030cea0d85397ba3ba5b930c82c6a"
+      "Hash": "f697db7d92b7028c4b3436e9603fb636"
     },
     "ellipsis": {
       "Package": "ellipsis",

@@ -17,6 +17,10 @@ ReadInputData <- function(inputDataPath)
 {
   inputData <- NULL
 
+  if (is.null(inputDataPath)) {
+    return(NULL)
+  }
+
   pathInfo <- file.info(inputDataPath)
 
   if (!is.na(pathInfo$mode)) {
@@ -47,7 +51,7 @@ ReadInputData <- function(inputDataPath)
         lapply(fileNames, fread),
         tools::file_path_sans_ext(basename(fileNames))
       )
-      message(sprintf('File %s read\n', fileNames))
+      message(sprintf('Data file "%s" loaded\n', fileNames))
     }
   }
 

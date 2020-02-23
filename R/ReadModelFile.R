@@ -58,6 +58,17 @@ ReadModelFile <- function(
   version <- as.integer(model$Model$FileVersion[[1]])
   if (version != 2) {
     warning('Version ', version, ' of model files is not supported')
+    return(NULL)
+  }
+
+  if (dir.exists(model$Model$Meta$InputDataPath[[1]])) {
+    inputDataPath <- model$Model$Meta$InputDataPath[[1]]
+  } else {
+    message(
+      'Input data path "', inputDataPath, '" provided in the model file does not exist. ',
+      'It will not be incorporated in to the run context.'
+    )
+    inputDataPath <- NULL
   }
 
   # Load risk groups
@@ -76,7 +87,8 @@ ReadModelFile <- function(
   incModel <- model$Model$IncidenceModel
   model <- list(
     Settings = list(
-      RiskGroups = riskGroups
+      RiskGroups = riskGroups,
+      InputDataPath = inputDataPath
     ),
     Parameters = list(
       INCIDENCE = list(

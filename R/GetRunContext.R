@@ -30,18 +30,29 @@ GetRunContext <- function(...)
   )
 
   # Extract paths from arguments
+  modelFilePath <- context$Settings$ModelFilePath
   if (!is.null(args$Settings$ModelFilePath)) {
-    context$Settings$ModelFilePath <- args$Settings$ModelFilePath
+    modelFilePath <- args$Settings$ModelFilePath
   }
+
+  inputDataPath <- context$Settings$ModelFilePath
   if (!is.null(args$Settings$InputDataPath)) {
-    context$Settings$InputDataPath <- args$Settings$InputDataPath
+    inputDataPath <- args$Settings$InputDataPath
   }
 
   # Override default context with parameters from the model file (average priority)
-  incidenceParams <- ReadModelFile(context$Settings$ModelFilePath, context$Settings$InputDataPath)
-  if (!is.null(incidenceParams)) {
-    context$Parameters$INCIDENCE$Intervals <- incidenceParams$Parameters$INCIDENCE$Intervals
-    context <- modifyList(context, incidenceParams)
+  modelIncidenceParams <- ReadModelFile(modelFilePath, inputDataPath)
+  if (!is.null(modelIncidenceParams)) {
+    # Intervals are merged manually due to a problem with merging data.table objects with modifyList
+    modelIntervals <- modelIncidenceParams$Parameters$INCIDENCE$Intervals
+    modelIncidenceParams$Parameters$INCIDENCE$Intervals <- NULL
+    context <- modifyList(context, modelIncidenceParams)
+  }
+
+  # InputDataPath could be initialized from the model file. Override here with the one supplied
+  # in the arguments.
+  if (!is.null(args$Settings$InputDataPath)) {
+    context$Settings$InputDataPath <- args$Settings$InputDataPath
   }
 
   # Override any settings with those provided directly to this function (highest priority)
@@ -61,7 +72,15 @@ GetRunContext <- function(...)
   }
 
   # Determine settings from data
-  ValidateData(context$Data)
+  allowedYearRanges <- GetAllowedYearRanges(context$Data)
+
+  # Create intervals
+  intervals <- GetIntervalsFromData(
+    minYear = allowedYearRanges[['All']][[1]],
+    maxYear = allowedYearRanges[['All']][[2]],
+    numIntervals = 5,
+    firstIntervalEndYear = 1984
+  )
 
   # Preprocess input data
   preprocessedData <- PreprocessInputData(
