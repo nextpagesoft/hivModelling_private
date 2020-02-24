@@ -51,7 +51,7 @@ ReadInputData <- function(inputDataPath)
         lapply(fileNames, fread),
         tools::file_path_sans_ext(basename(fileNames))
       )
-      message(sprintf('Data file "%s" loaded\n', fileNames))
+      message(sprintf('Data file "%s" loaded.\n', fileNames))
     }
   }
 

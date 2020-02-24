@@ -34,16 +34,15 @@ GetRunContext <- function(...)
   if (!is.null(args$Settings$ModelFilePath)) {
     modelFilePath <- args$Settings$ModelFilePath
   }
-
   inputDataPath <- context$Settings$ModelFilePath
   if (!is.null(args$Settings$InputDataPath)) {
     inputDataPath <- args$Settings$InputDataPath
   }
-
   # Override default context with parameters from the model file (average priority)
   modelIncidenceParams <- ReadModelFile(modelFilePath, inputDataPath)
+  modelIntervals <- NULL
   if (!is.null(modelIncidenceParams)) {
-    # Intervals are merged manually due to a problem with merging data.table objects with modifyList
+    # Intervals are merged manually due to a problem with merging data.table objects by modifyList
     modelIntervals <- modelIncidenceParams$Parameters$INCIDENCE$Intervals
     modelIncidenceParams$Parameters$INCIDENCE$Intervals <- NULL
     context <- modifyList(context, modelIncidenceParams)
@@ -55,44 +54,42 @@ GetRunContext <- function(...)
     context$Settings$InputDataPath <- args$Settings$InputDataPath
   }
 
-  # Override any settings with those provided directly to this function (highest priority)
-  if (!is.null(args$Parameters$INCIDENCE$Intervals)) {
-    context$Parameters$INCIDENCE$Intervals <- args$Parameters$INCIDENCE$Intervals
+  if (!is.null(args$Data)) {
+    context$Data <- args$Data
+    context$Settings$InputDataPath <- NULL
+  } else if (!is.null(context$Settings$InputDataPath)) {
+    context$Data <- ReadInputData(context$Settings$InputDataPath)
   }
-  context <- modifyList(context, args)
 
-  # Read input data
-  if (is.null(context$Data)) {
-    data <- ReadInputData(context$Settings$InputDataPath)
-    context <- modifyList(
-      context,
-      list(Data = data),
-      keep.null = TRUE
+  intervals <- NULL
+  if (!is.null(args$Parameters$INCIDENCE$Intervals)) {
+    intervals <- args$Parameters$INCIDENCE$Intervals
+  } else if (!is.null(modelIntervals)) {
+    intervals <- modelIntervals
+  } else {
+    # Determine settings from data
+    allowedYearRanges <- GetAllowedYearRanges(context$Data)
+
+    # Create intervals
+    intervals <- GetIntervalsFromData(
+      minYear = allowedYearRanges[['All']][[1]],
+      maxYear = allowedYearRanges[['All']][[2]],
+      numIntervals = 5,
+      firstIntervalEndYear = 1984
     )
   }
+  args$Parameters$INCIDENCE$Intervals <- NULL
 
-  # Determine settings from data
-  allowedYearRanges <- GetAllowedYearRanges(context$Data)
+  # Override any settings with those provided directly to this function (highest priority)
+  context <- modifyList(context, args)
 
-  # Create intervals
-  intervals <- GetIntervalsFromData(
-    minYear = allowedYearRanges[['All']][[1]],
-    maxYear = allowedYearRanges[['All']][[2]],
-    numIntervals = 5,
-    firstIntervalEndYear = 1984
-  )
+  context$Parameters$INCIDENCE$Intervals <- intervals
 
   # Preprocess input data
-  preprocessedData <- PreprocessInputData(
+  context$PreprocessedData <- PreprocessInputData(
     context$Data,
     minYear = context$Parameters$INCIDENCE$ModelMinYear,
     maxYear = context$Parameters$INCIDENCE$ModelMaxYear
-  )
-
-  context <- modifyList(
-    context,
-    list(PreprocessedData = preprocessedData),
-    keep.null = TRUE
   )
 
   return(context)

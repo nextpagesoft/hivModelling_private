@@ -53,11 +53,11 @@ ReadModelFile <- function(
     return(NULL)
   }
 
-  message('Model file "', modelFilePath, '" loaded')
+  message('Model file "', modelFilePath, '" loaded.')
 
   version <- as.integer(model$Model$FileVersion[[1]])
   if (version != 2) {
-    warning('Version ', version, ' of model files is not supported')
+    warning('Version ', version, ' of model files is not supported.')
     return(NULL)
   }
 
@@ -65,7 +65,9 @@ ReadModelFile <- function(
     inputDataPath <- model$Model$Meta$InputDataPath[[1]]
   } else {
     message(
-      'Input data path "', inputDataPath, '" provided in the model file does not exist. ',
+      'Input data path "',
+      model$Model$Meta$InputDataPath[[1]],
+      '" provided in the model file does not exist. ',
       'It will not be incorporated in to the run context.'
     )
     inputDataPath <- NULL
