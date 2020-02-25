@@ -61,14 +61,15 @@ GetRunContext <- function(...)
     context$Data <- ReadInputData(context$Settings$InputDataPath)
   }
 
+  # Determine settings from data
+  allowedYearRanges <- GetAllowedYearRanges(context$Data)
+
   intervals <- NULL
   if (!is.null(args$Parameters$INCIDENCE$Intervals)) {
     intervals <- args$Parameters$INCIDENCE$Intervals
   } else if (!is.null(modelIntervals)) {
     intervals <- modelIntervals
   } else {
-    # Determine settings from data
-    allowedYearRanges <- GetAllowedYearRanges(context$Data)
 
     # Create intervals
     intervals <- GetIntervalsFromData(
@@ -79,6 +80,23 @@ GetRunContext <- function(...)
     )
   }
   args$Parameters$INCIDENCE$Intervals <- NULL
+
+  if (is.null(modelIncidenceParams)) {
+    yearParams <- list()
+    yearParams$Parameters$INCIDENCE <- list(
+      ModelMinYear = allowedYearRanges[['All']][[1]],
+      ModelMaxYear = allowedYearRanges[['All']][[2]],
+      FitPosMinYear = allowedYearRanges[['HIV']][[1]],
+      FitPosMaxYear = allowedYearRanges[['HIV']][[2]],
+      FitPosCD4MinYear = allowedYearRanges[['HIVCD4']][[1]],
+      FitPosCD4MaxYear = allowedYearRanges[['HIVCD4']][[2]],
+      FitAIDSMinYear = allowedYearRanges[['AIDS']][[1]],
+      FitAIDSMaxYear = allowedYearRanges[['AIDS']][[2]],
+      FitAIDSPosMinYear = allowedYearRanges[['HIVAIDS']][[1]],
+      FitAIDSPosMaxYear = allowedYearRanges[['HIVAIDS']][[2]]
+    )
+    context <- modifyList(context, yearParams)
+  }
 
   # Override any settings with those provided directly to this function (highest priority)
   context <- modifyList(context, args)
