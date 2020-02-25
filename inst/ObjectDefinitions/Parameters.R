@@ -36,13 +36,13 @@ list(
     Country = 'OTHER',
 
     # Spline: number of knots
-    ModelNoKnots = 6,
+    ModelNoKnots = 4,
 
     # Require incidence to be zero at start of epidemic
     StartIncZero = TRUE,
 
     # 'POISSON' or 'NEGATIVE_BINOMIAL'
-    FitDistribution = 'NEGATIVE_BINOMIAL',
+    FitDistribution = 'POISSON',
 
     # Over-dispersion
     RDisp = 50,
