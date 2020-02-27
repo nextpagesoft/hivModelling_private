@@ -96,6 +96,14 @@ GetRunContext <- function(...)
       FitAIDSPosMaxYear = allowedYearRanges[['HIVAIDS']][[2]]
     )
     context <- modifyList(context, yearParams)
+
+    riskGroups <- list()
+    populationNames <- names(context$Data[[1]])[-1]
+    populationSets <- setNames(lapply(populationNames, '[[', 1), populationNames)
+    populationSets[['All']] <- populationNames
+    riskGroups$Settings$RiskGroups$PopulationSets <- populationSets
+    riskGroups$Settings$RiskGroups$Selected <- 'All'
+    context <- modifyList(context, riskGroups)
   }
 
   # Override any settings with those provided directly to this function (highest priority)

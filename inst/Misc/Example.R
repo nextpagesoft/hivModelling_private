@@ -3,12 +3,6 @@ library(hivModelling)
 
 # RUN ----------------------------------------------------------------------------------------------
 
-# context <- GetRunContext(
-#   settings = list(
-#     InputDataPath = '~/share/HIV test files/Data/test NL.zip'
-#   )
-# )
-
 context <- GetRunContext(
   settings = list(
     InputDataPath = '~/share/HIV Bootstrap/1/'
