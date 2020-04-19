@@ -4,12 +4,14 @@
 \alias{GetParameterVector}
 \title{GetParameterVector}
 \usage{
-GetParameterVector(beta, thetaF)
+GetParameterVector(beta, thetaF, param)
 }
 \arguments{
 \item{beta}{Numeric vector}
 
 \item{thetaF}{Numeric vector}
+
+\item{param}{Param list}
 }
 \value{
 numeric vector

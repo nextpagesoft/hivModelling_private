@@ -16,6 +16,11 @@
 ReadInputData <- function(inputDataPath)
 {
   inputData <- NULL
+  cli::cli_h2('Data files')
+  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
+  on.exit({
+    cli::cli_end()
+  })
 
   if (is.null(inputDataPath)) {
     return(NULL)
@@ -48,10 +53,14 @@ ReadInputData <- function(inputDataPath)
         ignore.case = FALSE
       )
       inputData <- setNames(
-        lapply(fileNames, fread),
+        lapply(fileNames, function(fileName) {
+          dt <- fread(fileName)
+          setnames(dt, 1, 'Year')
+          cli::cli_alert_success('Data file {.orange {fileName}} loaded.')
+          return(dt)
+        }),
         tools::file_path_sans_ext(basename(fileNames))
       )
-      message(sprintf('Data file "%s" loaded.\n', fileNames))
     }
   }
 

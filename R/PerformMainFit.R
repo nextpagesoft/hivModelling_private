@@ -103,7 +103,7 @@ PerformMainFit <- function(
     'theta[%d]: %f\t- %s\n',
     seq_along(param$Theta),
     param$Theta,
-    ifelse(param$ThetaP, 'FIXED', 'NOT FIXED')
+    ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
   ))
 
   info$ModelFitDist <- tmpModelFitDist

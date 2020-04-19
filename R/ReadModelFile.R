@@ -18,6 +18,12 @@ ReadModelFile <- function(
   modelFilePath = NULL,
   inputDataPath = NULL
 ) {
+  cli::cli_h2('Model file')
+  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
+  on.exit({
+    cli::cli_end()
+  })
+
   model <- NULL
 
   if (is.null(inputDataPath)) {
@@ -53,22 +59,22 @@ ReadModelFile <- function(
     return(NULL)
   }
 
-  message('Model file "', modelFilePath, '" loaded.')
+  cli::cli_alert_info('Model file {.orange {modelFilePath}} loaded.')
 
   version <- as.integer(model$Model$FileVersion[[1]])
   if (version != 2) {
-    warning('Version ', version, ' of model files is not supported.')
+    cli::cli_alert_danger('Version {.orange {version}} of model file is not supported.')
     return(NULL)
   }
 
   if (dir.exists(model$Model$Meta$InputDataPath[[1]])) {
     inputDataPath <- model$Model$Meta$InputDataPath[[1]]
   } else {
-    message(
-      'Input data path "',
-      model$Model$Meta$InputDataPath[[1]],
-      '" provided in the model file does not exist. ',
-      'It will not be incorporated in to the run context.'
+    cli::cli_alert_info(
+      paste(
+        'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} provided in the model file does not exist.',
+        'It will not be incorporated in to the run context.'
+      )
     )
     inputDataPath <- NULL
   }

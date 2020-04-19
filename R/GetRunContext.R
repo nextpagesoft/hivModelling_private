@@ -14,6 +14,8 @@
 #' @export
 GetRunContext <- function(...)
 {
+  cli::cli_h1('Context')
+
   # Prepare provided arguments
   args <- list(...)
   if (length(names(args)) > 0) {
@@ -32,11 +34,11 @@ GetRunContext <- function(...)
   # Extract paths from arguments
   modelFilePath <- context$Settings$ModelFilePath
   if (!is.null(args$Settings$ModelFilePath)) {
-    modelFilePath <- args$Settings$ModelFilePath
+    modelFilePath <- normalizePath(args$Settings$ModelFilePath)
   }
-  inputDataPath <- context$Settings$ModelFilePath
+  inputDataPath <- context$Settings$InputDataPath
   if (!is.null(args$Settings$InputDataPath)) {
-    inputDataPath <- args$Settings$InputDataPath
+    inputDataPath <- normalizePath(args$Settings$InputDataPath)
   }
   # Override default context with parameters from the model file (average priority)
   modelIncidenceParams <- ReadModelFile(modelFilePath, inputDataPath)

@@ -71,7 +71,7 @@ EstimateParameters <- function(
       if (param$NoDelta > defNoCD4) {
         beta[(defNoCD4 + 1):param$NoDelta] <- 0
       }
-
+      beta <- beta[seq_len(param$NoDelta)]
 
       for (j in seq_len(jMax + 1) - 1) {
         # Assume all theta's the same (range: 1 to 10^j_max)

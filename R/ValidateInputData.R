@@ -2,6 +2,8 @@
 #'
 #' Performs checks on input data
 #'
+#' @param dt Named list of input data sets
+#'
 #' @return
 #' NULL (invisibly)
 #'
@@ -17,7 +19,7 @@ ValidateInputData <- function(
 
   # Source: IncidencePopulationDataManager::ValidateSelf
 
-  requriedData <- c('HIV', 'HIVAIDS')
+  requiredData <- c('HIV', 'HIVAIDS')
   optionalData <- c('AIDS', 'Dead', 'HIV_CD4_1', 'HIV_CD4_2', 'HIV_CD4_3', 'HIV_CD4_4')
 
   validationMsgs <- data.table(

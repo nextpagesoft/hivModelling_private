@@ -46,12 +46,12 @@ GetParamList <- function(
   deltaP <- res$DeltaP
   noTime <- length(tc) - 1
 
-  deltaM <- matrix(0, param$NoStage, noTime)
-  deltaM[deltaP != 0] <- 0.2
-  deltaM[param$NoStage, ] <- param$DeltaAIDS
-
   noDelta <- max(max(deltaP))
-  beta <- rep(0, noDelta)
+  beta <- rep(0.2, noDelta)
+
+  deltaM <- matrix(0, param$NoStage, noTime)
+  deltaM[deltaP != 0] <- beta[deltaP]
+  deltaM[param$NoStage, ] <- param$DeltaAIDS
 
   # Initialize all thetaP at 1, i.e. no spline weight fixed
   thetaP <- rep(1, info$ModelSplineN)

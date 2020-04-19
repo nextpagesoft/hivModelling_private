@@ -4,6 +4,7 @@
 #'
 #' @param beta Numeric vector
 #' @param thetaF Numeric vector
+#' @param param Param list
 #'
 #' @return
 #' numeric vector
@@ -16,7 +17,8 @@
 #' @export
 GetParameterVector <- function(
   beta,
-  thetaF
+  thetaF,
+  param
 ) {
   p <- c(beta, thetaF)
   # p <- rep(0, param$NoDelta + param$NoTheta)
