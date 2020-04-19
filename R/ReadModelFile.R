@@ -18,7 +18,7 @@ ReadModelFile <- function(
   modelFilePath = NULL,
   inputDataPath = NULL
 ) {
-  cli::cli_h2('Model file')
+  cli::cli_h2('1.1. Model file')
   cli::cli_div(theme = list(span.orange = list(color = 'orange')))
   on.exit({
     cli::cli_end()
@@ -33,29 +33,32 @@ ReadModelFile <- function(
   if (!is.null(modelFilePath)) {
     # Model file provided directly
     model <- as_list(read_xml(modelFilePath))
-  } else if (isTRUE(file.info(inputDataPath)$isdir)) {
-    # Mode file included in directory with data files
-    modelFilePath <- list.files(
-      inputDataPath,
-      pattern = '\\.xml$',
-      all.files = TRUE,
-      full.names = TRUE
-    )[1]
-    if (!is.na(modelFilePath)) {
-      model <- as_list(read_xml(modelFilePath))
-    }
-  } else if (tolower(tools::file_ext(inputDataPath)) == 'zip') {
-    # Mode file included in zip file with data files
-    fileList <- unzip(inputDataPath, list = TRUE)
-    fileExts <- sapply(fileList$Name, tools::file_ext)
-    modelFilePath <- names(fileExts)[tolower(fileExts) == 'xml'][1]
-    if (!is.na(modelFilePath)) {
-      modelConn <- unz(inputDataPath, modelFilePath)
-      model <- as_list(read_xml(modelConn))
+  } else if (!is.null(inputDataPath)) {
+    if (isTRUE(file.info(inputDataPath)$isdir)) {
+      # Mode file included in directory with data files
+      modelFilePath <- list.files(
+        inputDataPath,
+        pattern = '\\.xml$',
+        all.files = TRUE,
+        full.names = TRUE
+      )[1]
+      if (!is.na(modelFilePath)) {
+        model <- as_list(read_xml(modelFilePath))
+      }
+    } else if (tolower(tools::file_ext(inputDataPath)) == 'zip') {
+      # Mode file included in zip file with data files
+      fileList <- unzip(inputDataPath, list = TRUE)
+      fileExts <- sapply(fileList$Name, tools::file_ext)
+      modelFilePath <- names(fileExts)[tolower(fileExts) == 'xml'][1]
+      if (!is.na(modelFilePath)) {
+        modelConn <- unz(inputDataPath, modelFilePath)
+        model <- as_list(read_xml(modelConn))
+      }
     }
   }
 
   if (is.null(model)) {
+    cli::cli_alert_info('No model file found. Parameters will be determined from data.')
     return(NULL)
   }
 
@@ -72,7 +75,7 @@ ReadModelFile <- function(
   } else {
     cli::cli_alert_info(
       paste(
-        'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} provided in the model file does not exist.',
+        'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
         'It will not be incorporated in to the run context.'
       )
     )

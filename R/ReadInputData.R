@@ -16,7 +16,7 @@
 ReadInputData <- function(inputDataPath)
 {
   inputData <- NULL
-  cli::cli_h2('Data files')
+  cli::cli_h2('1.2. Data files')
   cli::cli_div(theme = list(span.orange = list(color = 'orange')))
   on.exit({
     cli::cli_end()

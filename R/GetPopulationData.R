@@ -35,7 +35,9 @@ GetPopulationData <- function(
   }
 
   if (length(populationSet) == 0) {
-    cli::cli_alert_info('No populations have been selected from input data. All populations will be aggregated.')
+    cli::cli_alert_info(
+      'No populations have been selected from input data. All populations will be aggregated.'
+    )
     populationSet <- names(data)
   }
   cli::cli_alert_info(

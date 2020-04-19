@@ -56,7 +56,7 @@ EstimateParameters <- function(
   iter <- 1
 
   startTime <- Sys.time()
-  message('--- Iteration ', iter, ': Scale')
+  cli::cli_alert_info(paste0('--- Iteration ', iter, ': Scale'))
   if (runType == 'MAIN') {
     # Step 1 : determine the scale of the parameters
     defNoCD4 <- param$NoStage - 1
@@ -75,7 +75,7 @@ EstimateParameters <- function(
 
       for (j in seq_len(jMax + 1) - 1) {
         # Assume all theta's the same (range: 1 to 10^j_max)
-        thetaF <- rep((j + 1) * 10 ^ j, param$NoTheta)
+        thetaF <- rep((j + 1) * 10^j, param$NoTheta)
         p <- GetParameterVector(beta, thetaF)
         res <- FitLLTotal(p, probSurv1996, param, info, data)
         ll <- res$LLTotal
@@ -118,10 +118,10 @@ EstimateParameters <- function(
     startTime <- Sys.time()
 
     if (runType %in% c('MAIN', 'MAIN_WITH_INIT')) {
-      message('--- Iteration ', iter, ': Amoeba')
+      cli::cli_alert_info(paste0('--- Iteration ', iter, ': Amoeba'))
       res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
     } else {
-      message('--- Iteration ', iter, ': ', algorithm)
+      cli::cli_alert_info(paste0('--- Iteration ', iter, ': ', algorithm))
 
       # Algorithms checked:
       # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
@@ -145,20 +145,20 @@ EstimateParameters <- function(
 
       p <- optimRes$solution
       fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
-      message('  LLTotal = ', fitRes$LLTotal)
+      cli::cli_alert_info(paste0('  LLTotal = ', fitRes$LLTotal))
       res <- modifyList(
         list(P = p),
         fitRes
       )
     }
 
-    message('  Run time: ', format(Sys.time() - startTime))
+    cli::cli_alert_info(paste0('  Run time: ', format(Sys.time() - startTime)))
 
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
-  message('Total run time: ', format(Sys.time() - totalStartTime))
+  cli::cli_alert_info(paste0('Total run time: ', format(Sys.time() - totalStartTime)))
   cat('\n')
 
   lastResults <- iterResults[[iter]]

@@ -9,6 +9,18 @@ context <- GetRunContext(
   )
 )
 
+context <- GetRunContext(
+  settings = list(
+    InputDataPath = '~/share/_HIV_MODELLING/test NL - 2 populations.zip'
+  )
+)
+
+context <- GetRunContext(
+  settings = list(
+    InputDataPath = '~/share/HIV Bootstrap/1/'
+  )
+)
+
 data <- GetPopulationData(context)
 
 # # Model parameters
@@ -25,6 +37,9 @@ data <- GetPopulationData(context)
 # plots <- CreateOutputPlots(modelOutputs)
 
 mainResults <- PerformMainFit(context, data)
+
+mainResults <- PerformMainFit(context, data, mainResults$Param, mainResults$Info)
+
 plots <- CreateOutputPlots(mainResults)
 # mainResults <- PerformMainFit(context, data, model$Param, model$Info)
 bsResultsList <- PerformBootstrapFits(

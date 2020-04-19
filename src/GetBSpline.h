@@ -5,7 +5,9 @@
 
 using namespace Rcpp;
 
-double GetBSpline(double time, NumericVector theta, int kOrder, int modelSplineN,
-                  NumericVector myKnots, double minYear, double maxYear);
+double GetBSpline(
+  double time, NumericVector theta, int kOrder, int modelSplineN, NumericVector myKnots,
+  double minYear, double maxYear
+);
 
 #endif // _GetBSpline_

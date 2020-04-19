@@ -59,8 +59,11 @@ List odeint(
       h = x2 - x;
     }
 
-    rkqs(x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear,
-         rkqsRes, rkckRes);
+    rkqs(
+      x, y, dydx, nVar, h, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes,
+      rkckRes
+    );
+
     x = rkqsRes["X"];
     y = rkqsRes["Y"];
     double rkqsLambda = rkqsRes["MinLambda"];

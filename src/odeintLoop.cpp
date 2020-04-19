@@ -24,18 +24,10 @@ List odeintLoop(
   double minLambda = 1e+10;
 
   for (int i = 0; i != modelNoYears; ++i) {
-    List res = odeint(ystart,
-                      nVar,
-                      modelYears[i] + bitSml,
-                      modelYears[i + 1] - bitSml,
-                      eps,
-                      h1,
-                      param,
-                      info,
-                      modelMinYear,
-                      modelMaxYear,
-                      derivsFunc,
-                      0);
+    List res = odeint(
+      ystart, nVar, modelYears[i] + bitSml, modelYears[i + 1] - bitSml, eps, h1, param, info,
+      modelMinYear, modelMaxYear, derivsFunc, 0
+    );
     ystart = res["YStart"];
     double resMinLambda = res["MinLambda"];
     minLambda = fmin(minLambda, resMinLambda);

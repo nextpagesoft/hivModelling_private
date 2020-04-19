@@ -22,6 +22,7 @@ FitLLTotal <- function(
 
   derivsFunc <- GetDerivsFuncXptr('derivsMainFunc')
   res <- odeintLoop(modelYears, param, info, derivsFunc)
+
   modelResults <- res[['ModelResults']]
   minLambda <- res[['MinLambda']]
 

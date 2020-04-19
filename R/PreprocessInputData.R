@@ -20,6 +20,12 @@ PreprocessInputData <- function(
   minYear = 1980L,
   maxYear = year(Sys.time())
 ) {
+  cli::cli_h2('1.3. Data preprocessing')
+  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
+  on.exit({
+    cli::cli_end()
+  })
+
   # CRAN checks
   `.` <- NULL
   Year <- NULL
@@ -48,12 +54,28 @@ PreprocessInputData <- function(
   CompareColNames <- function(dt, populationNames) {
     identical(colnames(dt)[-1], populationNames)
   }
-  populationNames <- colnames(inputData[['HIV_CD4_1']])[-1]
+
+  populationNames <- Reduce(union, sapply(inputData, colnames), c())
   allColNamesEqual <- all(sapply(inputData, CompareColNames, populationNames = populationNames))
 
   if (!allColNamesEqual) {
-    stop('Input data files have misaligned column names for populations')
+    cli::cli_alert_warning(
+      paste(
+        'Input data files have misaligned names of populations.',
+        'All data files will be adjusted to include these populations:\n',
+        sprintf('{.orange %s}', paste(populationNames, collapse = ', '))
+      )
+    )
   }
+
+  # Complete missing populations
+  # dt <- inputData[[1]]
+  lapply(inputData, function(dt) {
+    missingPopulations <- setdiff(populationNames, colnames(dt))
+    if (length(missingPopulations) > 0) {
+      dt[, (missingPopulations) := NA]
+    }
+  })
 
   inputData <- setNames(lapply(populationNames, function(populationName) {
     lapply(inputData, function(dataSet) {

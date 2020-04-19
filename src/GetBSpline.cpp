@@ -7,27 +7,12 @@ double GetBSplineCubic(
   NumericVector theta,
   int modelSplineN,
   NumericVector myKnots,
-  double minYear,
-  double maxYear
+  int k
 ) {
-  if (time <= minYear || time > maxYear + 1e-7) {
-    return 0;
-  }
-
-  static const int p = 3;
-
-  int k = 0;
-  for (int i = 0; i != modelSplineN; ++i) {
-    if (myKnots[i] <= time && time < myKnots[i + 1]) {
-      k = i;
-      break;
-    }
-  }
-
-  double a = theta[k - p];
-  double b = theta[1 + k - p];
-  double c = theta[2 + k - p];
-  double d = theta[3 + k - p];
+  double a = theta[k - 3];
+  double b = theta[k - 2];
+  double c = theta[k - 1];
+  double d = theta[k];
 
   const double term1 = time - myKnots[k];
   const double term2 = time - myKnots[k - 1];
@@ -69,33 +54,31 @@ double GetBSpline(
     double minYear,
     double maxYear
 ) {
-  if (kOrder == 4) {
-    return GetBSplineCubic(time, theta, modelSplineN, myKnots, minYear, maxYear);
-  }
-
   if (time <= minYear || time > maxYear + 1e-7) {
     return 0;
   }
 
-  int p = kOrder - 1;
-
-  int posK = 0;
+  int k = 0;
   for (int i = 0; i != modelSplineN; ++i) {
     if (myKnots[i] <= time && time < myKnots[i + 1]) {
-      posK = i;
+      k = i;
       break;
     }
   }
 
-  NumericVector d(kOrder);
+  if (kOrder == 4) {
+    return GetBSplineCubic(time, theta, modelSplineN, myKnots, k);
+  }
 
+  NumericVector d(kOrder);
+  int p = kOrder - 1;
   for (int j = 0; j != kOrder; ++j) {
-    d[j] = theta[j + posK - p];
+    d[j] = theta[j + k - p];
   }
 
   for (int r = 1; r != kOrder; ++r) {
     for (int j = p; j != r - 1; --j) {
-      double alpha = (time - myKnots[j + posK - p]) / (myKnots[j + 1 + posK - r] - myKnots[j + posK - p]);
+      double alpha = (time - myKnots[j + k - p]) / (myKnots[j + k + 1  - r] - myKnots[j + k - p]);
       d[j] = (1 - alpha) * d[j - 1] + alpha * d[j];
     }
   }
@@ -106,6 +89,5 @@ double GetBSpline(
 }
 
 /*** R
-GetBSplineSlow(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 */

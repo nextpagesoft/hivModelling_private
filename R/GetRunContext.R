@@ -14,7 +14,7 @@
 #' @export
 GetRunContext <- function(...)
 {
-  cli::cli_h1('Context')
+  cli::cli_h1('1. Context')
 
   # Prepare provided arguments
   args <- list(...)
@@ -72,7 +72,6 @@ GetRunContext <- function(...)
   } else if (!is.null(modelIntervals)) {
     intervals <- modelIntervals
   } else {
-
     # Create intervals
     intervals <- GetIntervalsFromData(
       minYear = allowedYearRanges[['All']][[1]],
@@ -115,7 +114,7 @@ GetRunContext <- function(...)
 
   # Preprocess input data
   context$PreprocessedData <- PreprocessInputData(
-    context$Data,
+    inputData = context$Data,
     minYear = context$Parameters$INCIDENCE$ModelMinYear,
     maxYear = context$Parameters$INCIDENCE$ModelMaxYear
   )

@@ -67,6 +67,8 @@ void rkqs(
 }
 
 /*** R
-rkqs(x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear,
-     rkqsRes, rkckRes)
+rkqs(
+  x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear, rkqsRes,
+  rkckRes
+)
 */

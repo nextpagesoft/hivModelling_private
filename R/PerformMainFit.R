@@ -38,17 +38,30 @@ PerformMainFit <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
+  cli::cli_h2('2. Main fit')
+  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
+  on.exit({
+    cli::cli_end()
+  })
+
   if (is.null(info) || is.null(param)) {
     runType <- 'MAIN'
     info <- GetInfoList(context)
     param <- GetParamList(context, info)
-    message('Run type: ', runType, ' - all initial parameters will be determined from context')
+    cli::cli_alert_info(
+      paste0(
+        'Run type: {.orange ',
+        runType,
+        '}- all initial parameters will be determined from context')
+    )
   } else {
     runType <- 'MAIN_WITH_INIT'
-    message(
-      'Run type: ',
-      runType,
-      ' - all initial parameters will be determined from provided "info" and "param" objects'
+    cli::cli_alert_info(
+      paste0(
+        'Run type: {.orange ',
+        runType,
+        '} - all initial parameters will be determined from provided "info" and "param" objects'
+      )
     )
   }
   probSurv1996 <- GetProvSurv96(param, info)
@@ -56,15 +69,21 @@ PerformMainFit <- function(
   tmpModelFitDist <- info$ModelFitDist
   info$ModelFitDist <- 'POISSON'
   if (tmpModelFitDist != info$ModelFitDist) {
-    message('Input distribution was set to "', tmpModelFitDist, '. ',
-            'This is overridden to "', info$ModelFitDist, '" for the main fit.')
+    cli::cli_alert_info(
+      paste0(
+        'Input distribution was set to {.orange "', tmpModelFitDist, '"}. ',
+        'This is overridden to {.orange "', info$ModelFitDist, '"} for the main fit.'
+      )
+    )
   }
 
   converged <- FALSE
   while (!converged) {
     nTheta <- 100
     while (nTheta != param$NoTheta) {
-      message(sprintf('Number of estimated spline weights: %d', param$NoTheta))
+      cli::cli_alert_info(
+        sprintf('Number of estimated spline weights: {.orange %d}', param$NoTheta)
+      )
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
