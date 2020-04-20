@@ -38,12 +38,13 @@ PerformMainFit <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
-  cli::cli_h2('2. Main fit')
+  cli::cli_h1('2. Main fit')
   cli::cli_div(theme = list(span.orange = list(color = 'orange')))
   on.exit({
     cli::cli_end()
   })
 
+  cli::cli_h2('2.1. Info')
   if (is.null(info) || is.null(param)) {
     runType <- 'MAIN'
     info <- GetInfoList(context)
@@ -52,7 +53,7 @@ PerformMainFit <- function(
       paste0(
         'Run type: {.orange ',
         runType,
-        '}- all initial parameters will be determined from context')
+        '} - all initial parameters will be determined from context')
     )
   } else {
     runType <- 'MAIN_WITH_INIT'
@@ -81,9 +82,7 @@ PerformMainFit <- function(
   while (!converged) {
     nTheta <- 100
     while (nTheta != param$NoTheta) {
-      cli::cli_alert_info(
-        sprintf('Number of estimated spline weights: {.orange %d}', param$NoTheta)
-      )
+      cli::cli_alert_info('Number of estimated spline weights: {.orange {param$NoTheta}}')
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
@@ -107,28 +106,33 @@ PerformMainFit <- function(
     }
 
     if (!converged) {
-      message(sprintf('Fit did NOT converge, goodness-of-fit: %f\n', lastResults$LLTotal))
+      cli::cli_alert_danger('Fit did NOT converge, goodness-of-fit: {.orange {lastResults$LLTotal}}')
       context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
       info <- GetInfoList(context)
       param <- GetParamList(context, info)
       probSurv1996 <- GetProvSurv96(param, info)
     } else {
-      message(sprintf('Fit converged, goodness-of-fit: %f\n', lastResults$LLTotal))
+      cli::cli_alert_success('Fit converged, goodness-of-fit: {.orange {lastResults$LLTotal}}')
     }
   }
 
-  message(sprintf('beta[%d]: %f\n', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]))
-  message(sprintf(
-    'theta[%d]: %f\t- %s\n',
+  cli::cli_h2('2.3. Results')
+
+  thetas <- sprintf(
+    'theta[%d]: {.orange %f} - %s',
     seq_along(param$Theta),
     param$Theta,
     ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
-  ))
+  )
+  cli::cli_ul()
+  cli::cli_li(sprintf('beta[%d]: %f', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]))
+  sapply(thetas, cli::cli_li)
+  cli::cli_end()
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial
   if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-    message('Estimating overdispersion type ', info$OverdisperionType)
+    cli::cli_alert_info('Estimating overdispersion type ', info$OverdisperionType)
 
     rMin <- 1.0
     rMax <- 100000
@@ -147,7 +151,11 @@ PerformMainFit <- function(
       param$RDispAIDS <- zbrent(FitLLrAIDS, rMin, rMax, ftol, extraArgs)
       param$RDispRest <- zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
 
-      message(sprintf('Overdispersion: AIDS = %f, Rest = %f', param$RDispAIDS, param$RDispRest))
+      cli::cli_alert_info(sprintf(
+        'Overdispersion: AIDS = {.orange %f}, Rest = {.orange %f}',
+        param$RDispAIDS,
+        param$RDispRest)
+      )
     }
   }
 
@@ -159,7 +167,7 @@ PerformMainFit <- function(
   timeResults <- ModelTimeResults(modelResults, info, param)
   mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
 
-  return(list(
+  invisible(list(
     Converged = converged,
     P = p,
     Info = info,

@@ -38,6 +38,8 @@ EstimateParameters <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
+  cli::cli_h2('2.2. Iterations')
+
   OptimFunc <- function(p) {
     res <- FitLLTotal(p, probSurv1996, param, info, data)
     return(res$LLTotal)
@@ -56,7 +58,8 @@ EstimateParameters <- function(
   iter <- 1
 
   startTime <- Sys.time()
-  cli::cli_alert_info(paste0('--- Iteration ', iter, ': Scale'))
+  iterHeader <- paste0('Iteration ', iter, ': Scale')
+  processId <- cli::cli_process_start(iterHeader)
   if (runType == 'MAIN') {
     # Step 1 : determine the scale of the parameters
     defNoCD4 <- param$NoStage - 1
@@ -104,7 +107,7 @@ EstimateParameters <- function(
   } else {
     stop('EstimatedParameters: Unsupported estimation run type')
   }
-  message('  Run time: ', format(Sys.time() - startTime))
+  cli::cli_process_done(processId, paste(iterHeader, '| Run time:', format(Sys.time() - startTime)))
 
   # Stop fitting when the change in deviance is smaller than ctol.
   totalStartTime <- Sys.time()
@@ -118,11 +121,12 @@ EstimateParameters <- function(
     startTime <- Sys.time()
 
     if (runType %in% c('MAIN', 'MAIN_WITH_INIT')) {
-      cli::cli_alert_info(paste0('--- Iteration ', iter, ': Amoeba'))
+      iterHeader <- paste0('Iteration ', iter, ': Amoeba')
+      processId <- cli::cli_process_start(iterHeader)
       res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
     } else {
-      cli::cli_alert_info(paste0('--- Iteration ', iter, ': ', algorithm))
-
+      iterHeader <- paste0('Iteration ', iter, ': ', algorithm)
+      processId <- cli::cli_process_start(iterHeader)
       # Algorithms checked:
       # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
       # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
@@ -145,14 +149,14 @@ EstimateParameters <- function(
 
       p <- optimRes$solution
       fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
-      cli::cli_alert_info(paste0('  LLTotal = ', fitRes$LLTotal))
+
+      # cli::cli_alert_info(paste0('  LLTotal = ', fitRes$LLTotal))
       res <- modifyList(
         list(P = p),
         fitRes
       )
     }
-
-    cli::cli_alert_info(paste0('  Run time: ', format(Sys.time() - startTime)))
+    cli::cli_process_done(processId, paste(iterHeader, '| Run time:', format(Sys.time() - startTime)))
 
     pParam <- res$P
     iterResults[[iter]] <- res
