@@ -51,11 +51,15 @@ PreprocessInputData <- function(
   }
 
   # Check that populations names are aligned
-  CompareColNames <- function(dt, populationNames) {
-    identical(colnames(dt)[-1], populationNames)
+  ColNames <- function(dt) {
+    colnames(dt)[-1]
   }
 
-  populationNames <- Reduce(union, sapply(inputData, colnames), c())
+  CompareColNames <- function(dt, populationNames) {
+    identical(ColNames(dt), populationNames)
+  }
+
+  populationNames <- Reduce(union, sapply(inputData, ColNames), c())
   allColNamesEqual <- all(sapply(inputData, CompareColNames, populationNames = populationNames))
 
   if (!allColNamesEqual) {

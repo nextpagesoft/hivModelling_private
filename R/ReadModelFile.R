@@ -26,10 +26,6 @@ ReadModelFile <- function(
 
   model <- NULL
 
-  if (is.null(inputDataPath)) {
-    return(NULL)
-  }
-
   if (!is.null(modelFilePath)) {
     # Model file provided directly
     model <- as_list(read_xml(modelFilePath))
@@ -70,16 +66,20 @@ ReadModelFile <- function(
     return(NULL)
   }
 
-  if (dir.exists(model$Model$Meta$InputDataPath[[1]])) {
+  if (is.null(inputDataPath)) {
     inputDataPath <- model$Model$Meta$InputDataPath[[1]]
-  } else {
-    cli::cli_alert_info(
-      paste(
-        'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
-        'It will not be incorporated in to the run context.'
+    if (!fs::is_absolute_path(inputDataPath)) {
+      inputDataPath <- fs::path_norm(fs::path_join(c(dirname(modelFilePath), inputDataPath)))
+    }
+    if (!dir.exists(inputDataPath)) {
+      cli::cli_alert_info(
+        paste(
+          'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
+          'It will not be incorporated in to the run context.'
+        )
       )
-    )
-    inputDataPath <- NULL
+      inputDataPath <- NULL
+    }
   }
 
   # Load risk groups
