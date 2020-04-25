@@ -5,6 +5,6 @@
 
 using namespace Rcpp;
 
-NumericVector GetDelta(double time, List param);
+NumericVector GetDelta(const double& time, const List& param);
 
 #endif // _GetDelta_

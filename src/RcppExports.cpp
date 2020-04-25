@@ -6,6 +6,31 @@
 
 using namespace Rcpp;
 
+// v1
+NumericVector v1(List list);
+RcppExport SEXP _hivModelling_v1(SEXP listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type list(listSEXP);
+    rcpp_result_gen = Rcpp::wrap(v1(list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// v2
+NumericVector v2(NumericVector a, NumericVector b, NumericVector c, NumericVector d);
+RcppExport SEXP _hivModelling_v2(SEXP aSEXP, SEXP bSEXP, SEXP cSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b(bSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type c(cSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(v2(a, b, c, d));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FitLLNegBin
 NumericVector FitLLNegBin(NumericVector y_m, NumericVector y_d, double r);
 RcppExport SEXP _hivModelling_FitLLNegBin(SEXP y_mSEXP, SEXP y_dSEXP, SEXP rSEXP) {
@@ -48,14 +73,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// GetTimeInterval
+size_t GetTimeInterval(const double& x, const NumericVector& tc);
+RcppExport SEXP _hivModelling_GetTimeInterval(SEXP xSEXP, SEXP tcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type tc(tcSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetTimeInterval(x, tc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // GetDelta
-NumericVector GetDelta(double time, List param);
+NumericVector GetDelta(const double& time, const List& param);
 RcppExport SEXP _hivModelling_GetDelta(SEXP timeSEXP, SEXP paramSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< List >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const List& >::type param(paramSEXP);
     rcpp_result_gen = Rcpp::wrap(GetDelta(time, param));
     return rcpp_result_gen;
 END_RCPP
@@ -213,9 +250,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hivModelling_v1", (DL_FUNC) &_hivModelling_v1, 1},
+    {"_hivModelling_v2", (DL_FUNC) &_hivModelling_v2, 4},
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
     {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
+    {"_hivModelling_GetTimeInterval", (DL_FUNC) &_hivModelling_GetTimeInterval, 2},
     {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 2},
     {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
     {"_hivModelling_derivsMainFunc", (DL_FUNC) &_hivModelling_derivsMainFunc, 6},

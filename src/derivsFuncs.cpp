@@ -124,7 +124,3 @@ DerivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
     return DerivsFuncXPtr(R_NilValue);
   }
 }
-
-/*** R
-# derivsMainFunc(x, y, lambda, nVar, param, year)
-*/

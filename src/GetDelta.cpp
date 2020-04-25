@@ -2,53 +2,77 @@
 
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-NumericVector GetDelta(
-  double time,
-  List param
+size_t GetTimeInterval_std(
+  const double& time,
+  const NumericVector& timeIntervals
 ) {
-  int noStageM1 = param["NoStage"];
-  noStageM1 = noStageM1 - 1;
-  int noStageTot = param["NoStageTot"];
-  double deltaAIDS = param["DeltaAIDS"];
-  double delta4Fac = param["Delta4Fac"];
-  NumericMatrix deltaM = param["DeltaM"];
-  IntegerVector tc = param["Tc"];
+  NumericVector::const_iterator pos;
 
-  NumericVector delta(noStageTot);
+  pos = std::upper_bound(timeIntervals.begin(), timeIntervals.end(), time);
+  return std::distance(timeIntervals.begin(), pos);
+}
 
-  // First determine the time interval
-  int iTime = 0;
+size_t GetTimeInterval_original(
+  const double& time,
+  const NumericVector& tc
+) {
+  size_t iTime = 0;
   double dist = 10000;
   while (dist >= 0) {
     dist = time - tc[iTime];
     iTime++;
   }
   iTime--;
+  return iTime;
+}
 
-  for (int i = 0; i != noStageM1; ++i) {
-    delta[i] = 0;
-    for (int j = 0; j != iTime - 1; ++j) {
+// [[Rcpp::export]]
+size_t GetTimeInterval(
+  const double& x,
+  const NumericVector& tc
+) {
+  const size_t n = tc.size();
+  size_t i = 0;
+  for (; i != n; ++i) {
+    if (x < tc[i]) {
+      break;
+    }
+  }
+  i--;
+
+  return i;
+}
+
+// [[Rcpp::export]]
+NumericVector GetDelta(
+  const double& time,
+  const List& param
+) {
+  const size_t deadStageIdx   = param["NoStage"];
+  const size_t stageCount     = deadStageIdx - 1;
+  const double delta4Fac      = param["Delta4Fac"];
+  const NumericMatrix& deltaM = param["DeltaM"];
+  const NumericVector& tc     = param["Tc"];
+
+  size_t timeInterval = GetTimeInterval(time, tc);
+  const double ratio = (time - tc[timeInterval]) / (tc[timeInterval + 1] - tc[timeInterval]);
+  NumericVector delta(deadStageIdx + 1);
+
+  // CD4 stages
+  for (size_t i = 0; i != stageCount; ++i) {
+    for (size_t j = 0; j != timeInterval; ++j) {
       delta[i] += deltaM(i, j);
     }
-    delta[i] += deltaM(i, iTime - 1) * (time - tc[iTime - 1]) / (tc[iTime] - tc[iTime - 1]);
+    delta[i] += deltaM(i, timeInterval) * ratio;
   }
 
-  // AIDS stage : diagnosis rate is always constant
-  delta[noStageM1] = deltaM(noStageM1, iTime - 1);
-
-  // Check that the diagnosis rate is as expected
-  if (delta[noStageM1] != deltaAIDS) {
-    stop("AIDS rate not AIDS rate in GetDelta");
-  }
+  // AIDS stage: diagnosis rate is always constant
+  delta[stageCount] = deltaM(stageCount, timeInterval);
 
   // Add a constant to the diagnosis rate in the penultimate CD4 category
-  if (iTime >= 1) {
-    delta[noStageM1 - 1] = delta[noStageM1 - 1] + delta4Fac;
+  if (timeInterval > 0) {
+    delta[stageCount - 1] += delta4Fac;
   }
-
-  // Diagnosis rate when dead
-  delta[noStageTot] = 0;
 
   return delta;
 }
