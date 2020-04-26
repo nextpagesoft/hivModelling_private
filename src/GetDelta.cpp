@@ -3,6 +3,13 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
+void Test(
+  NumericVector& x
+) {
+  x[1] = 23;
+}
+
+// [[Rcpp::export]]
 size_t GetTimeInterval_std(
   const double& time,
   const NumericVector& timeIntervals

@@ -5,9 +5,7 @@ ModelTimeToDiagDist <- function(
 ) {
   nEq <- 1 + 2 * param$NoStage
 
-  bitSml <- 1e-6
-  h1 <- 0.02
-  eps <- 0.0001
+  BIT_SML <- 1e-6
   numYears <- nrow(modelResults)
 
   Dist_TimeToDiag <- matrix(0, param$DefNoDiagTime, numYears)
@@ -28,19 +26,10 @@ ModelTimeToDiagDist <- function(
       timeA <- j - 1
       timeB <- timeA + 1
 
-      res <- odeint(ystart,
-                    nVar = nEq,
-                    x1 = timeA + bitSml,
-                    x2 = timeB - bitSml,
-                    eps,
-                    h1,
-                    param,
-                    info,
-                    minYear = tmpMinYear,
-                    maxYear = tmpMaxYear,
-                    derivsFunc = derivsFunc,
-                    tmpYear = tmpMinYear)
-      ystart <- res$YStart
+      ystart <- odeintReturn(
+        ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
+        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpMinYear
+      )
 
       # Cumulative number diagnosed within j years afer infection in year i
       Dist_TimeToDiag[j, i] <- sum(tail(ystart, param$NoStage))
@@ -65,20 +54,11 @@ ModelTimeToDiagDist <- function(
       timeA <- info$ModelMinYear + (i - 1) + (j - 1)
       timeB <- timeA + 1
 
-      tmpYear <- min(timeA + 0.5, info$ModelMaxYear - 0.5 - bitSml)
-      res <- odeint(ystart,
-                    nVar = nEq,
-                    x1 = timeA + bitSml,
-                    x2 = timeB - bitSml,
-                    eps,
-                    h1,
-                    param,
-                    info,
-                    minYear = tmpMinYear,
-                    maxYear = tmpMaxYear,
-                    derivsFunc = derivsFunc,
-                    tmpYear = tmpYear)
-      ystart <- res$YStart
+      tmpYear <- min(timeA + 0.5, info$ModelMaxYear - 0.5 - BIT_SML)
+      ystart <- odeintReturn(
+        ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
+        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpYear
+      )
 
       # Cumulative number diagnosed within j years afer infection in year i
       Dist_ProbDiag[j, i] <- sum(tail(ystart, param$NoStage))

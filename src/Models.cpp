@@ -85,16 +85,16 @@ NumericVector TimeModel(
   const double& year,
   NumericVector& dydx
 ) {
-  NumericVector qoppa = param["Qoppa"];
-  NumericVector fInit = param["FInit"];
-  double alphaP = param["AlphaP"];
-  double mu = param["Mu"];
-  int noStage = param["NoStage"];
+  const NumericVector& qoppa = param["Qoppa"];
+  const NumericVector& fInit = param["FInit"];
+  const double& alphaP = param["AlphaP"];
+  const double& mu = param["Mu"];
+  const size_t& noStage = param["NoStage"];
 
-  //NumericVector dydx(nVar);
-  NumericVector delta = GetDelta(year, param);
+  const NumericVector delta = GetDelta(year, param);
 
-  int iEq = 0;
+  size_t j = 0;
+  size_t iEq = 0;
 
   // Primary infection
   dydx[iEq] = -alphaP * y[0] - mu * y[0];
@@ -102,15 +102,15 @@ NumericVector TimeModel(
 
   // Undiagnosed cases progressing through stages of infection
   dydx[iEq] = fInit[0] * alphaP * y[0] - (qoppa[0] + delta[0] + mu) * y[iEq];
-  for (int i = 1; i != noStage; ++i) {
-    int j = iEq + i;
+  for (size_t i = 1; i != noStage; ++i) {
+    j = iEq + i;
     dydx[j] = fInit[i] * alphaP * y[0] + qoppa[i - 1] * y[j - 1] - (qoppa[i] + delta[i] + mu) * y[j];
   }
   iEq += noStage;
 
   // Cumulative number of diagnoses in each stage
-  for (int i = 0; i != noStage; ++i) {
-    int j = iEq + i;
+  for (size_t i = 0; i != noStage; ++i) {
+    j = iEq + i;
     dydx[j] = delta[i] * y[j - noStage];
   }
 

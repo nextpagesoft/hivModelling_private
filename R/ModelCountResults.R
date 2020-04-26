@@ -4,9 +4,7 @@ ModelCountResults <- function(
   param
 ) {
   VERY_SML <- 1.0e-20
-  bitSml <- 1e-6
-  eps <- 0.0001
-  h1 <- 0.02
+  BIT_SML <- 1e-6
 
   numYears <- nrow(modelResults)
 
@@ -36,18 +34,9 @@ ModelCountResults <- function(
       timeA <- tmpMinYear + (j - i)
       timeB <- timeA + 1
 
-      res <- odeint(ystart,
-                    nVar = param$NoEq,
-                    x1 = timeA + bitSml,
-                    x2 = timeB - bitSml,
-                    eps,
-                    h1,
-                    param,
-                    info,
-                    minYear = tmpMinYear,
-                    maxYear = tmpMaxYear,
-                    derivsFunc = derivsFunc)
-      ystart <- res$YStart
+      ystart <- odeintReturn(
+        ystart, nVar = param$NoEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
+        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc)
       iEq <- 1
 
       # Number in primary infection (PI) at the end of year j of those infected in year i

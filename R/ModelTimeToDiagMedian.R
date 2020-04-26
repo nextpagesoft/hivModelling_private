@@ -3,9 +3,7 @@ ModelTimeToDiagMedian <- function(
   param,
   info
 ) {
-  h1 <- 0.02
-  eps <- 0.0001
-  bitSml <- 1e-6
+  BIT_SML <- 1e-6
 
   # Number of equations for calculating the distribution of time to diagnosis
   nEq <- 1 + 2 * param$NoStage
@@ -32,20 +30,10 @@ ModelTimeToDiagMedian <- function(
     timeA <- (j - 1) * 0.001
     timeB <- timeA + 0.001
 
-    res <- odeint(ystart,
-                  nVar = nEq,
-                  x1 = timeA + bitSml,
-                  x2 = timeB - bitSml,
-                  eps,
-                  h1,
-                  param,
-                  info,
-                  minYear = tmpMinYear,
-                  maxYear = tmpMaxYear,
-                  derivsFunc = derivsFunc,
-                  tmpYear = tmpMinYear)
-
-    ystart <- res$YStart
+    ystart <- odeintReturn(
+      ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
+      minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpMinYear
+    )
 
     sumYstart <- sum(tail(ystart, param$NoStage))
 

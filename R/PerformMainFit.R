@@ -160,7 +160,7 @@ PerformMainFit <- function(
   }
 
   res <- FitLLTotal(p, probSurv1996, param, info, data)
-  modelResults <- res$ModelResults
+  modelResults <- as.data.table(res$ModelResults)
   statRes <- FitStatistics(modelResults, info, data, param)
 
   countResults <- ModelCountResults(modelResults, info, param)

@@ -30,7 +30,7 @@ double odeint(
   double x = x1;
   double h = Sign(H1, x2 - x1);
 
-  NumericVector y = ystart;
+  NumericVector y = clone(ystart);
   double minLambda = VERY_LRG;
 
   List rkqsRes = List::create(
@@ -85,4 +85,22 @@ double odeint(
   }
 
   return minLambda;
+}
+
+// [[Rcpp::export]]
+NumericVector odeintReturn(
+  NumericVector& ystart,
+  const size_t& nVar,
+  const double& x1,
+  const double& x2,
+  const List& param,
+  const List& info,
+  const double& minYear,
+  const double& maxYear,
+  const DerivsFuncXPtr& derivsFunc,
+  const double tmpYear = 0
+) {
+  odeint(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear);
+
+  return ystart;
 }

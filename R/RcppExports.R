@@ -21,6 +21,10 @@ GetBSpline <- function(time, theta, kOrder, modelSplineN, myKnots, minYear, maxY
     .Call(`_hivModelling_GetBSpline`, time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 }
 
+Test <- function(x) {
+    invisible(.Call(`_hivModelling_Test`, x))
+}
+
 GetTimeInterval_std <- function(time, timeIntervals) {
     .Call(`_hivModelling_GetTimeInterval_std`, time, timeIntervals)
 }
@@ -59,6 +63,10 @@ Sign <- function(a, b) {
 
 odeint <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
     .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
+}
+
+odeintReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
+    .Call(`_hivModelling_odeintReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }
 
 odeintLoop <- function(modelYears, param, info, derivsFunc) {
