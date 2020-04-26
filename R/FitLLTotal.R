@@ -3,7 +3,8 @@ FitLLTotal <- function(
   probSurv1996,
   param,
   info,
-  data
+  data,
+  returnResults = TRUE
 ) {
   # CRAN checks
   Year <- NULL
@@ -87,10 +88,16 @@ FitLLTotal <- function(
     llAIDS$Result
   )
 
-  return(list(
-    LLTotal = llTotal,
-    ModelResults = modelResults
-  ))
+  if (returnResults) {
+    result <- list(
+      LLTotal = llTotal,
+      ModelResults = modelResults
+    )
+  } else {
+    result <- llTotal
+  }
+
+  return(result)
 }
 
 FitLLTotalDT <- function(

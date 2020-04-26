@@ -20,7 +20,6 @@ NumericVector CountModel(
   const double& mu = param["Mu"];
   const size_t& noStage = param["NoStage"];
 
-  // NumericVector dydx(nVar);
   const NumericVector delta = GetDelta(x, param);
 
   // Element 0

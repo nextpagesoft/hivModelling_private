@@ -25,8 +25,6 @@ void rkck(
   const int& kOrder = info["SplineOrder"];
   const int& modelSplineN = info["ModelSplineN"];
 
-  // NumericVector xTemps = x + h * NumericVector::create(a2, a3, a4, a5, a6);
-
   double xtemp = x + a2 * h;
   NumericVector ytemp = y + b21 * h * dydx;
   double lambda2 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
