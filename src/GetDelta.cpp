@@ -2,6 +2,7 @@
 
 using namespace Rcpp;
 
+// [[Rcpp::export]]
 size_t GetTimeInterval_std(
   const double& time,
   const NumericVector& timeIntervals
@@ -12,6 +13,18 @@ size_t GetTimeInterval_std(
   return std::distance(timeIntervals.begin(), pos);
 }
 
+// [[Rcpp::export]]
+size_t GetTimeInterval_std_lower(
+    const double& time,
+    const NumericVector& timeIntervals
+) {
+  NumericVector::const_iterator pos;
+
+  pos = std::lower_bound(timeIntervals.begin(), timeIntervals.end(), time);
+  return std::distance(timeIntervals.begin(), pos);
+}
+
+// [[Rcpp::export]]
 size_t GetTimeInterval_original(
   const double& time,
   const NumericVector& tc
@@ -22,6 +35,7 @@ size_t GetTimeInterval_original(
     dist = time - tc[iTime];
     iTime++;
   }
+  iTime--;
   iTime--;
   return iTime;
 }
@@ -48,13 +62,13 @@ NumericVector GetDelta(
   const double& time,
   const List& param
 ) {
-  const size_t deadStageIdx   = param["NoStage"];
-  const size_t stageCount     = deadStageIdx - 1;
-  const double delta4Fac      = param["Delta4Fac"];
+  const double& delta4Fac      = param["Delta4Fac"];
   const NumericMatrix& deltaM = param["DeltaM"];
   const NumericVector& tc     = param["Tc"];
+  const size_t deadStageIdx   = param["NoStage"];
+  const size_t stageCount     = deadStageIdx - 1;
 
-  size_t timeInterval = GetTimeInterval(time, tc);
+  const size_t timeInterval = GetTimeInterval(time, tc);
   const double ratio = (time - tc[timeInterval]) / (tc[timeInterval + 1] - tc[timeInterval]);
   NumericVector delta(deadStageIdx + 1);
 
@@ -76,7 +90,3 @@ NumericVector GetDelta(
 
   return delta;
 }
-
-/*** R
-GetDelta(time, param)
-*/

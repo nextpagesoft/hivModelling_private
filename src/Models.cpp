@@ -5,21 +5,23 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector derivsMainFunc(
-  double x,
-  NumericVector y,
-  double lambda,
-  int nVar,
-  List param,
-  double year
+NumericVector CountModel(
+  const double& x,
+  const NumericVector& y,
+  const double& lambda,
+  const size_t& nVar,
+  const List& param,
+  const double& year,
+  NumericVector& dydx
 ) {
-  NumericVector dydx(nVar);
-  NumericVector delta = GetDelta(x, param);
-  NumericVector qoppa = param["Qoppa"];
-  NumericVector fInit = param["FInit"];
-  double alphaP = param["AlphaP"];
-  double mu = param["Mu"];
-  int noStage = param["NoStage"];
+  const NumericVector& qoppa = param["Qoppa"];
+  const NumericVector& fInit = param["FInit"];
+  const double& alphaP = param["AlphaP"];
+  const double& mu = param["Mu"];
+  const size_t& noStage = param["NoStage"];
+
+  // NumericVector dydx(nVar);
+  const NumericVector delta = GetDelta(x, param);
 
   // Element 0
   dydx[0] = lambda - (alphaP - mu) * y[0];
@@ -48,7 +50,7 @@ NumericVector derivsMainFunc(
   dydx[cumUndiagDeathIdx] = qoppa[noStage - 1] * y[noStage] + mu * y[0];
 
   // Progress through stages
-  for (int i = 0; i != noStage; ++i) {
+  for (size_t i = 0; i != noStage; ++i) {
     if (i != 0) {
       undiagIdx++;
       dydx[undiagIdx] =
@@ -74,21 +76,23 @@ NumericVector derivsMainFunc(
 }
 
 // [[Rcpp::export]]
-NumericVector derivsTimeFunc(
-  double x,
-  NumericVector y,
-  double lambda,
-  int nVar,
-  List param,
-  double year
+NumericVector TimeModel(
+  const double& x,
+  const NumericVector& y,
+  const double& lambda,
+  const size_t& nVar,
+  const List& param,
+  const double& year,
+  NumericVector& dydx
 ) {
-  NumericVector dydx(nVar);
-  NumericVector delta = GetDelta(year, param);
   NumericVector qoppa = param["Qoppa"];
   NumericVector fInit = param["FInit"];
   double alphaP = param["AlphaP"];
   double mu = param["Mu"];
   int noStage = param["NoStage"];
+
+  //NumericVector dydx(nVar);
+  NumericVector delta = GetDelta(year, param);
 
   int iEq = 0;
 
@@ -116,10 +120,10 @@ NumericVector derivsTimeFunc(
 // [[Rcpp::export]]
 DerivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
 {
-  if (funcName == "derivsMainFunc") {
-    return DerivsFuncXPtr(new derivsFuncPtr(&derivsMainFunc));
-  } else if (funcName == "derivsTimeFunc") {
-    return DerivsFuncXPtr(new derivsFuncPtr(&derivsTimeFunc));
+  if (funcName == "CountModel") {
+    return DerivsFuncXPtr(new derivsFuncPtr(&CountModel));
+  } else if (funcName == "TimeModel") {
+    return DerivsFuncXPtr(new derivsFuncPtr(&TimeModel));
   } else {
     return DerivsFuncXPtr(R_NilValue);
   }

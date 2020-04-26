@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 #include "hivModelling_types.h"
-#include "GetBSpline.h"
 
 #ifndef _rkck_
 #define _rkck_
@@ -8,17 +7,17 @@
 using namespace Rcpp;
 
 void rkck(
-  double x,
-  NumericVector y,
-  NumericVector dydx,
-  int n,
-  double h,
-  List param,
-  List info,
-  double minYear,
-  double maxYear,
-  DerivsFuncXPtr derivsFunc,
-  double tmpYear,
+  const double& x,
+  const NumericVector& y,
+  const NumericVector& dydx,
+  const size_t& nVar,
+  const double& h,
+  const List& param,
+  const List& info,
+  const double& minYear,
+  const double& maxYear,
+  const DerivsFuncXPtr& derivsFunc,
+  const double& tmpYear,
   List& result
 );
 

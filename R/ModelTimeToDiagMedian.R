@@ -25,7 +25,7 @@ ModelTimeToDiagMedian <- function(
 
   j <- 0
   iNowStop <- FALSE
-  derivsFunc <- GetDerivsFuncXptr('derivsTimeFunc')
+  derivsFunc <- GetDerivsFuncXptr('TimeModel')
   while (!iNowStop) {
     # Continue calculations until t75 is not updated anymore
     j <- j + 1

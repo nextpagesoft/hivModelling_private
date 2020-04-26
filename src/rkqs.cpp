@@ -1,33 +1,30 @@
 // Takes one "quality-controlled" Runge-Kutta step
+#include "rkqs.h"
+#include "globals.h"
 #include "rkck.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
 void rkqs(
-  double x,
-  NumericVector y,
-  NumericVector dydx,
-  int n,
-  double htry,
-  double eps,
-  NumericVector yscal,
-  List param,
-  List info,
-  double minYear,
-  double maxYear,
-  DerivsFuncXPtr derivsFunc,
-  double tmpYear,
+  double& x,
+  NumericVector& y,
+  const NumericVector& dydx,
+  const size_t& nVar,
+  const double& htry,
+  const double& eps,
+  const NumericVector& yscal,
+  const List& param,
+  const List& info,
+  const double& minYear,
+  const double& maxYear,
+  const DerivsFuncXPtr& derivsFunc,
+  const double& tmpYear,
   List& rkqsRes,
   List& rkckRes
 ) {
-  static const double SAFETY = 0.9;
-  static const double PSHRNK = -0.25;
-  static const double ERRCON = 1.89e-4;
-  static const double PGROW = -0.2;
-
-  NumericVector yerr(n);
-  NumericVector ytemp(n);
+  NumericVector yerr(nVar);
+  NumericVector ytemp(nVar);
 
   double hNext = 0;
   double hDid = 0;
@@ -35,11 +32,11 @@ void rkqs(
   double h = htry;
 
   for (;;) {
-    rkck(x, y, dydx, n, h, param, info, minYear, maxYear, derivsFunc, tmpYear, rkckRes);
+    rkck(x, y, dydx, nVar, h, param, info, minYear, maxYear, derivsFunc, tmpYear, rkckRes);
 
-    NumericVector yOut = rkckRes["YOut"];
-    NumericVector yErr = rkckRes["YErr"];
-    minLambda = fmin(minLambda, rkckRes["MinLambda"]);
+    const NumericVector& yOut = rkckRes["YOut"];
+    const NumericVector& yErr = rkckRes["YErr"];
+    minLambda = fmin(minLambda, as<double>(rkckRes["MinLambda"]));
 
     double errMax = fmax(max(abs(yErr / yscal)), 0) / eps;
 
@@ -59,16 +56,7 @@ void rkqs(
     }
   }
 
-  rkqsRes["X"] = x;
-  rkqsRes["Y"] = y;
   rkqsRes["MinLambda"] = minLambda;
   rkqsRes["hDid"] = hDid;
   rkqsRes["hNext"] = hNext;
 }
-
-/*** R
-rkqs(
-  x, y, dydx, n, htry, eps, yscal, param, info, minYear, maxYear, derivsFuncXptr, tmpYear, rkqsRes,
-  rkckRes
-)
-*/

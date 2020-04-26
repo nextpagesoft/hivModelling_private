@@ -4,12 +4,13 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 NumericVector FitLLPoisson(
-  NumericVector y_m,
-  NumericVector y_d
+  const NumericVector& y_m,
+  const NumericVector& y_d
 ) {
   NumericVector LL(y_m.size());
 
-  for (int i = 0; i < LL.size(); ++i) {
+  const size_t n = LL.size();
+  for (size_t i = 0; i != n; ++i) {
     if (y_d[i] == 0.0) {
       LL[i] = 2 * y_m[i];
     } else {

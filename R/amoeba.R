@@ -12,15 +12,12 @@ amoeba <- function(
 
   if (verbose) {
     DisplayMessage <- function(rtol, nfunk, ytry) {
-      strs <- formatC(c(rtol, nfunk, ytry), width = 10,
-                      preserve.width = 'common')
-      message(sprintf('rtol = %s | nfunk = %s | ytry = %s',
-                      strs[1], strs[2], strs[3]))
+      strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
+      message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
     }
   } else {
     DisplayMessage <- function(rtol, nfunk, ytry) NULL
   }
-
 
   Swap1D <- function(y, a, b) {
     s <- y[a]
@@ -48,11 +45,7 @@ amoeba <- function(
 
     ptry <- psum * fac1 - p[ihi, ] * fac2
 
-    res <- FitLLTotal(ptry,
-                      probSurv1996,
-                      param,
-                      info,
-                      data)
+    res <- FitLLTotal(ptry, probSurv1996, param, info, data)
     ytry <- res$LLTotal
 
     if (ytry < y[ihi]) {
@@ -121,11 +114,7 @@ amoeba <- function(
     # Begin a new iteration. First extrapolate by a factor -1 through the face
     # of the simplex across from the high points, i.e., reflect the simplex from
     # the high point.
-    res <- AmoebaTry(p, y, psum, ndim, ihi, fac = -1,
-                     probSurv1996,
-                     param,
-                     info,
-                     data)
+    res <- AmoebaTry(p, y, psum, ndim, ihi, fac = -1, probSurv1996, param, info, data)
     ytry <- res$Ytry
     y <- res$Y
     psum <- res$Psum
@@ -136,11 +125,7 @@ amoeba <- function(
     ) {
       # Gives a result better than the best point, so try an additional
       # extrapolation by a factor 2.
-      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 2.0,
-                       probSurv1996,
-                       param,
-                       info,
-                       data)
+      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 2.0, probSurv1996, param, info, data)
       ytry <- res$Ytry
       y <- res$Y
       psum <- res$Psum
@@ -150,11 +135,7 @@ amoeba <- function(
       ytry >= y[inhi]
     ) {
       ysave <- y[ihi]
-      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 0.5,
-                       probSurv1996,
-                       param,
-                       info,
-                       data)
+      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 0.5, probSurv1996, param, info, data)
       ytry <- res$Ytry
       y <- res$Y
       psum <- res$Psum
@@ -170,11 +151,7 @@ amoeba <- function(
             psum <- 0.5 * (p[i, ] + p[ilo, ])
             p[i, ] <- psum
 
-            res <- FitLLTotal(psum,
-                              probSurv1996,
-                              param,
-                              info,
-                              data)
+            res <- FitLLTotal(psum, probSurv1996, param, info, data)
             y[i] <- res$LLTotal
           }
         }

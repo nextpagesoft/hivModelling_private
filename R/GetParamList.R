@@ -70,7 +70,7 @@ GetParamList <- function(
   theta <- rep(0, info$ModelSplineN)
   thetaF <- rep(0, sum(thetaP))
 
-  param[['NoEq']] <- 1 + param$NoStage + param$NoStage + param$NoStage + 1 + 1 + 1 + 1 + 1
+  param[['NoEq']] <- 6 + 3 * param$NoStage
   param[['Tc']] <- tc
   param[['DeltaP']] <- deltaP
   param[['DeltaM']] <- deltaM

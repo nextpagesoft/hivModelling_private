@@ -2,14 +2,48 @@
 
 using namespace Rcpp;
 
-double GetBSplineCubic(
-  double time,
-  NumericVector theta,
-  int modelSplineN,
-  NumericVector myKnots,
-  int k
+// [[Rcpp::export]]
+size_t GetInterval2(
+    const double& time,
+    const size_t& modelSplineN,
+    const NumericVector& myKnots,
+    const NumericVector& diffMyKnots
 ) {
-  double a = theta[k - 3];
+  size_t k = 0;
+  for (size_t i = 0; i != modelSplineN; ++i) {
+    if ((unsigned)(time - myKnots[i]) < diffMyKnots[i]) {
+      k = i;
+      break;
+    }
+  }
+
+  return k;
+}
+
+// [[Rcpp::export]]
+size_t GetInterval1(
+  const double& time,
+  const size_t& modelSplineN,
+  const NumericVector& myKnots
+) {
+  size_t k = 0;
+  for (size_t i = 0; i != modelSplineN; ++i) {
+    if (myKnots[i] <= time && time < myKnots[i + 1]) {
+      k = i;
+      break;
+    }
+  }
+
+  return k;
+}
+
+double GetBSplineCubic(
+  const double& time,
+  const NumericVector& theta,
+  const NumericVector& myKnots,
+  const size_t& k
+) {
+  const double& a = theta[k - 3];
   double b = theta[k - 2];
   double c = theta[k - 1];
   double d = theta[k];
@@ -46,20 +80,20 @@ double GetBSplineCubic(
 
 // [[Rcpp::export]]
 double GetBSpline(
-    double time,
-    NumericVector theta,
-    int kOrder,
-    int modelSplineN,
-    NumericVector myKnots,
-    double minYear,
-    double maxYear
+  const double& time,
+  const NumericVector& theta,
+  const size_t& kOrder,
+  const size_t& modelSplineN,
+  const NumericVector& myKnots,
+  const double& minYear,
+  const double& maxYear
 ) {
   if (time <= minYear || time > maxYear + 1e-7) {
     return 0;
   }
 
-  int k = 0;
-  for (int i = 0; i != modelSplineN; ++i) {
+  size_t k = 0;
+  for (size_t i = 0; i != modelSplineN; ++i) {
     if (myKnots[i] <= time && time < myKnots[i + 1]) {
       k = i;
       break;
@@ -67,17 +101,17 @@ double GetBSpline(
   }
 
   if (kOrder == 4) {
-    return GetBSplineCubic(time, theta, modelSplineN, myKnots, k);
+    return GetBSplineCubic(time, theta, myKnots, k);
   }
 
   NumericVector d(kOrder);
-  int p = kOrder - 1;
-  for (int j = 0; j != kOrder; ++j) {
+  const size_t p = kOrder - 1;
+  for (size_t j = 0; j != kOrder; ++j) {
     d[j] = theta[j + k - p];
   }
 
-  for (int r = 1; r != kOrder; ++r) {
-    for (int j = p; j != r - 1; --j) {
+  for (size_t r = 1; r != kOrder; ++r) {
+    for (size_t j = p; j != r - 1; --j) {
       double alpha = (time - myKnots[j + k - p]) / (myKnots[j + k + 1  - r] - myKnots[j + k - p]);
       d[j] = (1 - alpha) * d[j - 1] + alpha * d[j];
     }
@@ -87,7 +121,3 @@ double GetBSpline(
 
   return val;
 }
-
-/*** R
-GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
-*/
