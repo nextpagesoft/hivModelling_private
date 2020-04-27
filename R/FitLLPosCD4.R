@@ -12,13 +12,15 @@ FitLLPosCD4 <- function(
   LL_PosCD4_Year <- sprintf('LL_PosCD4_Year_%d', group)
 
   totModels <- modelResults[, N_HIV_Stage_S_Obs]
-  totDatas <- data[[N_HIV_Stage]]
+  totDatas <- data[, N_HIV_Stage]
+
+  modelYears <- modelResults[, 'Year']
 
   vals <- rep(0, length(totModels))
   sel <-
     totModels > 0 &
-    modelResults[, 'Year'] >= info$FitPosCD4MinYear &
-    modelResults[, 'Year'] <= info$FitPosCD4MaxYear
+    modelYears >= info$FitPosCD4MinYear &
+    modelYears <= info$FitPosCD4MaxYear
 
   if (info$ModelFitDist == 'POISSON') {
     vals[sel] <- FitLLPoisson(totModels[sel], totDatas[sel])

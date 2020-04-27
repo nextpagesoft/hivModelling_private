@@ -19,11 +19,6 @@ GetPopulationData <- function(
   context,
   populationSet = NULL
 ) {
-  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
-  on.exit({
-    cli::cli_end()
-  })
-
   `.` <- NULL
   Year <- NULL
 
@@ -35,16 +30,13 @@ GetPopulationData <- function(
   }
 
   if (length(populationSet) == 0) {
-    cli::cli_alert_info(
+    PrintAlert(
       'No populations have been selected from input data. All populations will be aggregated.'
     )
     populationSet <- names(data)
   }
-  cli::cli_alert_info(
-    sprintf(
-      'Data set is being prepared for a combination of the following populations: {.orange %s}',
-      paste(populationSet, collapse = ', ')
-    )
+  PrintAlert(
+    'Data set is being prepared for a combination of the following populations: {.val {populationSet}}'
   )
 
   if (!all(populationSet %in% names(data))) {

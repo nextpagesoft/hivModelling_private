@@ -9,7 +9,7 @@ FitLLrAIDS <- function(
   psiry <- 0
 
   totModels <- modelResults[, 'N_AIDS']
-  totDatas <- data[['N_AIDS']]
+  totDatas <- data[, 'N_AIDS']
 
   for (year in seq_len(nrow(modelResults))) {
     if (

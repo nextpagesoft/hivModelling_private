@@ -9,17 +9,9 @@ FitAmoeba <- function(
   data,
   verbose = FALSE
 ) {
-  pFit <- c(
-    rep(0.1, param$NoDelta),
-    rep(200, param$NoTheta)
-  )
+  pFit <- c(rep(0.1, param$NoDelta), rep(200, param$NoTheta))
 
-  amoebaP <- matrix(
-    rep(pParam, nParam + 1),
-    nParam + 1,
-    nParam,
-    byrow = TRUE
-  )
+  amoebaP <- matrix(rep(pParam, nParam + 1), nParam + 1, nParam, byrow = TRUE)
   amoebaY <- rep(0, nParam + 1)
 
   for (i in seq_len(nParam + 1)) {
@@ -29,8 +21,7 @@ FitAmoeba <- function(
 
     p <- amoebaP[i, ]
 
-    res <- FitLLTotal(p, probSurv1996, param, info, data)
-    amoebaY[i] <- res$LLTotal
+    amoebaY[i] <- FitLLTotal(p, probSurv1996, param, info, data, detailedResults = FALSE)
   }
 
   res <- amoeba(amoebaP, amoebaY, nParam, ftol, probSurv1996, param, info, data, verbose)

@@ -5,13 +5,14 @@ FitLLAIDSPos <- function(
   param
 ) {
   totModels <- modelResults[, 'N_HIV_Stage_S_Obs_5']
-  totDatas <- data[['N_HIV_Stage_5']]
+  totDatas <- data[, 'N_HIV_Stage_5']
+  modelYears <- modelResults[, 'Year']
 
   vals <- rep(0, length(totModels))
   sel <-
     totModels > 0 &
-    modelResults[, 'Year'] >= info$FitAIDSPosMinYear &
-    modelResults[, 'Year'] <= info$FitAIDSPosMaxYear
+    modelYears >= info$FitAIDSPosMinYear &
+    modelYears <= info$FitAIDSPosMaxYear
 
   if (info$ModelFitDist == 'POISSON') {
     vals[sel] <- FitLLPoisson(totModels[sel], totDatas[sel])

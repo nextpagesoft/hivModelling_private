@@ -14,7 +14,7 @@
 #' @export
 GetRunContext <- function(...)
 {
-  cli::cli_h1('1. Context')
+  PrintH1('1. Context')
 
   # Prepare provided arguments
   args <- list(...)

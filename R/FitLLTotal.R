@@ -4,7 +4,7 @@ FitLLTotal <- function(
   param,
   info,
   data,
-  returnResults = TRUE
+  detailedResults = TRUE
 ) {
   # CRAN checks
   Year <- NULL
@@ -47,7 +47,7 @@ FitLLTotal <- function(
   # Changes made by reference
   modelResults <- cbind(
     modelResults,
-    ModelAnnualNumbers(modelResults, probSurv1996, data$Prob_CD4)
+    ModelAnnualNumbers(modelResults, probSurv1996, data[, 'Prob_CD4'])
   )
 
   if (minLambda < 0) {
@@ -88,7 +88,7 @@ FitLLTotal <- function(
     llAIDS$Result
   )
 
-  if (returnResults) {
+  if (detailedResults) {
     result <- list(
       LLTotal = llTotal,
       ModelResults = modelResults

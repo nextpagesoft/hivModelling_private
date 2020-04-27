@@ -45,8 +45,7 @@ amoeba <- function(
 
     ptry <- psum * fac1 - p[ihi, ] * fac2
 
-    res <- FitLLTotal(ptry, probSurv1996, param, info, data)
-    ytry <- res$LLTotal
+    ytry <- FitLLTotal(ptry, probSurv1996, param, info, data, detailedResults = FALSE)
 
     if (ytry < y[ihi]) {
       y[ihi] <- ytry
@@ -54,12 +53,7 @@ amoeba <- function(
       p[ihi, ] <- ptry
     }
 
-    return(list(
-      Ytry = ytry,
-      Y = y,
-      Psum = psum,
-      P = p
-    ))
+    return(list(Ytry = ytry, Y = y, Psum = psum, P = p))
   }
 
   # Code -----------------------------------------------------------------------

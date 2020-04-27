@@ -13,11 +13,11 @@ FitLLrRest <- function(
   N_HIV_Stage_S_Obs_HIVAIDS <- sprintf('N_HIV_Stage_S_Obs_%d', param$NoStage)
   N_HIV_Stage_HIVAIDS <- sprintf('N_HIV_Stage_%d', param$NoStage)
   totModelsHIVAIDS <- modelResults[, N_HIV_Stage_S_Obs_HIVAIDS]
-  totDatasHIVAIDS <- data[[N_HIV_Stage_HIVAIDS]]
+  totDatasHIVAIDS <- data[, N_HIV_Stage_HIVAIDS]
   totModelsHIV <- modelResults[, 'N_HIV_S_Obs']
-  totDatasHIV <- data[['N_HIV']]
+  totDatasHIV <- data[, 'N_HIV']
   totModelsCD4 <- modelResults[, sprintf('N_HIV_Stage_S_Obs_%d', seq_len(noCD4))]
-  totDatasCD4 <- data[, sprintf('N_HIV_Stage_%d', seq_len(noCD4)), with = FALSE]
+  totDatasCD4 <- data[, sprintf('N_HIV_Stage_%d', seq_len(noCD4))]
 
   for (year in seq_len(nrow(modelResults))) {
     # Category HIV/AIDS
@@ -56,9 +56,9 @@ FitLLrRest <- function(
         modelResults[year, 'Year'] <= info$FitPosCD4MaxYear
       ) {
         psiry <- psiry +
-          digamma(r + totDatasCD4[[j]][year]) -
+          digamma(r + totDatasCD4[year, j]) -
           digamma(r) +
-          (totModelsCD4[year, j] - totDatasCD4[[j]][year]) / (r + totModelsCD4[year, j]) +
+          (totModelsCD4[year, j] - totDatasCD4[year, j]) / (r + totModelsCD4[year, j]) +
           log(r / (r + totModelsCD4[year, j]))
       }
     }

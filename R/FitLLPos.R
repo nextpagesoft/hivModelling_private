@@ -7,14 +7,15 @@ FitLLPos <- function(
   VERY_LRG <- 1e+10
 
   totModels <- modelResults[, 'N_HIV_S_Obs']
-  totDatas <- data[['N_HIV']]
+  totDatas <- data[, 'N_HIV']
+  modelYears <- modelResults[, 'Year']
 
   vals <- rep(0, length(totModels))
   sel <-
     totModels > 0 &
-    modelResults[, 'Year'] >= info$FitPosMinYear &
-    modelResults[, 'Year'] <= info$FitPosMaxYear &
-    (modelResults[, 'Year'] < info$FitPosCD4MinYear | modelResults[, 'Year'] > info$FitPosCD4MaxYear)
+    modelYears >= info$FitPosMinYear &
+    modelYears <= info$FitPosMaxYear &
+    (modelYears < info$FitPosCD4MinYear | modelYears > info$FitPosCD4MaxYear)
 
   if (info$ModelFitDist == 'POISSON') {
     vals[sel] <- FitLLPoisson(totModels[sel], totDatas[sel])

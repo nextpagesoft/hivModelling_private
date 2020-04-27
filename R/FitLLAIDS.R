@@ -5,7 +5,7 @@ FitLLAIDS <- function(
   param
 ) {
   totModels <- modelResults[, 'N_AIDS']
-  totDatas <- data[['N_AIDS']]
+  totDatas <- data[, 'N_AIDS']
 
   vals <- rep(0, length(totModels))
   sel <-

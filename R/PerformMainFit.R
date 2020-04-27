@@ -38,43 +38,34 @@ PerformMainFit <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
-  cli::cli_h1('2. Main fit')
-  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
-  on.exit({
-    cli::cli_end()
-  })
+  PrintH1('2. Main fit')
 
-  cli::cli_h2('2.1. Info')
+  PrintH2('2.1. Info')
   if (is.null(info) || is.null(param)) {
     runType <- 'MAIN'
     info <- GetInfoList(context)
     param <- GetParamList(context, info)
-    cli::cli_alert_info(
-      paste0(
-        'Run type: {.orange ',
-        runType,
-        '} - all initial parameters will be determined from context')
+    PrintAlert(
+      'Run type: {.val {runType}}',
+      '- all initial parameters will be determined from object {.var context}'
     )
   } else {
     runType <- 'MAIN_WITH_INIT'
-    cli::cli_alert_info(
-      paste0(
-        'Run type: {.orange ',
-        runType,
-        '} - all initial parameters will be determined from provided "info" and "param" objects'
-      )
+    PrintAlert(
+      'Run type: {.val {runType}}',
+      '- all initial parameters will be determined from objects',
+      '{.var info} and {.var param}'
     )
   }
   probSurv1996 <- GetProvSurv96(param, info)
+  dataMatrix <- as.matrix(data)
 
   tmpModelFitDist <- info$ModelFitDist
   info$ModelFitDist <- 'POISSON'
   if (tmpModelFitDist != info$ModelFitDist) {
-    cli::cli_alert_info(
-      paste0(
-        'Input distribution was set to {.orange "', tmpModelFitDist, '"}. ',
-        'This is overridden to {.orange "', info$ModelFitDist, '"} for the main fit.'
-      )
+    PrintAlert(
+      'Input distribution was set to {.val {tmpModelFitDist}}.',
+      'This is overridden to {.val {info$ModelFitDist}} for the main fit.'
     )
   }
 
@@ -82,12 +73,12 @@ PerformMainFit <- function(
   while (!converged) {
     nTheta <- 100
     while (nTheta != param$NoTheta) {
-      cli::cli_alert_info('Number of estimated spline weights: {.orange {param$NoTheta}}')
+      PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
         runType = runType,
-        probSurv1996, param, info, data,
+        probSurv1996, param, info, dataMatrix,
         maxNoFit, ctol, ftol, verbose
       )
 
@@ -106,33 +97,36 @@ PerformMainFit <- function(
     }
 
     if (!converged) {
-      cli::cli_alert_danger('Fit did NOT converge, goodness-of-fit: {.orange {lastResults$LLTotal}}')
+      PrintAlert(
+        'Fit did NOT converge, goodness-of-fit: {.val {lastResults$LLTotal}}',
+        type = 'danger'
+      )
       context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
       info <- GetInfoList(context)
       param <- GetParamList(context, info)
       probSurv1996 <- GetProvSurv96(param, info)
     } else {
-      cli::cli_alert_success('Fit converged, goodness-of-fit: {.orange {lastResults$LLTotal}}')
+      PrintAlert(
+        'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',
+        type = 'success'
+      )
     }
   }
 
-  cli::cli_h2('2.3. Results')
+  PrintH2('2.3. Results')
 
-  thetas <- sprintf(
-    'theta[%d]: {.orange %f} - %s',
-    seq_along(param$Theta),
-    param$Theta,
-    ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
-  )
-  cli::cli_ul()
-  cli::cli_li(sprintf('beta[%d]: %f', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]))
-  sapply(thetas, cli::cli_li)
-  cli::cli_end()
+  PrintBullets(c(
+    sprintf('beta[%d]: {.val %f}', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]),
+    sprintf(
+      'theta[%d]: {.val %f} - %s', seq_along(param$Theta), param$Theta,
+      ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
+    )
+  ))
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial
   if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-    cli::cli_alert_info('Estimating overdispersion type ', info$OverdisperionType)
+    PrintAlert('Estimating overdispersion type {.val {info$OverdisperionType}}')
 
     rMin <- 1.0
     rMax <- 100000
@@ -143,7 +137,7 @@ PerformMainFit <- function(
       extraArgs <- list(
         Type = 0,
         ModelResults = lastResults$ModelResults,
-        Data = data,
+        Data = dataMatrix,
         Info = info,
         Param = param
       )
@@ -151,15 +145,13 @@ PerformMainFit <- function(
       param$RDispAIDS <- zbrent(FitLLrAIDS, rMin, rMax, ftol, extraArgs)
       param$RDispRest <- zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
 
-      cli::cli_alert_info(sprintf(
-        'Overdispersion: AIDS = {.orange %f}, Rest = {.orange %f}',
-        param$RDispAIDS,
-        param$RDispRest)
+      PrintAlert(
+        'Overdispersion: AIDS = {.val {param$RDispAIDS}}, Rest = {.val {param$RDispRest}}'
       )
     }
   }
 
-  res <- FitLLTotal(p, probSurv1996, param, info, data)
+  res <- FitLLTotal(p, probSurv1996, param, info, dataMatrix)
   modelResults <- as.data.table(res$ModelResults)
   statRes <- FitStatistics(modelResults, info, data, param)
 

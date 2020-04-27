@@ -18,11 +18,7 @@ ReadModelFile <- function(
   modelFilePath = NULL,
   inputDataPath = NULL
 ) {
-  cli::cli_h2('1.1. Model file')
-  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
-  on.exit({
-    cli::cli_end()
-  })
+  PrintH2('1.1. Model file')
 
   model <- NULL
 
@@ -54,15 +50,15 @@ ReadModelFile <- function(
   }
 
   if (is.null(model)) {
-    cli::cli_alert_info('No model file found. Parameters will be determined from data.')
+    PrintAlert('No model file found. Parameters will be determined from data')
     return(NULL)
   }
 
-  cli::cli_alert_info('Model file {.orange {modelFilePath}} loaded.')
+  PrintAlert('Model file {.file {modelFilePath}} loaded', type = 'info')
 
-  version <- as.integer(model$Model$FileVersion[[1]])
-  if (version != 2) {
-    cli::cli_alert_danger('Version {.orange {version}} of model file is not supported.')
+  modelVersion <- as.integer(model$Model$FileVersion[[1]])
+  if (modelVersion != 2) {
+    PrintAlert('Version {.val {modelVersion}} of model file is not supported', type = 'danger')
     return(NULL)
   }
 
@@ -72,11 +68,9 @@ ReadModelFile <- function(
       inputDataPath <- fs::path_norm(fs::path_join(c(dirname(modelFilePath), inputDataPath)))
     }
     if (!dir.exists(inputDataPath)) {
-      cli::cli_alert_info(
-        paste(
-          'Input data path {.orange {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
-          'It will not be incorporated in to the run context.'
-        )
+      PrintAlert(
+        'Input data path {.path {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
+        'It will not be incorporated in to the run context.'
       )
       inputDataPath <- NULL
     }

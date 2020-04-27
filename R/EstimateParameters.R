@@ -38,11 +38,10 @@ EstimateParameters <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
-  cli::cli_h2('2.2. Iterations')
+  PrintH2('2.2. Iterations')
 
   OptimFunc <- function(p) {
-    res <- FitLLTotal(p, probSurv1996, param, info, data)
-    return(res$LLTotal)
+    return(FitLLTotal(p, probSurv1996, param, info, data, detailedResults = FALSE))
   }
 
   # Number of parameters in the fit:
@@ -57,60 +56,63 @@ EstimateParameters <- function(
   llMin <- 1e+10
   iter <- 1
 
-  startTime <- Sys.time()
-  iterHeader <- paste0('Iteration ', iter, ': Scale')
-  processId <- cli::cli_process_start(iterHeader)
-  if (runType == 'MAIN') {
-    # Step 1 : determine the scale of the parameters
-    defNoCD4 <- param$NoStage - 1
-    iMax <- 5
-    jMax <- 10
-    for (i in seq_len(iMax)) {
-      # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
-      beta <- rep(i * 0.05, defNoCD4)
-      # Extra contribution to delta4
-      beta[defNoCD4] <- beta[defNoCD4] + 0.4
-      # Keep delta's constant over time
-      if (param$NoDelta > defNoCD4) {
-        beta[(defNoCD4 + 1):param$NoDelta] <- 0
-      }
-      beta <- beta[seq_len(param$NoDelta)]
+  totalStartTime <- Sys.time()
+  algType <- 'SCALE'
+  processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}')
+  tryCatch({
+    if (runType == 'MAIN') {
+      # Step 1 : determine the scale of the parameters
+      defNoCD4 <- param$NoStage - 1
+      iMax <- 5
+      jMax <- 10
+      for (i in seq_len(iMax)) {
+        # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
+        beta <- rep(i * 0.05, defNoCD4)
+        # Extra contribution to delta4
+        beta[defNoCD4] <- beta[defNoCD4] + 0.4
+        # Keep delta's constant over time
+        if (param$NoDelta > defNoCD4) {
+          beta[(defNoCD4 + 1):param$NoDelta] <- 0
+        }
+        beta <- beta[seq_len(param$NoDelta)]
 
-      for (j in seq_len(jMax + 1) - 1) {
-        # Assume all theta's the same (range: 1 to 10^j_max)
-        thetaF <- rep((j + 1) * 10^j, param$NoTheta)
-        p <- GetParameterVector(beta, thetaF)
-        res <- FitLLTotal(p, probSurv1996, param, info, data)
-        ll <- res$LLTotal
+        for (j in seq_len(jMax + 1) - 1) {
+          # Assume all theta's the same (range: 1 to 10^j_max)
+          thetaF <- rep((j + 1) * 10^j, param$NoTheta)
+          p <- GetParameterVector(beta, thetaF)
+          llTotal <- OptimFunc(p)
 
-        if (ll < llMin) {
-          llMin <- ll
-          pParam <- p
-          iterResults[[iter]] <- list(
-            P = p,
-            LLTotal = res$LLTotal,
-            ModelResults = res$ModelResults
-          )
+          if (llTotal < llMin) {
+            llMin <- llTotal
+            pParam <- p
+          }
         }
       }
+      iterResults[[iter]] <- list(
+        P = p,
+        LLTotal = llMin
+      )
+    } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
+      beta <- param$Beta
+      thetaF <- param$ThetaF
+      pParam <- GetParameterVector(beta, thetaF)
+      llTotal <- OptimFunc(pParam)
+      iterResults[[iter]] <- list(
+        P = pParam,
+        LLTotal = llTotal
+      )
+    } else {
+      stop('EstimatedParameters: Unsupported estimation run type')
     }
-  } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
-    beta <- param$Beta
-    thetaF <- param$ThetaF
-    pParam <- GetParameterVector(beta, thetaF)
-    res <- FitLLTotal(pParam, probSurv1996, param, info, data)
-    iterResults[[iter]] <- list(
-      P = pParam,
-      LLTotal = res$LLTotal,
-      ModelResults = res$ModelResults
-    )
-  } else {
-    stop('EstimatedParameters: Unsupported estimation run type')
-  }
-  cli::cli_process_done(processId, paste(iterHeader, '| Run time:', format(Sys.time() - startTime)))
+  }, error = function(e) cli::cli_process_failed())
+  EndProcess(
+    processId,
+    'Iteration {.val {iter}}: {.val {algType}} ',
+    '| Run time: {.timestamp {format(Sys.time() - totalStartTime)}}'
+  )
 
   # Stop fitting when the change in deviance is smaller than ctol.
-  totalStartTime <- Sys.time()
+  algType <- ifelse(runType %in% c('MAIN', 'MAIN_WITH_INIT'), 'AMOEBA', algorithm)
   llOld <- 0
   while (
     abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&
@@ -119,51 +121,52 @@ EstimateParameters <- function(
     iter <- iter + 1
 
     startTime <- Sys.time()
+    processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}')
 
-    if (runType %in% c('MAIN', 'MAIN_WITH_INIT')) {
-      iterHeader <- paste0('Iteration ', iter, ': Amoeba')
-      processId <- cli::cli_process_start(iterHeader)
-      res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
-    } else {
-      iterHeader <- paste0('Iteration ', iter, ': ', algorithm)
-      processId <- cli::cli_process_start(iterHeader)
-      # Algorithms checked:
-      # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
-      # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
-      # NLOPT_LN_SBPLX        - very slow, interrupted
-      # NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
-      # NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
-      # NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
-      # NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
-      optimRes <- nloptr::nloptr(
-        pParam,
-        OptimFunc,
-        lb = c(rep(0, param$NoDelta), rep(-1e+4, param$NoTheta)),
-        ub = c(rep(1, param$NoDelta), rep(1e+4, param$NoTheta)),
-        opts = list(
-          algorithm = algorithm,
-          ftol_abs = ftol,
-          maxeval = 50000
+    tryCatch({
+      if (algType == 'AMOEBA') {
+        res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
+      } else {
+        # Algorithms checked:
+        # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
+        # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
+        # NLOPT_LN_SBPLX        - very slow, interrupted
+        # NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
+        # NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
+        # NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
+        # NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
+        optimRes <- nloptr::nloptr(
+          pParam,
+          OptimFunc,
+          lb = c(rep(0, param$NoDelta), rep(-1e+4, param$NoTheta)),
+          ub = c(rep(1, param$NoDelta), rep(1e+4, param$NoTheta)),
+          opts = list(
+            algorithm = algorithm,
+            ftol_abs = ftol,
+            maxeval = 50000
+          )
         )
-      )
 
-      p <- optimRes$solution
-      fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
+        p <- optimRes$solution
+        fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
 
-      # cli::cli_alert_info(paste0('  LLTotal = ', fitRes$LLTotal))
-      res <- modifyList(
-        list(P = p),
-        fitRes
-      )
-    }
-    cli::cli_process_done(processId, paste(iterHeader, '| Run time:', format(Sys.time() - startTime)))
+        res <- modifyList(
+          list(P = p),
+          fitRes
+        )
+      }
+    }, error = function(e) cli::cli_process_failed())
+
+    EndProcess(
+      processId,
+      'Iteration {.val {iter}}: {.val {algType}} | Run time: {.timestamp {format(Sys.time() - startTime)}}'
+    )
 
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
-  cli::cli_alert_info(paste0('Total run time: ', format(Sys.time() - totalStartTime)))
-  cat('\n')
+  PrintAlert('Total run time: {.timestamp {format(Sys.time() - totalStartTime)}}')
 
   lastResults <- iterResults[[iter]]
 
