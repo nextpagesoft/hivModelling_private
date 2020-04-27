@@ -107,9 +107,11 @@ PerformBootstrapFit <- function(
 
   GetDataWeights(dataBS)
 
+  dataBSMatrix <- as.matrix(dataBS)
+
   # Perform fit on the generated data
   res <- EstimateParameters(
-    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBS, maxNoFit, ctol, ftol,
+    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBSMatrix, maxNoFit, ctol, ftol,
     algorithm, verbose
   )
 
@@ -119,8 +121,8 @@ PerformBootstrapFit <- function(
   info <- res$Info
   iterResults <- res$IterResults
 
-  res <- FitLLTotal(p, probSurv1996, param, info, dataBS)
-  modelResults <- res$ModelResults
+  res <- FitLLTotal(p, probSurv1996, param, info, dataBSMatrix)
+  modelResults <- as.data.table(res$ModelResults)
   statRes <- FitStatistics(modelResults, info, dataBS, param)
 
   countResults <- ModelCountResults(modelResults, info, param)

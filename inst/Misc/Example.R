@@ -2,11 +2,9 @@ library(data.table)
 library(hivModelling)
 
 # RUN ----------------------------------------------------------------------------------------------
-
 context <- GetRunContext(
   settings = list(
-    ModelFilePath = '~/share/HIV test files/Data/test NL/Full data model.xml',
-    InputDataPath = '~/share/HIV test files/Data/test NL/'
+    InputDataPath = system.file('TestData/Test NL.zip', package = 'hivModelling')
   )
 )
 
