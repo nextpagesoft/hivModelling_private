@@ -1,3 +1,15 @@
+#' PrintH1
+#'
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' PrintH1('Test')
+#'
+#' @export
 PrintH1 <- function(
   ...,
   collapse = ' ',
@@ -8,6 +20,18 @@ PrintH1 <- function(
   invisible(NULL)
 }
 
+#' PrintH2
+#'
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' PrintH2('Test')
+#'
+#' @export
 PrintH2 <- function(
   ...,
   collapse = ' ',
@@ -18,6 +42,23 @@ PrintH2 <- function(
   invisible(NULL)
 }
 
+#' PrintAlert
+#'
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param type Type of alert
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' PrintAlert('Test')
+#' PrintAlert('Test', type = 'success')
+#' PrintAlert('Test', type = 'danger')
+#' PrintAlert('Test', type = 'warning')
+#' PrintAlert('Test', type = 'info')
+#'
+#' @export
 PrintAlert <- function(
   ...,
   collapse = ' ',
@@ -39,6 +80,20 @@ PrintAlert <- function(
   invisible(NULL)
 }
 
+#' StartProcess
+#'
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' \dontrun{
+#' processId <- StartProcess('Test')
+#' }
+#'
+#' @export
 StartProcess <- function(
   ...,
   collapse = ' ',
@@ -49,6 +104,21 @@ StartProcess <- function(
   invisible(processId)
 }
 
+#' EndProcess
+#'
+#' @param processId Process Id
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' \dontrun{
+#' EndProcess(processId, 'Test')
+#' }
+#'
+#' @export
 EndProcess <- function(
   processId = NULL,
   ...,
@@ -60,9 +130,19 @@ EndProcess <- function(
   invisible(NULL)
 }
 
+#' PrintBullets
+#'
+#' @param items Vector of text items
+#' @param .envir Environment for lookup of variables referenced in the text
+#'
+#' @return NULL
+#'
+#' @examples
+#' PrintBullets(c('Item 1', 'Item 2'))
+#'
+#' @export
 PrintBullets <- function(
   items = c(),
-  collapse = ' ',
   .envir = parent.frame()
 ) {
   cli::cli_ul()
@@ -72,6 +152,17 @@ PrintBullets <- function(
   invisible(NULL)
 }
 
+#' CollapseTexts
+#'
+#' @param ... Text to be collapsed
+#' @param collapse String to be used for concatenating texts
+#'
+#' @return NULL
+#'
+#' @examples
+#' CollapseTexts('Item 1', 'Item 2')
+#'
+#' @export
 CollapseTexts <- function(
   ...,
   collapse = ' '

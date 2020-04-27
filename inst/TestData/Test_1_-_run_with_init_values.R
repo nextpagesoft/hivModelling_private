@@ -25,7 +25,7 @@ plots <- CreateOutputPlots(mainResults)
 # RECONCILE ----------------------------------------------------------------------------------------
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
-oldVer <- fread(GetFilePath('Test_1_-_Windows results.csv'))
+oldVer <- fread(GetFilePath('Test_1_-_Windows_results.csv'))
 oldVer[, ':='(
   Version = 'C',
   Timestamp = NULL
