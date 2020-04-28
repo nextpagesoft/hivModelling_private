@@ -10,21 +10,21 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_1.zip')
+    InputDataPath = GetFilePath('Test_2.zip')
   )
 )
 
 data <- GetPopulationData(context)
 
 mainResults <- PerformMainFit(context, data)
-# saveRDS(mainResults, GetFilePath('Test_1_-_full_run_results.RDS'))
+# saveRDS(mainResults, GetFilePath('Test_2_-_full_run_results.RDS'))
 
 plots <- CreateOutputPlots(mainResults)
 
 # RECONCILE ----------------------------------------------------------------------------------------
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
-oldVer <- fread(GetFilePath('Test_1_-_Windows_results.csv'))
+oldVer <- fread(GetFilePath('Test_2_-_Windows_results.csv'))
 oldVer[, ':='(
   Version = 'C',
   Timestamp = NULL
@@ -38,6 +38,7 @@ compareDT <- compareDT[, lapply(.SD, sum), .SDcols = numCols, by = .(Version)]
 compareDT <- melt(compareDT, id.vars = 'Version', variable.name = 'Column', value.name = 'Value')
 compareDT <- dcast(compareDT, Column ~ Version, value.var = 'Value')
 compareDT[, Difference := R - C]
+compareDT[, DifferencePerc := Difference / C]
 errors <- compareDT[abs(Difference) > 1e-3]
 if (nrow(errors) > 0) {
   PrintAlert('Reconciliation failed:', type = 'danger')
