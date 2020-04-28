@@ -89,8 +89,8 @@ EstimateParameters <- function(
         }
       }
       iterResults[[iter]] <- list(
-        P = p,
-        LLTotal = llMin
+        LLTotal = llMin,
+        P = pParam
       )
     } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
       beta <- param$Beta
@@ -102,7 +102,7 @@ EstimateParameters <- function(
         LLTotal = llTotal
       )
     } else {
-      stop('EstimatedParameters: Unsupported estimation run type')
+      stop('EstimateParameters: Unsupported estimation run type')
     }
   }, error = function(e) cli::cli_process_failed())
   EndProcess(
