@@ -78,10 +78,6 @@ list(
 
     DeltaAIDS = 12,
 
-    # NoDelta = 1,
-    #
-    # NoTheta = 8,
-
     NoThetaFix = 0,
 
     Smoothing1 = 0,
@@ -89,6 +85,8 @@ list(
     Smoothing2 = 0,
 
     # Annual intervals time diagnosis
-    DefNoDiagTime = 15
+    DefNoDiagTime = 15,
+
+    ChiSqDiff = 3.84
   )
 )

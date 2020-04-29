@@ -10,7 +10,7 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_2.zip')
+    InputDataPath = GetFilePath('Test_3.zip')
   )
 )
 
@@ -24,7 +24,7 @@ plots <- CreateOutputPlots(mainResults)
 # RECONCILE ----------------------------------------------------------------------------------------
 newVer <- mainResults$MainOutputs
 newVer[, Version := 'R']
-oldVer <- fread(GetFilePath('Test_2_-_Windows_results.csv'))
+oldVer <- fread(GetFilePath('Test_3_-_Windows_results.csv'))
 oldVer[, ':='(
   Version = 'C',
   Timestamp = NULL

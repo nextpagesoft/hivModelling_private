@@ -29,11 +29,13 @@ GetParamList <- function(
     Delta4Fac = incidenceParams$Delta4Fac,
     DeltaAIDS = incidenceParams$DeltaAIDS,
     NoThetaFix = incidenceParams$NoThetaFix,
+    NoThetaFixInit = 0,
     Smoothing1 = incidenceParams$Smoothing1,
     Smoothing2 = incidenceParams$Smoothing2,
     RDispAIDS = incidenceParams$RDisp,
     RDispRest = incidenceParams$RDisp,
-    DefNoDiagTime = incidenceParams$DefNoDiagTime
+    DefNoDiagTime = incidenceParams$DefNoDiagTime,
+    ChiSqDiff = incidenceParams$ChiSqDiff
   )
 
   # Time intervals for diagnosis matrix
@@ -53,22 +55,10 @@ GetParamList <- function(
   deltaM[deltaP != 0] <- beta[deltaP]
   deltaM[param$NoStage, ] <- param$DeltaAIDS
 
-  # Initialize all thetaP at 1, i.e. no spline weight fixed
-  thetaP <- rep(1, info$ModelSplineN)
-  if (info$StartIncZero) {
-    # Incidence required to start at zero
-    thetaP[1] <- 0
-  }
-  if (info$SplineType == 'B-SPLINE') {
-    if (info$MaxIncCorr) {
-      thetaP[info$ModelSplineN] <- 0
-    }
+  param[['Theta']] <- rep(0, info$ModelSplineN)
+  param <- UpdateThetaParams(info, param)
 
-    thetaP[seq_len(param$NoThetaFix)] <- 0
-  }
-
-  theta <- rep(0, info$ModelSplineN)
-  thetaF <- rep(0, sum(thetaP))
+  thetaF <- rep(100, sum(param$ThetaP))
 
   param[['NoEq']] <- 6 + 3 * param$NoStage
   param[['Tc']] <- tc
@@ -76,11 +66,9 @@ GetParamList <- function(
   param[['DeltaM']] <- deltaM
   param[['NoDelta']] <- noDelta
   param[['Beta']] <- beta
-  param[['ThetaP']] <- thetaP
-  param[['Theta']] <- theta
   param[['ThetaF']] <- thetaF
-  param[['NoTheta']] <- sum(thetaP)
   param[['NoStageTot']] <- param$NoStage + 1
+
 
   return(param)
 }

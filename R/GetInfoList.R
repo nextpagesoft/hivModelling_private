@@ -38,7 +38,8 @@ GetInfoList <- function(
     SplineType = incidenceParams$SplineType,
     SplineOrder = incidenceParams$SplineOrder,
     MaxIncCorr = incidenceParams$MaxIncCorr,
-    StartIncZero = incidenceParams$StartIncZero
+    StartIncZero = incidenceParams$StartIncZero,
+    FullData = incidenceParams$FullData
   )
 
   info[['ModelNoYears']] <- info$ModelMaxYear - info$ModelMinYear + 1
@@ -78,14 +79,14 @@ GetInfoList <- function(
     info$FitPosCD4MinYear <= info$FitPosCD4MaxYear &&
     info$FitPosCD4MaxYear >= info$ModelMinYear
   ) {
-    FitMinYear <- min(fitMinYear, info$FitPosCD4MinYear)
+    fitMinYear <- min(fitMinYear, info$FitPosCD4MinYear)
   }
 
   if (
     info$FitAIDSPosMinYear <= info$FitAIDSPosMaxYear &&
     info$FitAIDSPosMaxYear >= info$ModelMinYear
   ) {
-    FitMinYear <- min(fitMinYear, info$FitAIDSPosMinYear)
+    fitMinYear <- min(fitMinYear, info$FitAIDSPosMinYear)
   }
 
   if (info$FitAIDSMinYear <= info$FitAIDSMaxYear && info$FitAIDSMaxYear >= info$ModelMinYear) {

@@ -99,6 +99,7 @@ StartProcess <- function(
   collapse = ' ',
   .envir = parent.frame()
 ) {
+  try(cli::cli_status_clear(NULL), silent = TRUE)
   processId <- cli::cli_process_start(CollapseTexts(..., collapse = collapse), .envir = .envir)
 
   invisible(processId)

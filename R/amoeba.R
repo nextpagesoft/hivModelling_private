@@ -7,16 +7,25 @@ amoeba <- function(
   param,
   info,
   data,
-  verbose = FALSE
+  verbose = FALSE,
+  ifit
 ) {
-
   if (verbose) {
-    DisplayMessage <- function(rtol, nfunk, ytry) {
-      strs <- formatC(c(rtol, nfunk, ytry), width = 10, preserve.width = 'common')
-      message(sprintf('rtol = %s | nfunk = %s | ytry = %s', strs[1], strs[2], strs[3]))
+    DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) {
+      strs <- formatC(
+        c(rtol, nfunk, ytry, fac, y9),
+        width = 10,
+        preserve.width = 'common',
+        digits = 8
+      )
+      msg <- sprintf(
+        'rtol = %s | nfunk = %s | ytry = %s | fac = %s | y[9] = %s',
+        strs[1], strs[2], strs[3], strs[4], strs[5]
+      )
+      message(msg)
     }
   } else {
-    DisplayMessage <- function(rtol, nfunk, ytry) NULL
+    DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) NULL
   }
 
   Swap1D <- function(y, a, b) {
@@ -52,6 +61,7 @@ amoeba <- function(
       psum <- psum + ptry - p[ihi, ]
       p[ihi, ] <- ptry
     }
+    DisplayMessage(rtol, nfunk, ytry, fac, y[9])
 
     return(list(Ytry = ytry, Y = y, Psum = psum, P = p))
   }
@@ -114,9 +124,7 @@ amoeba <- function(
     psum <- res$Psum
     p <- res$P
 
-    if (
-      ytry <= y[ilo]
-    ) {
+    if (ytry <= y[ilo]) {
       # Gives a result better than the best point, so try an additional
       # extrapolation by a factor 2.
       res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 2.0, probSurv1996, param, info, data)
@@ -124,10 +132,7 @@ amoeba <- function(
       y <- res$Y
       psum <- res$Psum
       p <- res$P
-
-    } else if (
-      ytry >= y[inhi]
-    ) {
+    } else if (ytry >= y[inhi]) {
       ysave <- y[ihi]
       res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 0.5, probSurv1996, param, info, data)
       ytry <- res$Ytry
@@ -135,9 +140,7 @@ amoeba <- function(
       psum <- res$Psum
       p <- res$P
 
-      if (
-        ytry >= ysave
-      ) {
+      if (ytry >= ysave) {
         # Can't seem to get rid of that high point. Better contract around the
         # lowest (best) point.
         for (i in seq_len(mpts)) {
@@ -159,8 +162,6 @@ amoeba <- function(
       # Correct the evaluation count
       nfunk <- nfunk - 1
     }
-
-    DisplayMessage(rtol, nfunk, ytry)
   }
 
   pParam <- p[1, ]

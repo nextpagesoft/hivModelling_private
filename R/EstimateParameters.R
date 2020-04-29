@@ -38,8 +38,6 @@ EstimateParameters <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
-  PrintH2('2.2. Iterations')
-
   OptimFunc <- function(p) {
     return(FitLLTotal(p, probSurv1996, param, info, data, detailedResults = FALSE))
   }
@@ -113,10 +111,10 @@ EstimateParameters <- function(
 
   # Stop fitting when the change in deviance is smaller than ctol.
   algType <- ifelse(runType %in% c('MAIN', 'MAIN_WITH_INIT'), 'AMOEBA', algorithm)
-  llOld <- 0
+  llOld <- iterResults[[iter]]$LLTotal + ctol + 1
   while (
     abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&
-    iter < maxNoFit
+    iter < maxNoFit + 1
   ) {
     iter <- iter + 1
 

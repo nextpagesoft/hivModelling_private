@@ -69,6 +69,67 @@ PerformMainFit <- function(
     )
   }
 
+  PrintH2('2.2. Iterations')
+  # AutoThetaFix -----------------------------------------------------------------------------------
+  if (!info$FullData && info$SplineType == 'B-SPLINE') {
+    # Set initial number of splines with theta = 0 when doing automated search;
+    # loop starts at the first knot not equal to the start year of calculations
+    idxs <- seq(info$ModelNoKnots) + info$SplineOrder
+    sel <- info$MyKnots[idxs] + 5 < info$FitMinYear
+    if (any(sel)) {
+      param$NoThetaFixInit <- max(idxs[sel]) - info$SplineOrder
+    }
+
+    # Search starts by holding the first theta fixed
+    param$NoThetaFix <- as.integer(info$StartIncZero)
+
+    param <- UpdateThetaParams(info, param)
+
+    res <- EstimateParameters(
+      runType = runType,
+      probSurv1996, param, info, dataMatrix,
+      maxNoFit, ctol, ftol, verbose
+    )
+
+    res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
+    modelResults <- as.data.table(res$ModelResults)
+    statRes <- FitStatistics(modelResults, info, data, param)
+    llNew <- statRes$LL_Poisson
+    llBest <- statRes$LL_Poisson
+    llOld <- 1e+7
+
+    nThetaFixBest <- param$NoThetaFix
+    nThetaFixMax <- info$ModelSplineN - (as.integer(info$MaxIncCorr) + 1)
+    # Increase the number of fixed spline weights until the fit gets too bad
+
+    while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax)
+    {
+      param$NoThetaFix <- param$NoThetaFix + 1
+      param <- UpdateThetaParams(info, param)
+
+      res <- EstimateParameters(
+        runType = runType,
+        probSurv1996, param, info, dataMatrix,
+        maxNoFit, ctol, ftol, verbose
+      )
+
+      res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
+      modelResults <- as.data.table(res$ModelResults)
+      statRes <- FitStatistics(modelResults, info, data, param)
+      llNew <- statRes$LL_Poisson
+
+      if (llNew < (llOld + param$ChiSqDiff)) {
+        nThetaFixBest <- param$NoThetaFix
+        llBest <- llNew
+        llOld <- llNew
+      }
+    }
+
+    param$NoThetaFix <- nThetaFixBest
+    param <- UpdateThetaParams(info, param)
+  }
+
+  # ------------------------------------------------------------------------------------------------
   converged <- FALSE
   while (!converged) {
     nTheta <- 100
