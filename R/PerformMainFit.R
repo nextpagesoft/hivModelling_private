@@ -70,6 +70,7 @@ PerformMainFit <- function(
   }
 
   PrintH2('2.2. Iterations')
+
   # AutoThetaFix -----------------------------------------------------------------------------------
   if (!info$FullData && info$SplineType == 'B-SPLINE') {
     # Set initial number of splines with theta = 0 when doing automated search;
