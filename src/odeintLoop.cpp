@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "globals.h"
 #include "odeint.h"
+#include "Models.h"
 
 using namespace Rcpp;
 
@@ -8,8 +9,7 @@ using namespace Rcpp;
 List odeintLoop(
   const NumericVector& modelYears,
   const List& param,
-  const List& info,
-  const DerivsFuncXPtr& derivsFunc
+  const List& info
 ) {
   const size_t& nVar = param["NoEq"];
   const size_t& modelNoYears = as<int>(info["ModelNoYears"]) - 1;
@@ -19,6 +19,7 @@ List odeintLoop(
   NumericVector ystart(nVar);
   NumericMatrix modelResults(modelNoYears, nVar);
   double minLambda = 1e+10;
+  const DerivsFuncXPtr& derivsFunc = DerivsFuncXPtr(new derivsFuncPtr(&CountModel));
 
   for (size_t i = 0; i != modelNoYears; ++i) {
     double resMinLambda = odeint(

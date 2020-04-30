@@ -77,8 +77,8 @@ odeintReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, de
     .Call(`_hivModelling_odeintReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }
 
-odeintLoop <- function(modelYears, param, info, derivsFunc) {
-    .Call(`_hivModelling_odeintLoop`, modelYears, param, info, derivsFunc)
+odeintLoop <- function(modelYears, param, info) {
+    .Call(`_hivModelling_odeintLoop`, modelYears, param, info)
 }
 
 rkck <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result) {

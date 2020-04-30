@@ -1,4 +1,4 @@
-external.libraries: /home/daniel/R/x86_64-pc-linux-gnu-library/4.0/
+external.libraries: C:/SoftDevel/R/R-4.0.0/library
 ignored.packages:
 snapshot.type: packrat
 use.cache: TRUE

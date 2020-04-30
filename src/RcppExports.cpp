@@ -269,16 +269,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // odeintLoop
-List odeintLoop(const NumericVector& modelYears, const List& param, const List& info, const DerivsFuncXPtr& derivsFunc);
-RcppExport SEXP _hivModelling_odeintLoop(SEXP modelYearsSEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP derivsFuncSEXP) {
+List odeintLoop(const NumericVector& modelYears, const List& param, const List& info);
+RcppExport SEXP _hivModelling_odeintLoop(SEXP modelYearsSEXP, SEXP paramSEXP, SEXP infoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericVector& >::type modelYears(modelYearsSEXP);
     Rcpp::traits::input_parameter< const List& >::type param(paramSEXP);
     Rcpp::traits::input_parameter< const List& >::type info(infoSEXP);
-    Rcpp::traits::input_parameter< const DerivsFuncXPtr& >::type derivsFunc(derivsFuncSEXP);
-    rcpp_result_gen = Rcpp::wrap(odeintLoop(modelYears, param, info, derivsFunc));
+    rcpp_result_gen = Rcpp::wrap(odeintLoop(modelYears, param, info));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -363,7 +362,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
     {"_hivModelling_odeint", (DL_FUNC) &_hivModelling_odeint, 10},
     {"_hivModelling_odeintReturn", (DL_FUNC) &_hivModelling_odeintReturn, 10},
-    {"_hivModelling_odeintLoop", (DL_FUNC) &_hivModelling_odeintLoop, 4},
+    {"_hivModelling_odeintLoop", (DL_FUNC) &_hivModelling_odeintLoop, 3},
     {"_hivModelling_rkck", (DL_FUNC) &_hivModelling_rkck, 12},
     {"_hivModelling_rkqs", (DL_FUNC) &_hivModelling_rkqs, 15},
     {"_hivModelling_zbrent", (DL_FUNC) &_hivModelling_zbrent, 5},

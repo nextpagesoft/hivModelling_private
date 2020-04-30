@@ -41,7 +41,6 @@ compareDT <- dcast(compareDT, Column ~ Version, value.var = 'Value')
 compareDT[, Difference := R - C]
 compareDT[, DifferencePerc := Difference / C]
 compareDT[, DifferencePercStr := sprintf('%.2f%%', DifferencePerc * 100)]
-setorder(compareDT, Column)
 errors <- compareDT[abs(DifferencePerc) > 1e-3]
 if (nrow(errors) > 0) {
   PrintAlert('Reconciliation failed:', type = 'danger')
