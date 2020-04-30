@@ -72,6 +72,9 @@ amoeba <- function(
   mpts <- ndim + 1
   nfunk <- 0
   psum <- colSums(p)
+
+  seqMpts <- seq_len(mpts)
+  seqNDim <- seq_len(ndim)
   while (
     nfunk < NMAX
   ) {
@@ -85,7 +88,7 @@ amoeba <- function(
       ihi <- 2
     }
 
-    for (i in seq_len(mpts)) {
+    for (i in seqMpts) {
       if (y[i] <= y[ilo]) {
         ilo <- i
       }
@@ -102,7 +105,7 @@ amoeba <- function(
 
     if (rtol < ftol) {
       y <- Swap1D(y, 1, ilo)
-      for (i in seq_len(ndim)) {
+      for (i in seqNDim) {
         p <- Swap2D(p, 1, i, ilo, i)
       }
 
@@ -143,7 +146,7 @@ amoeba <- function(
       if (ytry >= ysave) {
         # Can't seem to get rid of that high point. Better contract around the
         # lowest (best) point.
-        for (i in seq_len(mpts)) {
+        for (i in seqMpts) {
           if (i != ilo) {
             psum <- 0.5 * (p[i, ] + p[ilo, ])
             p[i, ] <- psum
