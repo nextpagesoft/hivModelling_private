@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "odeint.h"
 #include "Models.h"
+#include "hivModelling_types.h"
 
 using namespace Rcpp;
 
@@ -19,6 +20,7 @@ List odeintLoop(
   NumericVector ystart(nVar);
   NumericMatrix modelResults(modelNoYears, nVar);
   double minLambda = 1e+10;
+
   const DerivsFuncXPtr& derivsFunc = DerivsFuncXPtr(new derivsFuncPtr(&CountModel));
 
   for (size_t i = 0; i != modelNoYears; ++i) {

@@ -59,8 +59,6 @@ list(
 
     FullData = TRUE,
 
-    # Non editable parameters ----------------------------------------------------------------------
-
     SplineOrder = 4,
 
     # Number of disease stages
