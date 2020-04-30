@@ -61,6 +61,14 @@ Sign <- function(a, b) {
     .Call(`_hivModelling_Sign`, a, b)
 }
 
+Swap1D <- function(y, a, b) {
+    invisible(.Call(`_hivModelling_Swap1D`, y, a, b))
+}
+
+Swap2D <- function(y, a1, a2, b1, b2) {
+    invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
+}
+
 odeint <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
     .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
 }

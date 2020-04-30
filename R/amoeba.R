@@ -28,20 +28,6 @@ amoeba <- function(
     DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) NULL
   }
 
-  Swap1D <- function(y, a, b) {
-    s <- y[a]
-    y[a] <- y[b]
-    y[b] <- s
-    return(y)
-  }
-
-  Swap2D <- function(y, a1, a2, b1, b2) {
-    s <- y[a1, a2]
-    y[a1, a2] <- y[b1, b2]
-    y[b1, b2] <- s
-    return(y)
-  }
-
   AmoebaTry <- function(
     p, y, psum, ndim, ihi, fac,
     probSurv1996,
@@ -104,9 +90,9 @@ amoeba <- function(
     rtol <- 2.0 * abs(y[ihi] - y[ilo]) / (abs(y[ihi]) + abs(y[ilo]))
 
     if (rtol < ftol) {
-      y <- Swap1D(y, 1, ilo)
+      Swap1D(y, 1, ilo)
       for (i in seqNDim) {
-        p <- Swap2D(p, 1, i, ilo, i)
+        Swap2D(p, 1, i, ilo, i)
       }
 
       break
@@ -146,14 +132,9 @@ amoeba <- function(
       if (ytry >= ysave) {
         # Can't seem to get rid of that high point. Better contract around the
         # lowest (best) point.
-        for (i in seqMpts) {
-          if (i != ilo) {
-            psum <- 0.5 * (p[i, ] + p[ilo, ])
-            p[i, ] <- psum
-
-            res <- FitLLTotal(psum, probSurv1996, param, info, data)
-            y[i] <- res$LLTotal
-          }
+        for (i in seqMpts[seqMpts != ilo]) {
+          p[i, ] <- 0.5 * (p[i, ] + p[ilo, ])
+          y[i] <- FitLLTotal(p[i, ], probSurv1996, param, info, data, detailedResults = FALSE)
         }
         # Keep track of function evaluations
         nfunk <- nfunk + ndim

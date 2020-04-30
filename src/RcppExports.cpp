@@ -202,6 +202,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Swap1D
+void Swap1D(Rcpp::NumericVector& y, const int a, const int b);
+RcppExport SEXP _hivModelling_Swap1D(SEXP ySEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    Swap1D(y, a, b);
+    return R_NilValue;
+END_RCPP
+}
+// Swap2D
+void Swap2D(Rcpp::NumericMatrix& y, const int a1, const int a2, const int b1, const int b2);
+RcppExport SEXP _hivModelling_Swap2D(SEXP ySEXP, SEXP a1SEXP, SEXP a2SEXP, SEXP b1SEXP, SEXP b2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const int >::type a1(a1SEXP);
+    Rcpp::traits::input_parameter< const int >::type a2(a2SEXP);
+    Rcpp::traits::input_parameter< const int >::type b1(b1SEXP);
+    Rcpp::traits::input_parameter< const int >::type b2(b2SEXP);
+    Swap2D(y, a1, a2, b1, b2);
+    return R_NilValue;
+END_RCPP
+}
 // odeint
 double odeint(NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const List& param, const List& info, const double& minYear, const double& maxYear, const DerivsFuncXPtr& derivsFunc, const double tmpYear);
 RcppExport SEXP _hivModelling_odeint(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP derivsFuncSEXP, SEXP tmpYearSEXP) {
@@ -333,6 +359,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_TimeModel", (DL_FUNC) &_hivModelling_TimeModel, 7},
     {"_hivModelling_GetDerivsFuncXptr", (DL_FUNC) &_hivModelling_GetDerivsFuncXptr, 1},
     {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
+    {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
+    {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
     {"_hivModelling_odeint", (DL_FUNC) &_hivModelling_odeint, 10},
     {"_hivModelling_odeintReturn", (DL_FUNC) &_hivModelling_odeintReturn, 10},
     {"_hivModelling_odeintLoop", (DL_FUNC) &_hivModelling_odeintLoop, 4},
