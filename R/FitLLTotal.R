@@ -6,10 +6,6 @@ FitLLTotal <- function(
   data,
   detailedResults = TRUE
 ) {
-  # CRAN checks
-  Year <- NULL
-  Prob_CD4 <- NULL
-
   VERY_LRG <- 1e+10
   # Smoothness omitted
   smooth1 <- 0

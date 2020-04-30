@@ -18,6 +18,7 @@ data <- GetPopulationData(context)
 
 mainResults <- PerformMainFit(context, data)
 # saveRDS(mainResults, GetFilePath('Test_2_-_full_run_results.RDS'))
+# mainResults <- readRDS(url('http://nextpagesoft.net/hivModelling/Test_2_-_full_run_results.RDS'))
 
 plots <- CreateOutputPlots(mainResults)
 
@@ -40,7 +41,7 @@ compareDT <- dcast(compareDT, Column ~ Version, value.var = 'Value')
 compareDT[, Difference := R - C]
 compareDT[, DifferencePerc := Difference / C]
 compareDT[, DifferencePercStr := sprintf('%.2f%%', DifferencePerc * 100)]
-errors <- compareDT[abs(DifferencePerc) > 1e-5]
+errors <- compareDT[abs(DifferencePerc) > 1e-3]
 if (nrow(errors) > 0) {
   PrintAlert('Reconciliation failed:', type = 'danger')
   print(errors)
