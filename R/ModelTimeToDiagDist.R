@@ -11,7 +11,6 @@ ModelTimeToDiagDist <- function(
   Dist_TimeToDiag <- matrix(0, param$DefNoDiagTime, numYears)
   Dist_ProbDiag <- matrix(0, param$DefNoDiagTime, numYears)
 
-  derivsFunc <- GetDerivsFuncXptr('TimeModel')
   # Expected proportion diagnosed in each year following the year of infection
   # when diagnosis rates remain the same as in the year of infection
   for (i in seq_len(numYears)) {
@@ -26,9 +25,9 @@ ModelTimeToDiagDist <- function(
       timeA <- j - 1
       timeB <- timeA + 1
 
-      ystart <- odeintReturn(
+      ystart <- odeintReturn_time(
         ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
-        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpMinYear
+        minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpMinYear
       )
 
       # Cumulative number diagnosed within j years afer infection in year i
@@ -55,9 +54,9 @@ ModelTimeToDiagDist <- function(
       timeB <- timeA + 1
 
       tmpYear <- min(timeA + 0.5, info$ModelMaxYear - 0.5 - BIT_SML)
-      ystart <- odeintReturn(
+      ystart <- odeintReturn_time(
         ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
-        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpYear
+        minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpYear
       )
 
       # Cumulative number diagnosed within j years afer infection in year i

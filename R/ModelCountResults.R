@@ -24,8 +24,6 @@ ModelCountResults <- function(
   D_Cum_Time_Advanced <- matrix(0, param$DefNoDiagTime, numYears)
   D_Avg_Time <- rep(0, numYears)
 
-  derivsFunc <- GetDerivsFuncXptr('CountModel')
-
   for (i in seq_len(numYears)) {
     ystart <- rep(0, param$NoEq)
     tmpMinYear <- info$ModelMinYear + (i - 1)
@@ -34,9 +32,10 @@ ModelCountResults <- function(
       timeA <- tmpMinYear + (j - i)
       timeB <- timeA + 1
 
-      ystart <- odeintReturn(
+      ystart <- odeintReturn_count(
         ystart, nVar = param$NoEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
-        minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc)
+        minYear = tmpMinYear, maxYear = tmpMaxYear
+      )
       iEq <- 1
 
       # Number in primary infection (PI) at the end of year j of those infected in year i

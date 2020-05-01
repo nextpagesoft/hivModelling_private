@@ -3,7 +3,11 @@ ModelTimeResults <- function(
   info,
   param
 ) {
-  deltasList <- lapply(modelResults$Year, GetDelta, param)
+  deltasList <- lapply(
+    modelResults$Year,
+    GetDelta,
+    param$Delta4Fac, param$DeltaM, param$Tc, param$NoStage
+  )
 
   timeToDiag <- sapply(deltasList, ModelTimeToDiag, param)
   timeToDiagMedian <- lapply(modelResults$Year, ModelTimeToDiagMedian, param, info)

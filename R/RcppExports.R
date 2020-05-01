@@ -21,40 +21,24 @@ GetBSpline <- function(time, theta, kOrder, modelSplineN, myKnots, minYear, maxY
     .Call(`_hivModelling_GetBSpline`, time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 }
 
-Test <- function(x) {
-    invisible(.Call(`_hivModelling_Test`, x))
-}
-
 GetTimeInterval_std <- function(time, timeIntervals) {
     .Call(`_hivModelling_GetTimeInterval_std`, time, timeIntervals)
-}
-
-GetTimeInterval_std_lower <- function(time, timeIntervals) {
-    .Call(`_hivModelling_GetTimeInterval_std_lower`, time, timeIntervals)
-}
-
-GetTimeInterval_original <- function(time, tc) {
-    .Call(`_hivModelling_GetTimeInterval_original`, time, tc)
 }
 
 GetTimeInterval <- function(x, tc) {
     .Call(`_hivModelling_GetTimeInterval`, x, tc)
 }
 
-GetDelta <- function(time, param) {
-    .Call(`_hivModelling_GetDelta`, time, param)
+GetDelta <- function(time, delta4Fac, deltaM, tc, deadStageIdx) {
+    .Call(`_hivModelling_GetDelta`, time, delta4Fac, deltaM, tc, deadStageIdx)
 }
 
-CountModel <- function(x, y, lambda, nVar, param, year, dydx) {
-    .Call(`_hivModelling_CountModel`, x, y, lambda, nVar, param, year, dydx)
+CountModel <- function(x, y, lambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx) {
+    .Call(`_hivModelling_CountModel`, x, y, lambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx)
 }
 
-TimeModel <- function(x, y, lambda, nVar, param, year, dydx) {
-    .Call(`_hivModelling_TimeModel`, x, y, lambda, nVar, param, year, dydx)
-}
-
-GetDerivsFuncXptr <- function(funcName) {
-    .Call(`_hivModelling_GetDerivsFuncXptr`, funcName)
+TimeModel <- function(x, y, param, year, dydx) {
+    .Call(`_hivModelling_TimeModel`, x, y, param, year, dydx)
 }
 
 Sign <- function(a, b) {
@@ -69,24 +53,40 @@ Swap2D <- function(y, a1, a2, b1, b2) {
     invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
 }
 
-odeint <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
-    .Call(`_hivModelling_odeint`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
+odeint_count <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear) {
+    .Call(`_hivModelling_odeint_count`, ystart, nVar, x1, x2, param, info, minYear, maxYear)
 }
 
-odeintReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear = 0) {
-    .Call(`_hivModelling_odeintReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear, derivsFunc, tmpYear)
+odeint_time <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear) {
+    invisible(.Call(`_hivModelling_odeint_time`, ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear))
+}
+
+odeintReturn_count <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear) {
+    .Call(`_hivModelling_odeintReturn_count`, ystart, nVar, x1, x2, param, info, minYear, maxYear)
+}
+
+odeintReturn_time <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear) {
+    .Call(`_hivModelling_odeintReturn_time`, ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear)
 }
 
 odeintLoop <- function(modelYears, param, info) {
     .Call(`_hivModelling_odeintLoop`, modelYears, param, info)
 }
 
-rkck <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result) {
-    invisible(.Call(`_hivModelling_rkck`, x, y, dydx, nVar, h, param, info, minYear, maxYear, derivsFunc, tmpYear, result))
+rkck_count <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, result) {
+    invisible(.Call(`_hivModelling_rkck_count`, x, y, dydx, nVar, h, param, info, minYear, maxYear, result))
 }
 
-rkqs <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes, rkckRes) {
-    invisible(.Call(`_hivModelling_rkqs`, x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, derivsFunc, tmpYear, rkqsRes, rkckRes))
+rkck_time <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, result) {
+    invisible(.Call(`_hivModelling_rkck_time`, x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, result))
+}
+
+rkqs_count <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsRes, rkckRes) {
+    invisible(.Call(`_hivModelling_rkqs_count`, x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsRes, rkckRes))
+}
+
+rkqs_time <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, tmpYear, rkqsRes, rkckRes) {
+    invisible(.Call(`_hivModelling_rkqs_time`, x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, tmpYear, rkqsRes, rkckRes))
 }
 
 zbrent <- function(func, x1, x2, tol, extraArgs) {

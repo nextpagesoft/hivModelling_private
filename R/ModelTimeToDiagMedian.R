@@ -23,16 +23,15 @@ ModelTimeToDiagMedian <- function(
 
   j <- 0
   iNowStop <- FALSE
-  derivsFunc <- GetDerivsFuncXptr('TimeModel')
   while (!iNowStop) {
     # Continue calculations until t75 is not updated anymore
     j <- j + 1
     timeA <- (j - 1) * 0.001
     timeB <- timeA + 0.001
 
-    ystart <- odeintReturn(
+    ystart <- odeintReturn_time(
       ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
-      minYear = tmpMinYear, maxYear = tmpMaxYear, derivsFunc = derivsFunc, tmpYear = tmpMinYear
+      minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpMinYear
     )
 
     sumYstart <- sum(tail(ystart, param$NoStage))

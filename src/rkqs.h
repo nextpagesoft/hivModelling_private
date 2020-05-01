@@ -1,12 +1,11 @@
 #include <Rcpp.h>
-#include "hivModelling_types.h"
 
 #ifndef _rkqs_
 #define _rkqs_
 
 using namespace Rcpp;
 
-void rkqs(
+void rkqs_count(
   double& x,
   NumericVector& y,
   const NumericVector& dydx,
@@ -18,7 +17,22 @@ void rkqs(
   const List& info,
   const double& minYear,
   const double& maxYear,
-  const DerivsFuncXPtr& derivsFunc,
+  List& rkqsRes,
+  List& rkckRes
+);
+
+void rkqs_time(
+  double& x,
+  NumericVector& y,
+  const NumericVector& dydx,
+  const size_t& nVar,
+  const double& htry,
+  const double& eps,
+  const NumericVector& yscal,
+  const List& param,
+  const List& info,
+  const double& minYear,
+  const double& maxYear,
   const double& tmpYear,
   List& rkqsRes,
   List& rkckRes

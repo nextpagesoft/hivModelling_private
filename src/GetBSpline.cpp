@@ -9,15 +9,14 @@ size_t GetInterval2(
     const NumericVector& myKnots,
     const NumericVector& diffMyKnots
 ) {
-  size_t k = 0;
-  for (size_t i = 0; i != modelSplineN; ++i) {
+  size_t i = 0;
+  for (i = 0; i != modelSplineN; ++i) {
     if ((unsigned)(time - myKnots[i]) < diffMyKnots[i]) {
-      k = i;
       break;
     }
   }
 
-  return k;
+  return i;
 }
 
 // [[Rcpp::export]]
@@ -26,15 +25,14 @@ size_t GetInterval1(
   const size_t& modelSplineN,
   const NumericVector& myKnots
 ) {
-  size_t k = 0;
-  for (size_t i = 0; i != modelSplineN; ++i) {
+  size_t i = 0;
+  for (i = 0; i != modelSplineN; ++i) {
     if (myKnots[i] <= time && time < myKnots[i + 1]) {
-      k = i;
       break;
     }
   }
 
-  return k;
+  return i;
 }
 
 double GetBSplineCubic(
@@ -93,9 +91,8 @@ double GetBSpline(
   }
 
   size_t k = 0;
-  for (size_t i = 0; i != modelSplineN; ++i) {
-    if (myKnots[i] <= time && time < myKnots[i + 1]) {
-      k = i;
+  for (k = 0; k != modelSplineN; ++k) {
+    if (myKnots[k] <= time && time < myKnots[k + 1]) {
       break;
     }
   }

@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 #include "GetDelta.h"
-#include "hivModelling_types.h"
 
 using namespace Rcpp;
 
@@ -10,17 +9,17 @@ NumericVector CountModel(
   const NumericVector& y,
   const double& lambda,
   const size_t& nVar,
-  const List& param,
-  const double& year,
+  const NumericVector& qoppa,
+  const NumericVector& fInit,
+  const double& alphaP,
+  const double& mu,
+  const size_t& noStage,
+  const double& delta4Fac,
+  const NumericMatrix& deltaM,
+  const NumericVector& tc,
   NumericVector& dydx
 ) {
-  const NumericVector& qoppa = param["Qoppa"];
-  const NumericVector& fInit = param["FInit"];
-  const double& alphaP = param["AlphaP"];
-  const double& mu = param["Mu"];
-  const size_t& noStage = param["NoStage"];
-
-  const NumericVector delta = GetDelta(x, param);
+  const NumericVector delta = GetDelta(x, delta4Fac, deltaM, tc, noStage);
 
   // Element 0
   dydx[0] = lambda - (alphaP - mu) * y[0];
@@ -78,19 +77,20 @@ NumericVector CountModel(
 NumericVector TimeModel(
   const double& x,
   const NumericVector& y,
-  const double& lambda,
-  const size_t& nVar,
   const List& param,
   const double& year,
   NumericVector& dydx
 ) {
-  const NumericVector& qoppa = param["Qoppa"];
-  const NumericVector& fInit = param["FInit"];
-  const double& alphaP = param["AlphaP"];
-  const double& mu = param["Mu"];
-  const size_t& noStage = param["NoStage"];
+  const NumericVector& qoppa  = param["Qoppa"];
+  const NumericVector& fInit  = param["FInit"];
+  const double& alphaP        = param["AlphaP"];
+  const double& mu            = param["Mu"];
+  const size_t& noStage       = param["NoStage"];
+  const double& delta4Fac     = param["Delta4Fac"];
+  const NumericMatrix& deltaM = param["DeltaM"];
+  const NumericVector& tc     = param["Tc"];
 
-  const NumericVector delta = GetDelta(year, param);
+  const NumericVector delta = GetDelta(year, delta4Fac, deltaM, tc, noStage);
 
   size_t j = 0;
   size_t iEq = 0;
@@ -114,16 +114,4 @@ NumericVector TimeModel(
   }
 
   return dydx;
-}
-
-// [[Rcpp::export]]
-DerivsFuncXPtr GetDerivsFuncXptr(std::string funcName)
-{
-  if (funcName == "CountModel") {
-    return DerivsFuncXPtr(new derivsFuncPtr(&CountModel));
-  } else if (funcName == "TimeModel") {
-    return DerivsFuncXPtr(new derivsFuncPtr(&TimeModel));
-  } else {
-    return DerivsFuncXPtr(R_NilValue);
-  }
 }
