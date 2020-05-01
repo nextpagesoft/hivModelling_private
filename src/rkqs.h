@@ -17,8 +17,12 @@ void rkqs_count(
   const List& info,
   const double& minYear,
   const double& maxYear,
-  List& rkqsRes,
-  List& rkckRes
+  double& rkqsLambda,
+  double& hDid,
+  double& hNext,
+  double& rkckLambda,
+  NumericVector& yOut,
+  NumericVector& yErr
 );
 
 void rkqs_time(

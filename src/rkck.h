@@ -15,7 +15,9 @@ void rkck_count(
   const List& info,
   const double& minYear,
   const double& maxYear,
-  List& result
+  double& rkckLambda,
+  NumericVector& yout,
+  NumericVector& yerr
 );
 
 void rkck_time(

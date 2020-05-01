@@ -18,23 +18,21 @@ void rkqs_count(
   const List& info,
   const double& minYear,
   const double& maxYear,
-  List& rkqsRes,
-  List& rkckRes
+  double& rkqsLambda,
+  double& hDid,
+  double& hNext,
+  double& rkckLambda,
+  NumericVector& yOut,
+  NumericVector& yErr
 ) {
-  NumericVector yerr(nVar);
-  NumericVector ytemp(nVar);
-
-  double hNext = 0;
-  double hDid = 0;
-  double minLambda = 0;
+  rkqsLambda = 0;
+  rkckLambda = 0;
   double h = htry;
 
   for (;;) {
-    rkck_count(x, y, dydx, nVar, h, param, info, minYear, maxYear, rkckRes);
+    rkck_count(x, y, dydx, nVar, h, param, info, minYear, maxYear, rkckLambda, yOut, yErr);
 
-    const NumericVector& yOut = rkckRes["YOut"];
-    const NumericVector& yErr = rkckRes["YErr"];
-    minLambda = fmin(minLambda, as<double>(rkckRes["MinLambda"]));
+    rkqsLambda = fmin(rkqsLambda, rkckLambda);
 
     double errMax = fmax(max(abs(yErr / yscal)), 0) / eps;
 
@@ -49,16 +47,11 @@ void rkqs_count(
       }
       hDid = h;
       x += hDid;
-      y = yOut;
+      y = clone(yOut);
       break;
     }
   }
-
-  rkqsRes["MinLambda"] = minLambda;
-  rkqsRes["hDid"] = hDid;
-  rkqsRes["hNext"] = hNext;
 }
-
 
 // [[Rcpp::export]]
 void rkqs_time(

@@ -38,23 +38,18 @@ double odeint_count(
   double h = Sign(H1, x2 - x1);
 
   NumericVector y = clone(ystart);
+
   double minLambda = VERY_LRG;
-
-  List rkqsRes = List::create(
-    Named("MinLambda") = R_NilValue,
-    Named("hDid") = R_NilValue,
-    Named("hNext") = R_NilValue
-  );
-
-  List rkckRes = List::create(
-    Named("YOut") = R_NilValue,
-    Named("YErr") = R_NilValue,
-    Named("MinLambda") = R_NilValue
-  );
+  double rkqsLambda = 0;
+  double hDid = 0;
+  double hNext = 0;
+  double rkckLambda = 0;
+  NumericVector yOut(nVar);
+  NumericVector yErr(nVar);
 
   double derivLambda;
   NumericVector dydx(nVar);
-  NumericVector yscal;
+  NumericVector yscal(nVar);
 
   for (int nstp = 0; nstp != MAX_STP; ++nstp) {
 
@@ -70,12 +65,9 @@ double odeint_count(
     }
 
     rkqs_count(
-      x, y, dydx, nVar, h, EPS, yscal, param, info, minYear, maxYear, rkqsRes,
-      rkckRes
+      x, y, dydx, nVar, h, EPS, yscal, param, info, minYear, maxYear, rkqsLambda, hDid, hNext,
+      rkckLambda, yOut, yErr
     );
-
-    const double& rkqsLambda = rkqsRes["MinLambda"];
-    const double& hDid = rkqsRes["hDid"];
 
     minLambda = fmin(fmin(minLambda, derivLambda), rkqsLambda);
 
@@ -90,7 +82,7 @@ double odeint_count(
       break;
     }
 
-    h = rkqsRes["hNext"];
+    h = hNext;
   }
 
   return minLambda;
@@ -176,7 +168,6 @@ NumericVector odeintReturn_count(
     const double& maxYear
 ) {
   odeint_count(ystart, nVar, x1, x2, param, info, minYear, maxYear);
-
   return ystart;
 }
 
@@ -193,6 +184,5 @@ NumericVector odeintReturn_time(
   const double tmpYear
 ) {
   odeint_time(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
-
   return ystart;
 }

@@ -73,16 +73,16 @@ odeintLoop <- function(modelYears, param, info) {
     .Call(`_hivModelling_odeintLoop`, modelYears, param, info)
 }
 
-rkck_count <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, result) {
-    invisible(.Call(`_hivModelling_rkck_count`, x, y, dydx, nVar, h, param, info, minYear, maxYear, result))
+rkck_count <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, rkckLambda, yOut, yErr) {
+    invisible(.Call(`_hivModelling_rkck_count`, x, y, dydx, nVar, h, param, info, minYear, maxYear, rkckLambda, yOut, yErr))
 }
 
 rkck_time <- function(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, result) {
     invisible(.Call(`_hivModelling_rkck_time`, x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, result))
 }
 
-rkqs_count <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsRes, rkckRes) {
-    invisible(.Call(`_hivModelling_rkqs_count`, x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsRes, rkckRes))
+rkqs_count <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsLambda, hDid, hNext, rkckLambda, yOut, yErr) {
+    invisible(.Call(`_hivModelling_rkqs_count`, x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, rkqsLambda, hDid, hNext, rkckLambda, yOut, yErr))
 }
 
 rkqs_time <- function(x, y, dydx, nVar, htry, eps, yscal, param, info, minYear, maxYear, tmpYear, rkqsRes, rkckRes) {
