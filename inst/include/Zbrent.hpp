@@ -6,11 +6,11 @@
 namespace hivModelling {
 
 inline double Zbrent(
-  const Rcpp::Function& func,
-  double x1,
-  double x2,
-  double tol,
-  const Rcpp::List& extraArgs
+    const Rcpp::Function& func,
+    double x1,
+    double x2,
+    double tol,
+    const Rcpp::List& extraArgs
 ) {
   const int ITMAX = 100;
   const double EPS = 3.0e-8;

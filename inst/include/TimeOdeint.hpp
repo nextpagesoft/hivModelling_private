@@ -4,7 +4,7 @@
 #include "globals.hpp"
 #include "Sign.hpp"
 #include "TimeModel.hpp"
-#include "timeRkqs.hpp"
+#include "TimeRkqs.hpp"
 
 namespace hivModelling {
 
