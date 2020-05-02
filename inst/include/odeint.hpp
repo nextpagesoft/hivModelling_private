@@ -1,35 +1,33 @@
-#include "odeint.h"
-#include "globals.h"
-#include "Sign.h"
-#include "GetBSpline.h"
-#include "rkqs.h"
-#include "Models.h"
+#ifndef _hivModelling_odeint_
+#define _hivModelling_odeint_
 
-using namespace Rcpp;
+#include "rkqs.hpp"
+#include "Sign.hpp"
 
-// [[Rcpp::export]]
-double odeint_count(
-  NumericVector& ystart,
+namespace hivModelling {
+
+inline double odeint_count(
+  Rcpp::NumericVector& ystart,
   const size_t& nVar,
   const double& x1,
   const double& x2,
-  const List& param,
-  const List& info,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear
 ) {
-  const NumericVector& myKnots = info["MyKnots"];
+  const Rcpp::NumericVector& myKnots = info["MyKnots"];
   const int& kOrder            = info["SplineOrder"];
   const int& modelSplineN      = info["ModelSplineN"];
-  const NumericVector& theta   = param["Theta"];
-  const NumericVector& qoppa   = param["Qoppa"];
-  const NumericVector& fInit   = param["FInit"];
+  const Rcpp::NumericVector& theta   = param["Theta"];
+  const Rcpp::NumericVector& qoppa   = param["Qoppa"];
+  const Rcpp::NumericVector& fInit   = param["FInit"];
   const double& alphaP         = param["AlphaP"];
   const double& mu             = param["Mu"];
   const size_t& noStage        = param["NoStage"];
   const double& delta4Fac      = param["Delta4Fac"];
-  const NumericMatrix& deltaM  = param["DeltaM"];
-  const NumericVector& tc      = param["Tc"];
+  const Rcpp::NumericMatrix& deltaM  = param["DeltaM"];
+  const Rcpp::NumericVector& tc      = param["Tc"];
 
   int nBad = 0;
   int nOk = 0;
@@ -37,19 +35,19 @@ double odeint_count(
   double x = x1;
   double h = Sign(H1, x2 - x1);
 
-  NumericVector y = clone(ystart);
+  Rcpp::NumericVector y = clone(ystart);
 
   double minLambda = VERY_LRG;
   double rkqsLambda = 0;
   double hDid = 0;
   double hNext = 0;
   double rkckLambda = 0;
-  NumericVector yOut(nVar);
-  NumericVector yErr(nVar);
+  Rcpp::NumericVector yOut(nVar);
+  Rcpp::NumericVector yErr(nVar);
 
   double derivLambda;
-  NumericVector dydx(nVar);
-  NumericVector yscal(nVar);
+  Rcpp::NumericVector dydx(nVar);
+  Rcpp::NumericVector yscal(nVar);
 
   for (int nstp = 0; nstp != MAX_STP; ++nstp) {
 
@@ -88,20 +86,19 @@ double odeint_count(
   return minLambda;
 }
 
-// [[Rcpp::export]]
-void odeint_time(
-  NumericVector& ystart,
+inline void odeint_time(
+  Rcpp::NumericVector& ystart,
   const size_t& nVar,
   const double& x1,
   const double& x2,
-  const List& param,
-  const List& info,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
-  const double tmpYear
+  const double& tmpYear
 ) {
-  const NumericVector& theta = param["Theta"];
-  const NumericVector& myKnots = info["MyKnots"];
+  const Rcpp::NumericVector& theta = param["Theta"];
+  const Rcpp::NumericVector& myKnots = info["MyKnots"];
 
   int nBad = 0;
   int nOk = 0;
@@ -109,20 +106,20 @@ void odeint_time(
   double x = x1;
   double h = Sign(H1, x2 - x1);
 
-  NumericVector y = clone(ystart);
+  Rcpp::NumericVector y = Rcpp::clone(ystart);
 
-  List rkqsRes = List::create(
-    Named("hDid") = R_NilValue,
-    Named("hNext") = R_NilValue
+  Rcpp::List rkqsRes = Rcpp::List::create(
+    Rcpp::Named("hDid") = R_NilValue,
+    Rcpp::Named("hNext") = R_NilValue
   );
 
-  List rkckRes = List::create(
-    Named("YOut") = R_NilValue,
-    Named("YErr") = R_NilValue
+  Rcpp::List rkckRes = Rcpp::List::create(
+    Rcpp::Named("YOut") = R_NilValue,
+    Rcpp::Named("YErr") = R_NilValue
   );
 
-  NumericVector dydx(nVar);
-  NumericVector yscal;
+  Rcpp::NumericVector dydx(nVar);
+  Rcpp::NumericVector yscal;
 
   for (int nstp = 0; nstp != MAX_STP; ++nstp) {
 
@@ -156,33 +153,35 @@ void odeint_time(
   }
 }
 
-// [[Rcpp::export]]
-NumericVector odeintReturn_count(
-    NumericVector& ystart,
-    const size_t& nVar,
-    const double& x1,
-    const double& x2,
-    const List& param,
-    const List& info,
-    const double& minYear,
-    const double& maxYear
+inline Rcpp::NumericVector odeintReturn_count(
+  Rcpp::NumericVector& ystart,
+  const size_t& nVar,
+  const double& x1,
+  const double& x2,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
+  const double& minYear,
+  const double& maxYear
 ) {
   odeint_count(ystart, nVar, x1, x2, param, info, minYear, maxYear);
   return ystart;
 }
 
-// [[Rcpp::export]]
-NumericVector odeintReturn_time(
-  NumericVector& ystart,
+inline Rcpp::NumericVector odeintReturn_time(
+  Rcpp::NumericVector& ystart,
   const size_t& nVar,
   const double& x1,
   const double& x2,
-  const List& param,
-  const List& info,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
-  const double tmpYear
+  const double& tmpYear
 ) {
   odeint_time(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
   return ystart;
 }
+
+} // hivModelling
+
+#endif // _hivModelling_odeint_

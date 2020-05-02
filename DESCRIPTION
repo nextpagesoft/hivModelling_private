@@ -31,3 +31,4 @@ LinkingTo:
     Rcpp
 Suggests: 
     testthat
+SystemRequirements: C++11

@@ -1,29 +1,29 @@
-// Takes one "quality-controlled" Runge-Kutta step
-#include "rkqs.h"
-#include "globals.h"
-#include "rkck.h"
+#ifndef _hivModelling_rkqs_
+#define _hivModelling_rkqs_
 
-using namespace Rcpp;
+#include "globals.hpp"
+#include "rkck.hpp"
 
-// [[Rcpp::export]]
-void rkqs_count(
+namespace hivModelling {
+
+inline void rkqs_count(
   double& x,
-  NumericVector& y,
-  const NumericVector& dydx,
+  Rcpp::NumericVector& y,
+  const Rcpp::NumericVector& dydx,
   const size_t& nVar,
   const double& htry,
   const double& eps,
-  const NumericVector& yscal,
-  const List& param,
-  const List& info,
+  const Rcpp::NumericVector& yscal,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
   double& rkqsLambda,
   double& hDid,
   double& hNext,
   double& rkckLambda,
-  NumericVector& yOut,
-  NumericVector& yErr
+  Rcpp::NumericVector& yOut,
+  Rcpp::NumericVector& yErr
 ) {
   rkqsLambda = 0;
   rkckLambda = 0;
@@ -53,25 +53,24 @@ void rkqs_count(
   }
 }
 
-// [[Rcpp::export]]
-void rkqs_time(
+inline void rkqs_time(
   double& x,
-  NumericVector& y,
-  const NumericVector& dydx,
+  Rcpp::NumericVector& y,
+  const Rcpp::NumericVector& dydx,
   const size_t& nVar,
   const double& htry,
   const double& eps,
-  const NumericVector& yscal,
-  const List& param,
-  const List& info,
+  const Rcpp::NumericVector& yscal,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
   const double& tmpYear,
-  List& rkqsRes,
-  List& rkckRes
+  Rcpp::List& rkqsRes,
+  Rcpp::List& rkckRes
 ) {
-  NumericVector yerr(nVar);
-  NumericVector ytemp(nVar);
+  Rcpp::NumericVector yerr(nVar);
+  Rcpp::NumericVector ytemp(nVar);
 
   double hNext = 0;
   double hDid = 0;
@@ -80,8 +79,8 @@ void rkqs_time(
   for (;;) {
     rkck_time(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, rkckRes);
 
-    const NumericVector& yOut = rkckRes["YOut"];
-    const NumericVector& yErr = rkckRes["YErr"];
+    const Rcpp::NumericVector& yOut = rkckRes["YOut"];
+    const Rcpp::NumericVector& yErr = rkckRes["YErr"];
 
     double errMax = fmax(max(abs(yErr / yscal)), 0) / eps;
 
@@ -104,3 +103,7 @@ void rkqs_time(
   rkqsRes["hDid"] = hDid;
   rkqsRes["hNext"] = hNext;
 }
+
+} // hivModelling
+
+#endif // _hivModelling_rkqs_

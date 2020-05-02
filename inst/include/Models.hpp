@@ -1,8 +1,11 @@
-#include <Rcpp.h>
-#include "header.h"
+#ifndef _hivModelling_Models_
+#define _hivModelling_Models_
 
-// [[Rcpp::export]]
-Rcpp::NumericVector CountModel(
+#include "GetDelta.hpp"
+
+namespace hivModelling {
+
+inline Rcpp::NumericVector CountModel(
   const double& x,
   const Rcpp::NumericVector& y,
   const double& lambda,
@@ -17,7 +20,7 @@ Rcpp::NumericVector CountModel(
   const Rcpp::NumericVector& tc,
   Rcpp::NumericVector& dydx
 ) {
-  const Rcpp::NumericVector delta = hivModelling::GetDelta(x, delta4Fac, deltaM, tc, noStage);
+  const Rcpp::NumericVector delta = GetDelta(x, delta4Fac, deltaM, tc, noStage);
 
   // Element 0
   dydx[0] = lambda - (alphaP - mu) * y[0];
@@ -71,8 +74,7 @@ Rcpp::NumericVector CountModel(
   return dydx;
 }
 
-// [[Rcpp::export]]
-Rcpp::NumericVector TimeModel(
+inline Rcpp::NumericVector TimeModel(
   const double& x,
   const Rcpp::NumericVector& y,
   const Rcpp::List& param,
@@ -81,14 +83,14 @@ Rcpp::NumericVector TimeModel(
 ) {
   const Rcpp::NumericVector& qoppa  = param["Qoppa"];
   const Rcpp::NumericVector& fInit  = param["FInit"];
-  const double& alphaP        = param["AlphaP"];
-  const double& mu            = param["Mu"];
-  const size_t& noStage       = param["NoStage"];
-  const double& delta4Fac     = param["Delta4Fac"];
+  const double& alphaP              = param["AlphaP"];
+  const double& mu                  = param["Mu"];
+  const size_t& noStage             = param["NoStage"];
+  const double& delta4Fac           = param["Delta4Fac"];
   const Rcpp::NumericMatrix& deltaM = param["DeltaM"];
   const Rcpp::NumericVector& tc     = param["Tc"];
 
-  const Rcpp::NumericVector delta = hivModelling::GetDelta(year, delta4Fac, deltaM, tc, noStage);
+  const Rcpp::NumericVector delta = GetDelta(year, delta4Fac, deltaM, tc, noStage);
 
   size_t j = 0;
   size_t iEq = 0;
@@ -113,3 +115,7 @@ Rcpp::NumericVector TimeModel(
 
   return dydx;
 }
+
+} // namespace
+
+#endif // _hivModelling_Models_

@@ -1,15 +1,16 @@
-#include <Rcpp.h>
-#include "Sign.h"
+#ifndef _hivModelling_zbrent_
+#define _hivModelling_zbrent_
 
-using namespace Rcpp;
+#include "Sign.hpp"
 
-// [[Rcpp::export]]
-double zbrent(
-  Function func,
+namespace hivModelling {
+
+inline double zbrent(
+  const Rcpp::Function& func,
   double x1,
   double x2,
   double tol,
-  List extraArgs
+  const Rcpp::List& extraArgs
 ) {
   const int ITMAX = 100;
   const double EPS = 3.0e-8;
@@ -19,16 +20,16 @@ double zbrent(
   double c = x2;
   double d = 0.0;
   double e = 0.0;
-  double fa = as<double>(func(a, extraArgs));
-  double fb = as<double>(func(b, extraArgs));
+  double fa = Rcpp::as<double>(func(a, extraArgs));
+  double fb = Rcpp::as<double>(func(b, extraArgs));
 
   if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
-    Rcout << "zbrent: Root must be bracketed\n";
+    // Rcpp::Rcout << "zbrent: Root must be bracketed\n";
   }
 
   double fc = fb;
 
-  for (int iter = 1; iter <= ITMAX; iter++) {
+  for (size_t iter = 1; iter <= ITMAX; iter++) {
     if ((fb > 0.0 && fc > 0.0) || (fb < 0.0 && fc < 0.0)) {
       c = a;
       fc = fa;
@@ -91,15 +92,14 @@ double zbrent(
       b += Sign(tol1, xm);
     }
 
-    fb = as<double>(func(b, extraArgs));
+    fb = Rcpp::as<double>(func(b, extraArgs));
   }
 
-  Rcout << "Maximum number of iterations exceeded in zbrent";
+  Rcpp::Rcout << "zbrent: Maximum number of iterations exceeded";
 
   return 0.0;
 }
 
+} // hivModelling
 
-/*** R
-# zbrent(42)
-*/
+#endif // _hivModelling_zbrent_

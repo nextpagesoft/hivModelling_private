@@ -61,6 +61,6 @@ inline Rcpp::NumericVector GetDelta(
   return delta;
 }
 
-}
+} // namespace
 
 #endif // _hivModelling_GetDelta_

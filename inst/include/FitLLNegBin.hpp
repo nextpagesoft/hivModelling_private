@@ -1,14 +1,14 @@
-#include <Rcpp.h>
+#ifndef _hivModelling_FitLLNegBin_
+#define _hivModelling_FitLLNegBin_
 
-using namespace Rcpp;
+namespace hivModelling {
 
-// [[Rcpp::export]]
-NumericVector FitLLNegBin(
-  const NumericVector& y_m,
-  const NumericVector& y_d,
+inline Rcpp::NumericVector FitLLNegBin(
+  const Rcpp::NumericVector& y_m,
+  const Rcpp::NumericVector& y_d,
   const double& r
 ) {
-  NumericVector LL(y_m.size());
+  Rcpp::NumericVector LL(y_m.size());
 
   const size_t n = LL.size();
   for (size_t i = 0; i != n; ++i) {
@@ -24,6 +24,6 @@ NumericVector FitLLNegBin(
   return LL;
 }
 
-/*** R
-FitLLNegBin(y_m, y_d, r)
-*/
+} // hivModelling
+
+#endif // _hivModelling_FitLLNegBin_

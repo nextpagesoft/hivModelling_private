@@ -1,44 +1,12 @@
-#include <Rcpp.h>
+#ifndef _hivModelling_GetBSpline_
+#define _hivModelling_GetBSpline_
 
-using namespace Rcpp;
+namespace hivModelling {
 
-// [[Rcpp::export]]
-size_t GetInterval2(
-    const double& time,
-    const size_t& modelSplineN,
-    const NumericVector& myKnots,
-    const NumericVector& diffMyKnots
-) {
-  size_t i = 0;
-  for (i = 0; i != modelSplineN; ++i) {
-    if ((unsigned)(time - myKnots[i]) < diffMyKnots[i]) {
-      break;
-    }
-  }
-
-  return i;
-}
-
-// [[Rcpp::export]]
-size_t GetInterval1(
+inline double GetBSplineCubic(
   const double& time,
-  const size_t& modelSplineN,
-  const NumericVector& myKnots
-) {
-  size_t i = 0;
-  for (i = 0; i != modelSplineN; ++i) {
-    if (myKnots[i] <= time && time < myKnots[i + 1]) {
-      break;
-    }
-  }
-
-  return i;
-}
-
-double GetBSplineCubic(
-  const double& time,
-  const NumericVector& theta,
-  const NumericVector& myKnots,
+  const Rcpp::NumericVector& theta,
+  const Rcpp::NumericVector& myKnots,
   const size_t& k
 ) {
   const double& a = theta[k - 3];
@@ -76,13 +44,12 @@ double GetBSplineCubic(
   return d;
 }
 
-// [[Rcpp::export]]
-double GetBSpline(
+inline double GetBSpline(
   const double& time,
-  const NumericVector& theta,
+  const Rcpp::NumericVector& theta,
   const size_t& kOrder,
   const size_t& modelSplineN,
-  const NumericVector& myKnots,
+  const Rcpp::NumericVector& myKnots,
   const double& minYear,
   const double& maxYear
 ) {
@@ -101,7 +68,7 @@ double GetBSpline(
     return GetBSplineCubic(time, theta, myKnots, k);
   }
 
-  NumericVector d(kOrder);
+  Rcpp::NumericVector d(kOrder);
   const size_t p = kOrder - 1;
   for (size_t j = 0; j != kOrder; ++j) {
     d[j] = theta[j + k - p];
@@ -118,3 +85,7 @@ double GetBSpline(
 
   return val;
 }
+
+} // namespace
+
+#endif // _hivModelling_GetBSpline_
