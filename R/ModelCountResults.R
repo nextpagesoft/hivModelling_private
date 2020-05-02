@@ -24,6 +24,8 @@ ModelCountResults <- function(
   D_Cum_Time_Advanced <- matrix(0, param$DefNoDiagTime, numYears)
   D_Avg_Time <- rep(0, numYears)
 
+  SetCountModelParameters(param, info)
+
   for (i in seq_len(numYears)) {
     ystart <- rep(0, param$NoEq)
     tmpMinYear <- info$ModelMinYear + (i - 1)
@@ -32,9 +34,9 @@ ModelCountResults <- function(
       timeA <- tmpMinYear + (j - i)
       timeB <- timeA + 1
 
-      ystart <- OdeintCountReturn(
-        ystart, nVar = param$NoEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
-        minYear = tmpMinYear, maxYear = tmpMaxYear
+      ystart <- CountOdeintReturn(
+        ystart, nVar = param$NoEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, minYear = tmpMinYear,
+        maxYear = tmpMaxYear
       )
       iEq <- 1
 

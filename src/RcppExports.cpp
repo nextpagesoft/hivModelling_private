@@ -77,22 +77,20 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// OdeintCountLoop
-Rcpp::List OdeintCountLoop(const Rcpp::NumericVector& modelYears, const Rcpp::List& param, const Rcpp::List& info);
-RcppExport SEXP _hivModelling_OdeintCountLoop(SEXP modelYearsSEXP, SEXP paramSEXP, SEXP infoSEXP) {
+// CountOdeintLoop
+Rcpp::List CountOdeintLoop(const Rcpp::NumericVector& modelYears);
+RcppExport SEXP _hivModelling_CountOdeintLoop(SEXP modelYearsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type modelYears(modelYearsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type info(infoSEXP);
-    rcpp_result_gen = Rcpp::wrap(OdeintCountLoop(modelYears, param, info));
+    rcpp_result_gen = Rcpp::wrap(CountOdeintLoop(modelYears));
     return rcpp_result_gen;
 END_RCPP
 }
-// OdeintCountReturn
-Rcpp::NumericVector OdeintCountReturn(Rcpp::NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const Rcpp::List& param, const Rcpp::List& info, const double& minYear, const double& maxYear);
-RcppExport SEXP _hivModelling_OdeintCountReturn(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
+// CountOdeintReturn
+Rcpp::NumericVector CountOdeintReturn(Rcpp::NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const double& minYear, const double& maxYear);
+RcppExport SEXP _hivModelling_CountOdeintReturn(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP minYearSEXP, SEXP maxYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -100,17 +98,26 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const size_t& >::type nVar(nVarSEXP);
     Rcpp::traits::input_parameter< const double& >::type x1(x1SEXP);
     Rcpp::traits::input_parameter< const double& >::type x2(x2SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type info(infoSEXP);
     Rcpp::traits::input_parameter< const double& >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type maxYear(maxYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(OdeintCountReturn(ystart, nVar, x1, x2, param, info, minYear, maxYear));
+    rcpp_result_gen = Rcpp::wrap(CountOdeintReturn(ystart, nVar, x1, x2, minYear, maxYear));
     return rcpp_result_gen;
 END_RCPP
 }
-// OdeintTimeReturn
-Rcpp::NumericVector OdeintTimeReturn(Rcpp::NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const Rcpp::List& param, const Rcpp::List& info, const double& minYear, const double& maxYear, const double& tmpYear);
-RcppExport SEXP _hivModelling_OdeintTimeReturn(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP tmpYearSEXP) {
+// SetCountModelParameters
+void SetCountModelParameters(const Rcpp::List& param, const Rcpp::List& info);
+RcppExport SEXP _hivModelling_SetCountModelParameters(SEXP paramSEXP, SEXP infoSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type info(infoSEXP);
+    SetCountModelParameters(param, info);
+    return R_NilValue;
+END_RCPP
+}
+// TimeOdeintReturn
+Rcpp::NumericVector TimeOdeintReturn(Rcpp::NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const Rcpp::List& param, const Rcpp::List& info, const double& minYear, const double& maxYear, const double& tmpYear);
+RcppExport SEXP _hivModelling_TimeOdeintReturn(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP tmpYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -123,7 +130,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double& >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type maxYear(maxYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type tmpYear(tmpYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(OdeintTimeReturn(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear));
+    rcpp_result_gen = Rcpp::wrap(TimeOdeintReturn(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -174,9 +181,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
     {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
-    {"_hivModelling_OdeintCountLoop", (DL_FUNC) &_hivModelling_OdeintCountLoop, 3},
-    {"_hivModelling_OdeintCountReturn", (DL_FUNC) &_hivModelling_OdeintCountReturn, 8},
-    {"_hivModelling_OdeintTimeReturn", (DL_FUNC) &_hivModelling_OdeintTimeReturn, 9},
+    {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 1},
+    {"_hivModelling_CountOdeintReturn", (DL_FUNC) &_hivModelling_CountOdeintReturn, 6},
+    {"_hivModelling_SetCountModelParameters", (DL_FUNC) &_hivModelling_SetCountModelParameters, 2},
+    {"_hivModelling_TimeOdeintReturn", (DL_FUNC) &_hivModelling_TimeOdeintReturn, 9},
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
     {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
     {"_hivModelling_Zbrent", (DL_FUNC) &_hivModelling_Zbrent, 5},

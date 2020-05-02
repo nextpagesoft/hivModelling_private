@@ -3,15 +3,18 @@
 
 #include <Rcpp.h>
 
-#include "OdeintCountLoop.hpp"
-#include "OdeintCount.hpp"
-#include "OdeintTime.hpp"
-#include "RkqsCount.hpp"
-#include "RkqsTime.hpp"
-#include "RkckCount.hpp"
-#include "RkckTime.hpp"
+#include "CountOdeintLoop.hpp"
+#include "CountOdeint.hpp"
+#include "CountRkqs.hpp"
+#include "CountRkck.hpp"
 #include "CountModel.hpp"
+#include "SetCountModelParameters.hpp"
+
+#include "TimeOdeint.hpp"
+#include "TimeRkqs.hpp"
+#include "TimeRkck.hpp"
 #include "TimeModel.hpp"
+
 #include "GetDelta.hpp"
 #include "GetBSpline.hpp"
 #include "Sign.hpp"

@@ -1,14 +1,14 @@
-#ifndef _hivModelling_OdeintTime_
-#define _hivModelling_OdeintTime_
+#ifndef _hivModelling_TimeOdeint_
+#define _hivModelling_TimeOdeint_
 
 #include "globals.hpp"
 #include "Sign.hpp"
 #include "TimeModel.hpp"
-#include "RkqsTime.hpp"
+#include "timeRkqs.hpp"
 
 namespace hivModelling {
 
-inline void OdeintTime(
+inline void TimeOdeint(
   Rcpp::NumericVector& ystart,
   const size_t& nVar,
   const double& x1,
@@ -53,7 +53,7 @@ inline void OdeintTime(
       h = x2 - x;
     }
 
-    RkqsTime(
+    TimeRkqs(
       x, y, dydx, nVar, h, EPS, yscal, param, info, minYear, maxYear, tmpYear, rkqsRes,
       rkckRes
     );
@@ -77,4 +77,4 @@ inline void OdeintTime(
 
 } // hivModelling
 
-#endif // _hivModelling_OdeintTime_
+#endif // _hivModelling_TimeOdeint_

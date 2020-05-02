@@ -29,7 +29,7 @@ ModelTimeToDiagMedian <- function(
     timeA <- (j - 1) * 0.001
     timeB <- timeA + 0.001
 
-    ystart <- OdeintTimeReturn(
+    ystart <- TimeOdeintReturn(
       ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
       minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpMinYear
     )

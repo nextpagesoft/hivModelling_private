@@ -55,42 +55,46 @@ void Swap2D(
 }
 
 // [[Rcpp::export]]
-Rcpp::List OdeintCountLoop(
-    const Rcpp::NumericVector& modelYears,
-    const Rcpp::List& param,
-    const Rcpp::List& info
+Rcpp::List CountOdeintLoop(
+  const Rcpp::NumericVector& modelYears
 ) {
-  return hivModelling::OdeintCountLoop(modelYears, param, info);
+  return hivModelling::CountOdeintLoop(modelYears);
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector OdeintCountReturn(
-    Rcpp::NumericVector& ystart,
-    const size_t& nVar,
-    const double& x1,
-    const double& x2,
-    const Rcpp::List& param,
-    const Rcpp::List& info,
-    const double& minYear,
-    const double& maxYear
+Rcpp::NumericVector CountOdeintReturn(
+  Rcpp::NumericVector& ystart,
+  const size_t& nVar,
+  const double& x1,
+  const double& x2,
+  const double& minYear,
+  const double& maxYear
 ) {
-  hivModelling::OdeintCount(ystart, nVar, x1, x2, param, info, minYear, maxYear);
+  hivModelling::CountOdeint(ystart, nVar, x1, x2, minYear, maxYear);
   return ystart;
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector OdeintTimeReturn(
-    Rcpp::NumericVector& ystart,
-    const size_t& nVar,
-    const double& x1,
-    const double& x2,
-    const Rcpp::List& param,
-    const Rcpp::List& info,
-    const double& minYear,
-    const double& maxYear,
-    const double& tmpYear
+void SetCountModelParameters(
+  const Rcpp::List& param,
+  const Rcpp::List& info
 ) {
-  hivModelling::OdeintTime(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
+  hivModelling::SetCountModelParameters(param, info);
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector TimeOdeintReturn(
+  Rcpp::NumericVector& ystart,
+  const size_t& nVar,
+  const double& x1,
+  const double& x2,
+  const Rcpp::List& param,
+  const Rcpp::List& info,
+  const double& minYear,
+  const double& maxYear,
+  const double& tmpYear
+) {
+  hivModelling::TimeOdeint(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
   return ystart;
 }
 
@@ -105,8 +109,8 @@ Rcpp::NumericVector FitLLNegBin(
 
 // [[Rcpp::export]]
 Rcpp::NumericVector FitLLPoisson(
-    const Rcpp::NumericVector& y_m,
-    const Rcpp::NumericVector& y_d
+  const Rcpp::NumericVector& y_m,
+  const Rcpp::NumericVector& y_d
 ) {
   return hivModelling::FitLLPoisson(y_m, y_d);
 }

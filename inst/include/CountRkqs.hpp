@@ -1,12 +1,12 @@
-#ifndef _hivModelling_RkqsCount_
-#define _hivModelling_RkqsCount_
+#ifndef _hivModelling_CountRkqs_
+#define _hivModelling_CountRkqs_
 
 #include "globals.hpp"
-#include "RkckCount.hpp"
+#include "CountRkck.hpp"
 
 namespace hivModelling {
 
-inline void RkqsCount(
+inline void CountRkqs(
   double& x,
   Rcpp::NumericVector& y,
   const Rcpp::NumericVector& dydx,
@@ -14,8 +14,6 @@ inline void RkqsCount(
   const double& htry,
   const double& eps,
   const Rcpp::NumericVector& yscal,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
   double& rkqsLambda,
@@ -30,7 +28,7 @@ inline void RkqsCount(
   double h = htry;
 
   for (;;) {
-    RkckCount(x, y, dydx, nVar, h, param, info, minYear, maxYear, rkckLambda, yOut, yErr);
+    CountRkck(x, y, dydx, nVar, h, minYear, maxYear, rkckLambda, yOut, yErr);
 
     rkqsLambda = fmin(rkqsLambda, rkckLambda);
 
@@ -55,4 +53,4 @@ inline void RkqsCount(
 
 } // hivModelling
 
-#endif // _hivModelling_RkqsCount_
+#endif // _hivModelling_CountRkqs_

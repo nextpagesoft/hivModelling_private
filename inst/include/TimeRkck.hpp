@@ -1,12 +1,12 @@
-#ifndef _hivModelling_RkckTime_
-#define _hivModelling_RkckTime_
+#ifndef _hivModelling_TimeRkck_
+#define _hivModelling_TimeRkck_
 
 #include "globals.hpp"
 #include "TimeModel.hpp"
 
 namespace hivModelling {
 
-inline void RkckTime(
+inline void TimeRkck(
   const double& x,
   const Rcpp::NumericVector& y,
   const Rcpp::NumericVector& dydx,
@@ -53,4 +53,4 @@ inline void RkckTime(
 
 } // hivModelling
 
-#endif // _hivModelling_RkckTime_
+#endif // _hivModelling_TimeRkck_

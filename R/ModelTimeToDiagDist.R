@@ -25,7 +25,7 @@ ModelTimeToDiagDist <- function(
       timeA <- j - 1
       timeB <- timeA + 1
 
-      ystart <- OdeintTimeReturn(
+      ystart <- TimeOdeintReturn(
         ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
         minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpMinYear
       )
@@ -54,7 +54,7 @@ ModelTimeToDiagDist <- function(
       timeB <- timeA + 1
 
       tmpYear <- min(timeA + 0.5, info$ModelMaxYear - 0.5 - BIT_SML)
-      ystart <- OdeintTimeReturn(
+      ystart <- TimeOdeintReturn(
         ystart, nVar = nEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
         minYear = tmpMinYear, maxYear = tmpMaxYear, tmpYear = tmpYear
       )

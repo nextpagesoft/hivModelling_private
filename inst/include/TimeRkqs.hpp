@@ -1,12 +1,12 @@
-#ifndef _hivModelling_RkqsTime_
-#define _hivModelling_RkqsTime_
+#ifndef _hivModelling_TimeRkqs_
+#define _hivModelling_TimeRkqs_
 
 #include "globals.hpp"
-#include "RkckTime.hpp"
+#include "TimeRkck.hpp"
 
 namespace hivModelling {
 
-inline void RkqsTime(
+inline void TimeRkqs(
   double& x,
   Rcpp::NumericVector& y,
   const Rcpp::NumericVector& dydx,
@@ -30,7 +30,7 @@ inline void RkqsTime(
   double h = htry;
 
   for (;;) {
-    RkckTime(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, rkckRes);
+    TimeRkck(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, rkckRes);
 
     const Rcpp::NumericVector& yOut = rkckRes["YOut"];
     const Rcpp::NumericVector& yErr = rkckRes["YErr"];
@@ -59,4 +59,4 @@ inline void RkqsTime(
 
 } // hivModelling
 
-#endif // _hivModelling_rkqs_
+#endif // _hivModelling_TimeRkqs_

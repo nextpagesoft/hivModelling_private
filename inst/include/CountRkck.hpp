@@ -1,39 +1,25 @@
-#ifndef _hivModelling_RkckCount_
-#define _hivModelling_RkckCount_
+#ifndef _hivModelling_CountRkck_
+#define _hivModelling_CountRkck_
 
 #include "globals.hpp"
+#include "CountModelParameters.hpp"
 #include "GetBSpline.hpp"
 #include "CountModel.hpp"
 
 namespace hivModelling {
 
-inline void RkckCount(
+inline void CountRkck(
   const double& x,
   const Rcpp::NumericVector& y,
   const Rcpp::NumericVector& dydx,
   const size_t& nVar,
   const double& h,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
   double& rkckLambda,
   Rcpp::NumericVector& yOut,
   Rcpp::NumericVector& yErr
 ) {
-  const Rcpp::NumericVector& myKnots = info["MyKnots"];
-  const int& kOrder                  = info["SplineOrder"];
-  const int& modelSplineN            = info["ModelSplineN"];
-  const Rcpp::NumericVector& theta   = param["Theta"];
-  const Rcpp::NumericVector& qoppa   = param["Qoppa"];
-  const Rcpp::NumericVector& fInit   = param["FInit"];
-  const double& alphaP               = param["AlphaP"];
-  const double& mu                   = param["Mu"];
-  const size_t& noStage              = param["NoStage"];
-  const double& delta4Fac            = param["Delta4Fac"];
-  const Rcpp::NumericMatrix& deltaM  = param["DeltaM"];
-  const Rcpp::NumericVector& tc      = param["Tc"];
-
   Rcpp::NumericVector ak2(nVar);
   double xtemp = x + a2 * h;
   Rcpp::NumericVector ytemp = y + b21 * h * dydx;
@@ -84,4 +70,4 @@ inline void RkckCount(
 
 } // hivModelling
 
-#endif // _hivModelling_RkckCount_
+#endif // _hivModelling_CountRkck_
