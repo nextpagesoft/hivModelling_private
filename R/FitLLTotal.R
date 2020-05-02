@@ -17,7 +17,7 @@ FitLLTotal <- function(
   param$DeltaM <- GetParamDeltaM(p, param)
   param$Theta <- GetParamTheta(p, param, info)
 
-  res <- odeintLoop(modelYears, param, info)
+  res <- OdeintCountLoop(modelYears, param, info)
 
   modelResults <- res[['ModelResults']]
   minLambda <- res[['MinLambda']]

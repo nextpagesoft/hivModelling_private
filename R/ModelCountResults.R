@@ -32,7 +32,7 @@ ModelCountResults <- function(
       timeA <- tmpMinYear + (j - i)
       timeB <- timeA + 1
 
-      ystart <- odeintReturn_count(
+      ystart <- OdeintCountReturn(
         ystart, nVar = param$NoEq, x1 = timeA + BIT_SML, x2 = timeB - BIT_SML, param, info,
         minYear = tmpMinYear, maxYear = tmpMaxYear
       )

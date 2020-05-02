@@ -1,11 +1,11 @@
-#ifndef _hivModelling_zbrent_
-#define _hivModelling_zbrent_
+#ifndef _hivModelling_Zbrent_
+#define _hivModelling_Zbrent_
 
 #include "Sign.hpp"
 
 namespace hivModelling {
 
-inline double zbrent(
+inline double Zbrent(
   const Rcpp::Function& func,
   double x1,
   double x2,
@@ -24,7 +24,7 @@ inline double zbrent(
   double fb = Rcpp::as<double>(func(b, extraArgs));
 
   if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
-    // Rcpp::Rcout << "zbrent: Root must be bracketed\n";
+    // Rcpp::Rcout << "Zbrent: Root must be bracketed\n";
   }
 
   double fc = fb;
@@ -95,11 +95,11 @@ inline double zbrent(
     fb = Rcpp::as<double>(func(b, extraArgs));
   }
 
-  Rcpp::Rcout << "zbrent: Maximum number of iterations exceeded";
+  Rcpp::Rcout << "Zbrent: Maximum number of iterations exceeded";
 
   return 0.0;
 }
 
 } // hivModelling
 
-#endif // _hivModelling_zbrent_
+#endif // _hivModelling_Zbrent_

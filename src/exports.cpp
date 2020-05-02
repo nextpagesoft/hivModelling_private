@@ -55,12 +55,43 @@ void Swap2D(
 }
 
 // [[Rcpp::export]]
-Rcpp::List odeintLoop(
+Rcpp::List OdeintCountLoop(
     const Rcpp::NumericVector& modelYears,
     const Rcpp::List& param,
     const Rcpp::List& info
 ) {
-  return hivModelling::odeintLoop(modelYears, param, info);
+  return hivModelling::OdeintCountLoop(modelYears, param, info);
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector OdeintCountReturn(
+    Rcpp::NumericVector& ystart,
+    const size_t& nVar,
+    const double& x1,
+    const double& x2,
+    const Rcpp::List& param,
+    const Rcpp::List& info,
+    const double& minYear,
+    const double& maxYear
+) {
+  hivModelling::OdeintCount(ystart, nVar, x1, x2, param, info, minYear, maxYear);
+  return ystart;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector OdeintTimeReturn(
+    Rcpp::NumericVector& ystart,
+    const size_t& nVar,
+    const double& x1,
+    const double& x2,
+    const Rcpp::List& param,
+    const Rcpp::List& info,
+    const double& minYear,
+    const double& maxYear,
+    const double& tmpYear
+) {
+  hivModelling::OdeintTime(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
+  return ystart;
 }
 
 // [[Rcpp::export]]
@@ -81,43 +112,12 @@ Rcpp::NumericVector FitLLPoisson(
 }
 
 // [[Rcpp::export]]
-double zbrent(
+double Zbrent(
   const Rcpp::Function& func,
   double x1,
   double x2,
   double tol,
   const Rcpp::List& extraArgs
 ) {
-  return hivModelling::zbrent(func, x1, x2, tol, extraArgs);
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector odeintReturn_count(
-  Rcpp::NumericVector& ystart,
-  const size_t& nVar,
-  const double& x1,
-  const double& x2,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
-  const double& minYear,
-  const double& maxYear
-) {
-  return hivModelling::odeintReturn_count(ystart, nVar, x1, x2, param, info, minYear, maxYear);
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector odeintReturn_time(
-  Rcpp::NumericVector& ystart,
-  const size_t& nVar,
-  const double& x1,
-  const double& x2,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
-  const double& minYear,
-  const double& maxYear,
-  const double& tmpYear
-) {
-  return hivModelling::odeintReturn_time(
-    ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear
-  );
+  return hivModelling::Zbrent(func, x1, x2, tol, extraArgs);
 }

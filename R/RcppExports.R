@@ -21,8 +21,16 @@ Swap2D <- function(y, a1, a2, b1, b2) {
     invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
 }
 
-odeintLoop <- function(modelYears, param, info) {
-    .Call(`_hivModelling_odeintLoop`, modelYears, param, info)
+OdeintCountLoop <- function(modelYears, param, info) {
+    .Call(`_hivModelling_OdeintCountLoop`, modelYears, param, info)
+}
+
+OdeintCountReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear) {
+    .Call(`_hivModelling_OdeintCountReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear)
+}
+
+OdeintTimeReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear) {
+    .Call(`_hivModelling_OdeintTimeReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear)
 }
 
 FitLLNegBin <- function(y_m, y_d, r) {
@@ -33,15 +41,7 @@ FitLLPoisson <- function(y_m, y_d) {
     .Call(`_hivModelling_FitLLPoisson`, y_m, y_d)
 }
 
-zbrent <- function(func, x1, x2, tol, extraArgs) {
-    .Call(`_hivModelling_zbrent`, func, x1, x2, tol, extraArgs)
-}
-
-odeintReturn_count <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear) {
-    .Call(`_hivModelling_odeintReturn_count`, ystart, nVar, x1, x2, param, info, minYear, maxYear)
-}
-
-odeintReturn_time <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear) {
-    .Call(`_hivModelling_odeintReturn_time`, ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear)
+Zbrent <- function(func, x1, x2, tol, extraArgs) {
+    .Call(`_hivModelling_Zbrent`, func, x1, x2, tol, extraArgs)
 }
 

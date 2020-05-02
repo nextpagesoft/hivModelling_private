@@ -204,8 +204,8 @@ PerformMainFit <- function(
         Param = param
       )
       # Use base R function 'uniroot' instead of zbrent
-      param$RDispAIDS <- zbrent(FitLLrAIDS, rMin, rMax, ftol, extraArgs)
-      param$RDispRest <- zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
+      param$RDispAIDS <- Zbrent(FitLLrAIDS, rMin, rMax, ftol, extraArgs)
+      param$RDispRest <- Zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
 
       PrintAlert(
         'Overdispersion: AIDS = {.val {param$RDispAIDS}}, Rest = {.val {param$RDispRest}}'

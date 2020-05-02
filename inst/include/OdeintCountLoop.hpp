@@ -1,18 +1,18 @@
-#ifndef _hivModelling_odeintloop_
-#define _hivModelling_odeintloop_
+#ifndef _hivModelling_OdeintCountLoop_
+#define _hivModelling_OdeintCountLoop_
 
 #include "globals.hpp"
-#include "odeint.hpp"
+#include "OdeintCount.hpp"
 
 namespace hivModelling {
 
-inline Rcpp::List odeintLoop(
+inline Rcpp::List OdeintCountLoop(
   const Rcpp::NumericVector& modelYears,
   const Rcpp::List& param,
   const Rcpp::List& info
 ) {
-  const size_t& nVar = param["NoEq"];
-  const size_t& modelNoYears = Rcpp::as<int>(info["ModelNoYears"]) - 1;
+  const size_t& nVar         = param["NoEq"];
+  const size_t& modelNoYears = Rcpp::as<size_t>(info["ModelNoYears"]) - 1;
   const double& modelMinYear = info["ModelMinYear"];
   const double& modelMaxYear = info["ModelMaxYear"];
 
@@ -21,7 +21,7 @@ inline Rcpp::List odeintLoop(
   double minLambda = 1e+10;
 
   for (size_t i = 0; i != modelNoYears; ++i) {
-    double resMinLambda = odeint_count(
+    double resMinLambda = OdeintCount(
       ystart, nVar, modelYears[i] + BIT_SML, modelYears[i + 1] - BIT_SML, param, info,
       modelMinYear, modelMaxYear
     );
@@ -39,4 +39,4 @@ inline Rcpp::List odeintLoop(
 
 } // hivModelling
 
-#endif // _hivModelling_odeintloop_
+#endif // _hivModelling_OdeintCountLoop_

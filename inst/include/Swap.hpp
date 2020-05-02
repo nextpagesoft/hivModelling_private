@@ -35,4 +35,4 @@ inline void Swap2D(
 
 } // hivModelling
 
-#endif // _hivModelling_zbrent_
+#endif // _hivModelling_Swap_
