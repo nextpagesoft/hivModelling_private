@@ -1,22 +1,21 @@
-#include <Rcpp.h>
+#ifndef _hivModelling_GetDelta_
+#define _hivModelling_GetDelta_
 
-using namespace Rcpp;
+namespace hivModelling {
 
-// [[Rcpp::export]]
-size_t GetTimeInterval_std(
+inline size_t GetTimeInterval_std(
   const double& time,
-  const NumericVector& timeIntervals
+  const Rcpp::NumericVector& timeIntervals
 ) {
-  NumericVector::const_iterator pos;
+  Rcpp::NumericVector::const_iterator pos;
 
   pos = std::upper_bound(timeIntervals.begin(), timeIntervals.end(), time);
   return std::distance(timeIntervals.begin(), pos) - 1;
 }
 
-// [[Rcpp::export]]
-size_t GetTimeInterval(
+inline size_t GetTimeInterval(
   const double& x,
-  const NumericVector& tc
+  const Rcpp::NumericVector& tc
 ) {
   const size_t n = tc.size();
   size_t i = 0;
@@ -30,19 +29,18 @@ size_t GetTimeInterval(
   return i;
 }
 
-// [[Rcpp::export]]
-NumericVector GetDelta(
+inline Rcpp::NumericVector GetDelta(
   const double& time,
   const double& delta4Fac,
-  const NumericMatrix& deltaM,
-  const NumericVector& tc,
+  const Rcpp::NumericMatrix& deltaM,
+  const Rcpp::NumericVector& tc,
   const size_t& deadStageIdx
 ) {
   const size_t stageCount = deadStageIdx - 1;
 
   const size_t timeInterval = GetTimeInterval(time, tc);
   const double ratio = (time - tc[timeInterval]) / (tc[timeInterval + 1] - tc[timeInterval]);
-  NumericVector delta(deadStageIdx + 1);
+  Rcpp::NumericVector delta(deadStageIdx + 1);
 
   // CD4 stages
   for (size_t i = 0; i != stageCount; ++i) {
@@ -62,3 +60,7 @@ NumericVector GetDelta(
 
   return delta;
 }
+
+}
+
+#endif // _hivModelling_GetDelta_

@@ -74,79 +74,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetTimeInterval_std
-size_t GetTimeInterval_std(const double& time, const NumericVector& timeIntervals);
-RcppExport SEXP _hivModelling_GetTimeInterval_std(SEXP timeSEXP, SEXP timeIntervalsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type timeIntervals(timeIntervalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetTimeInterval_std(time, timeIntervals));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetTimeInterval
-size_t GetTimeInterval(const double& x, const NumericVector& tc);
-RcppExport SEXP _hivModelling_GetTimeInterval(SEXP xSEXP, SEXP tcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type tc(tcSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetTimeInterval(x, tc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetDelta
-NumericVector GetDelta(const double& time, const double& delta4Fac, const NumericMatrix& deltaM, const NumericVector& tc, const size_t& deadStageIdx);
-RcppExport SEXP _hivModelling_GetDelta(SEXP timeSEXP, SEXP delta4FacSEXP, SEXP deltaMSEXP, SEXP tcSEXP, SEXP deadStageIdxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const double& >::type delta4Fac(delta4FacSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type deltaM(deltaMSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type tc(tcSEXP);
-    Rcpp::traits::input_parameter< const size_t& >::type deadStageIdx(deadStageIdxSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetDelta(time, delta4Fac, deltaM, tc, deadStageIdx));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CountModel
-NumericVector CountModel(const double& x, const NumericVector& y, const double& lambda, const size_t& nVar, const NumericVector& qoppa, const NumericVector& fInit, const double& alphaP, const double& mu, const size_t& noStage, const double& delta4Fac, const NumericMatrix& deltaM, const NumericVector& tc, NumericVector& dydx);
+Rcpp::NumericVector CountModel(const double& x, const Rcpp::NumericVector& y, const double& lambda, const size_t& nVar, const Rcpp::NumericVector& qoppa, const Rcpp::NumericVector& fInit, const double& alphaP, const double& mu, const size_t& noStage, const double& delta4Fac, const Rcpp::NumericMatrix& deltaM, const Rcpp::NumericVector& tc, Rcpp::NumericVector& dydx);
 RcppExport SEXP _hivModelling_CountModel(SEXP xSEXP, SEXP ySEXP, SEXP lambdaSEXP, SEXP nVarSEXP, SEXP qoppaSEXP, SEXP fInitSEXP, SEXP alphaPSEXP, SEXP muSEXP, SEXP noStageSEXP, SEXP delta4FacSEXP, SEXP deltaMSEXP, SEXP tcSEXP, SEXP dydxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const double& >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< const size_t& >::type nVar(nVarSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type qoppa(qoppaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type fInit(fInitSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type qoppa(qoppaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type fInit(fInitSEXP);
     Rcpp::traits::input_parameter< const double& >::type alphaP(alphaPSEXP);
     Rcpp::traits::input_parameter< const double& >::type mu(muSEXP);
     Rcpp::traits::input_parameter< const size_t& >::type noStage(noStageSEXP);
     Rcpp::traits::input_parameter< const double& >::type delta4Fac(delta4FacSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type deltaM(deltaMSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type tc(tcSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type dydx(dydxSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type deltaM(deltaMSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type tc(tcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type dydx(dydxSEXP);
     rcpp_result_gen = Rcpp::wrap(CountModel(x, y, lambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx));
     return rcpp_result_gen;
 END_RCPP
 }
 // TimeModel
-NumericVector TimeModel(const double& x, const NumericVector& y, const List& param, const double& year, NumericVector& dydx);
+Rcpp::NumericVector TimeModel(const double& x, const Rcpp::NumericVector& y, const Rcpp::List& param, const double& year, Rcpp::NumericVector& dydx);
 RcppExport SEXP _hivModelling_TimeModel(SEXP xSEXP, SEXP ySEXP, SEXP paramSEXP, SEXP yearSEXP, SEXP dydxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const double& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const List& >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
     Rcpp::traits::input_parameter< const double& >::type year(yearSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type dydx(dydxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type dydx(dydxSEXP);
     rcpp_result_gen = Rcpp::wrap(TimeModel(x, y, param, year, dydx));
     return rcpp_result_gen;
 END_RCPP
@@ -187,6 +148,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type b2(b2SEXP);
     Swap2D(y, a1, a2, b1, b2);
     return R_NilValue;
+END_RCPP
+}
+// GetDelta
+Rcpp::NumericVector GetDelta(const double& time, const double& delta4Fac, const Rcpp::NumericMatrix& deltaM, const Rcpp::NumericVector& tc, const size_t& deadStageIdx);
+RcppExport SEXP _hivModelling_GetDelta(SEXP timeSEXP, SEXP delta4FacSEXP, SEXP deltaMSEXP, SEXP tcSEXP, SEXP deadStageIdxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const double& >::type delta4Fac(delta4FacSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type deltaM(deltaMSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type tc(tcSEXP);
+    Rcpp::traits::input_parameter< const size_t& >::type deadStageIdx(deadStageIdxSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetDelta(time, delta4Fac, deltaM, tc, deadStageIdx));
+    return rcpp_result_gen;
 END_RCPP
 }
 // odeint_count
@@ -387,14 +363,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetInterval2", (DL_FUNC) &_hivModelling_GetInterval2, 4},
     {"_hivModelling_GetInterval1", (DL_FUNC) &_hivModelling_GetInterval1, 3},
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
-    {"_hivModelling_GetTimeInterval_std", (DL_FUNC) &_hivModelling_GetTimeInterval_std, 2},
-    {"_hivModelling_GetTimeInterval", (DL_FUNC) &_hivModelling_GetTimeInterval, 2},
-    {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 5},
     {"_hivModelling_CountModel", (DL_FUNC) &_hivModelling_CountModel, 13},
     {"_hivModelling_TimeModel", (DL_FUNC) &_hivModelling_TimeModel, 5},
     {"_hivModelling_Sign", (DL_FUNC) &_hivModelling_Sign, 2},
     {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
+    {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 5},
     {"_hivModelling_odeint_count", (DL_FUNC) &_hivModelling_odeint_count, 8},
     {"_hivModelling_odeint_time", (DL_FUNC) &_hivModelling_odeint_time, 9},
     {"_hivModelling_odeintReturn_count", (DL_FUNC) &_hivModelling_odeintReturn_count, 8},

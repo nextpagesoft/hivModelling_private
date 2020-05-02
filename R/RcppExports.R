@@ -21,18 +21,6 @@ GetBSpline <- function(time, theta, kOrder, modelSplineN, myKnots, minYear, maxY
     .Call(`_hivModelling_GetBSpline`, time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 }
 
-GetTimeInterval_std <- function(time, timeIntervals) {
-    .Call(`_hivModelling_GetTimeInterval_std`, time, timeIntervals)
-}
-
-GetTimeInterval <- function(x, tc) {
-    .Call(`_hivModelling_GetTimeInterval`, x, tc)
-}
-
-GetDelta <- function(time, delta4Fac, deltaM, tc, deadStageIdx) {
-    .Call(`_hivModelling_GetDelta`, time, delta4Fac, deltaM, tc, deadStageIdx)
-}
-
 CountModel <- function(x, y, lambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx) {
     .Call(`_hivModelling_CountModel`, x, y, lambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx)
 }
@@ -51,6 +39,10 @@ Swap1D <- function(y, a, b) {
 
 Swap2D <- function(y, a1, a2, b1, b2) {
     invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
+}
+
+GetDelta <- function(time, delta4Fac, deltaM, tc, deadStageIdx) {
+    .Call(`_hivModelling_GetDelta`, time, delta4Fac, deltaM, tc, deadStageIdx)
 }
 
 odeint_count <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear) {
