@@ -47,11 +47,21 @@ void Swap1D(
 void Swap2D(
   Rcpp::NumericMatrix& y,
   const int a1,
-  const int a2,
+  const Rcpp::IntegerVector& a2,
   const int b1,
-  const int b2
+  const Rcpp::IntegerVector& b2
 ) {
   hivModelling::Swap2D(y, a1, a2, b1, b2);
+}
+
+// [[Rcpp::export]]
+void DetermineIloIhi(
+  const Rcpp::NumericVector& y,
+  Rcpp::IntegerVector& ilo,
+  Rcpp::IntegerVector& ihi,
+  Rcpp::IntegerVector& inhi
+) {
+  hivModelling::DetermineIloIhi(y, ilo, ihi, inhi);
 }
 
 // [[Rcpp::export]]

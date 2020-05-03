@@ -19,18 +19,41 @@ inline void Swap1D(
 inline void Swap2D(
   Rcpp::NumericMatrix& y,
   const int a1,
-  const int a2,
+  const Rcpp::IntegerVector& a2,
   const int b1,
-  const int b2
+  const Rcpp::IntegerVector& b2
 ) {
   const int a10 = a1 - 1;
-  const int a20 = a2 - 1;
+  const Rcpp::IntegerVector a20 = a2 - 1;
   const int b10 = b1 - 1;
-  const int b20 = b2 - 1;
+  const Rcpp::IntegerVector b20 = b2 - 1;
 
-  const double s = y(a10, a20);
-  y(a10, a20) = y(b10, b20);
-  y(b10, b20) = s;
+  for (int i = 0; i != a20.size(); ++i) {
+    const double s = y(a10, a20[i]);
+    y(a10, a20[i]) = y(b10, b20[i]);
+    y(b10, b20[i]) = s;
+  }
+}
+
+inline void DetermineIloIhi(
+  const Rcpp::NumericVector& y,
+  Rcpp::IntegerVector& ilo,
+  Rcpp::IntegerVector& ihi,
+  Rcpp::IntegerVector& inhi
+) {
+  for (int i = 0; i != y.size(); ++i) {
+    if (y[i] <= y[ilo[0] - 1]) {
+      ilo[0] = i + 1;
+    }
+
+    if (y[i] > y[ihi[0] - 1]) {
+      inhi[0] = ihi[0];
+      ihi[0] = i + 1;
+    } else if (y[i] > y[inhi[0] - 1] && i != (ihi[0] - 1)) {
+      inhi[0] = i + 1;
+    }
+  }
+  ilo = 6;
 }
 
 } // hivModelling

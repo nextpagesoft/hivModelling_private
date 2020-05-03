@@ -21,6 +21,10 @@ Swap2D <- function(y, a1, a2, b1, b2) {
     invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
 }
 
+DetermineIloIhi <- function(y, ilo, ihi, inhi) {
+    invisible(.Call(`_hivModelling_DetermineIloIhi`, y, ilo, ihi, inhi))
+}
+
 CountOdeintLoop <- function() {
     .Call(`_hivModelling_CountOdeintLoop`)
 }

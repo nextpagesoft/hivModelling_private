@@ -64,16 +64,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // Swap2D
-void Swap2D(Rcpp::NumericMatrix& y, const int a1, const int a2, const int b1, const int b2);
+void Swap2D(Rcpp::NumericMatrix& y, const int a1, const Rcpp::IntegerVector& a2, const int b1, const Rcpp::IntegerVector& b2);
 RcppExport SEXP _hivModelling_Swap2D(SEXP ySEXP, SEXP a1SEXP, SEXP a2SEXP, SEXP b1SEXP, SEXP b2SEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const int >::type a1(a1SEXP);
-    Rcpp::traits::input_parameter< const int >::type a2(a2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type a2(a2SEXP);
     Rcpp::traits::input_parameter< const int >::type b1(b1SEXP);
-    Rcpp::traits::input_parameter< const int >::type b2(b2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type b2(b2SEXP);
     Swap2D(y, a1, a2, b1, b2);
+    return R_NilValue;
+END_RCPP
+}
+// DetermineIloIhi
+void DetermineIloIhi(const Rcpp::NumericVector& y, Rcpp::IntegerVector& ilo, Rcpp::IntegerVector& ihi, Rcpp::IntegerVector& inhi);
+RcppExport SEXP _hivModelling_DetermineIloIhi(SEXP ySEXP, SEXP iloSEXP, SEXP ihiSEXP, SEXP inhiSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector& >::type ilo(iloSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector& >::type ihi(ihiSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector& >::type inhi(inhiSEXP);
+    DetermineIloIhi(y, ilo, ihi, inhi);
     return R_NilValue;
 END_RCPP
 }
@@ -192,6 +205,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
     {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
+    {"_hivModelling_DetermineIloIhi", (DL_FUNC) &_hivModelling_DetermineIloIhi, 4},
     {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 0},
     {"_hivModelling_CountOdeintReturn", (DL_FUNC) &_hivModelling_CountOdeintReturn, 6},
     {"_hivModelling_SetCountModelParameters", (DL_FUNC) &_hivModelling_SetCountModelParameters, 2},

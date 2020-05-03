@@ -7,8 +7,7 @@ amoeba <- function(
   param,
   info,
   data,
-  verbose = FALSE,
-  ifit
+  verbose = FALSE
 ) {
   if (verbose) {
     DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) {
@@ -28,28 +27,20 @@ amoeba <- function(
     DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) NULL
   }
 
-  AmoebaTry <- function(
-    p, y, psum, ndim, ihi, fac,
-    probSurv1996,
-    param,
-    info,
-    data)
+  AmoebaTry <- function(fac)
   {
     fac1 <- (1.0 - fac) / ndim
     fac2 <- fac1 - fac
-
     ptry <- psum * fac1 - p[ihi, ] * fac2
-
-    ytry <- FitLLTotal(ptry, probSurv1996, param, info, data, detailedResults = FALSE)
+    ytry <<- FitLLTotal(ptry, probSurv1996, param, info, data, detailedResults = FALSE)
 
     if (ytry < y[ihi]) {
-      y[ihi] <- ytry
-      psum <- psum + ptry - p[ihi, ]
-      p[ihi, ] <- ptry
+      y[ihi] <<- ytry
+      psum <<- psum + ptry - p[ihi, ]
+      p[ihi, ] <<- ptry
     }
-    DisplayMessage(rtol, nfunk, ytry, fac, y[9])
 
-    return(list(Ytry = ytry, Y = y, Psum = psum, P = p))
+    DisplayMessage(rtol, nfunk, ytry, fac, y[9])
   }
 
   # Code -----------------------------------------------------------------------
@@ -64,37 +55,23 @@ amoeba <- function(
   while (
     nfunk < NMAX
   ) {
-    inhi <- 0
-    ilo <- 1
+    inhi <- 0L
+    ilo <- 1L
     if (y[1] > y[2]) {
-      inhi <- 2
-      ihi <- 1
+      inhi <- 2L
+      ihi <- 1L
     } else {
-      inhi <- 1
-      ihi <- 2
+      inhi <- 1L
+      ihi <- 2L
     }
 
-    for (i in seqMpts) {
-      if (y[i] <= y[ilo]) {
-        ilo <- i
-      }
-
-      if (y[i] > y[ihi]) {
-        inhi <- ihi
-        ihi <- i
-      } else if (y[i] > y[inhi] && i != ihi) {
-        inhi <- i
-      }
-    }
+    DetermineIloIhi(y, ilo, ihi, inhi)
 
     rtol <- 2.0 * abs(y[ihi] - y[ilo]) / (abs(y[ihi]) + abs(y[ilo]))
 
     if (rtol < ftol) {
       Swap1D(y, 1, ilo)
-      for (i in seqNDim) {
-        Swap2D(p, 1, i, ilo, i)
-      }
-
+      Swap2D(p, 1, seqNDim, ilo, seqNDim)
       break
     }
 
@@ -107,27 +84,15 @@ amoeba <- function(
     # Begin a new iteration. First extrapolate by a factor -1 through the face
     # of the simplex across from the high points, i.e., reflect the simplex from
     # the high point.
-    res <- AmoebaTry(p, y, psum, ndim, ihi, fac = -1, probSurv1996, param, info, data)
-    ytry <- res$Ytry
-    y <- res$Y
-    psum <- res$Psum
-    p <- res$P
+    AmoebaTry(-1)
 
     if (ytry <= y[ilo]) {
       # Gives a result better than the best point, so try an additional
       # extrapolation by a factor 2.
-      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 2.0, probSurv1996, param, info, data)
-      ytry <- res$Ytry
-      y <- res$Y
-      psum <- res$Psum
-      p <- res$P
+      AmoebaTry(2.0)
     } else if (ytry >= y[inhi]) {
       ysave <- y[ihi]
-      res <- AmoebaTry(p, y, psum, ndim, ihi, fac = 0.5, probSurv1996, param, info, data)
-      ytry <- res$Ytry
-      y <- res$Y
-      psum <- res$Psum
-      p <- res$P
+      AmoebaTry(0.5)
 
       if (ytry >= ysave) {
         # Can't seem to get rid of that high point. Better contract around the
