@@ -55,10 +55,8 @@ void Swap2D(
 }
 
 // [[Rcpp::export]]
-Rcpp::List CountOdeintLoop(
-  const Rcpp::NumericVector& modelYears
-) {
-  return hivModelling::CountOdeintLoop(modelYears);
+Rcpp::List CountOdeintLoop() {
+  return hivModelling::CountOdeintLoop();
 }
 
 // [[Rcpp::export]]
@@ -124,4 +122,12 @@ double Zbrent(
   const Rcpp::List& extraArgs
 ) {
   return hivModelling::Zbrent(func, x1, x2, tol, extraArgs);
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector Seq(
+  const int& start,
+  const int& end
+) {
+  return hivModelling::Seq(start, end);
 }

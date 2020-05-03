@@ -21,8 +21,8 @@ Swap2D <- function(y, a1, a2, b1, b2) {
     invisible(.Call(`_hivModelling_Swap2D`, y, a1, a2, b1, b2))
 }
 
-CountOdeintLoop <- function(modelYears) {
-    .Call(`_hivModelling_CountOdeintLoop`, modelYears)
+CountOdeintLoop <- function() {
+    .Call(`_hivModelling_CountOdeintLoop`)
 }
 
 CountOdeintReturn <- function(ystart, nVar, x1, x2, minYear, maxYear) {
@@ -47,5 +47,9 @@ FitLLPoisson <- function(y_m, y_d) {
 
 Zbrent <- function(func, x1, x2, tol, extraArgs) {
     .Call(`_hivModelling_Zbrent`, func, x1, x2, tol, extraArgs)
+}
+
+Seq <- function(start, end) {
+    .Call(`_hivModelling_Seq`, start, end)
 }
 

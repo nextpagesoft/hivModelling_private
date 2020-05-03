@@ -4,23 +4,30 @@
 #include "globals.hpp"
 #include "CountModelParameters.hpp"
 #include "CountOdeint.hpp"
+#include "Seq.hpp"
 
 namespace hivModelling {
 
-inline Rcpp::List CountOdeintLoop(
-  const Rcpp::NumericVector& modelYears
-) {
-  Rcpp::NumericVector ystart(nVar);
-  Rcpp::NumericMatrix modelResults(modelNoYears, nVar);
-  double minLambda = 1e+10;
+inline Rcpp::List CountOdeintLoop() {
+  const Rcpp::IntegerVector modelYears = Seq(modelMinYear, modelMaxYear - 1);
+  const size_t modelNoYears = modelYears.size();
 
+  double minLambda = VERY_LRG;
+  Rcpp::NumericVector yStart(nVar);
+  Rcpp::NumericMatrix modelResults(modelNoYears, nVar + 1);
   for (size_t i = 0; i != modelNoYears; ++i) {
-    double resMinLambda = CountOdeint(
-      ystart, nVar, modelYears[i] + BIT_SML, modelYears[i + 1] - BIT_SML, modelMinYear, modelMaxYear
+    double odeintLambda = CountOdeint(
+      yStart, nVar, modelYears[i] + BIT_SML, modelYears[i] + 1 - BIT_SML, modelMinYear, modelMaxYear
     );
-    minLambda = fmin(minLambda, resMinLambda);
-    modelResults(i, Rcpp::_) = ystart;
+
+    modelResults(i, 0) = modelYears[i];
+    for (size_t j = 0; j != nVar; ++j) {
+      modelResults(i, j + 1) = yStart[j];
+    }
+
+    minLambda = fmin(minLambda, odeintLambda);
   }
+  Rcpp::colnames(modelResults) = modelResultsColNames;
 
   Rcpp::List result = Rcpp::List::create(
     Rcpp::Named("ModelResults") = modelResults,

@@ -6,21 +6,21 @@
 namespace hivModelling {
 
 Rcpp::NumericVector myKnots;
-size_t kOrder;
-size_t modelSplineN;
+size_t              kOrder;
+size_t              modelSplineN;
 Rcpp::NumericVector theta;
 Rcpp::NumericVector qoppa;
 Rcpp::NumericVector fInit;
-double alphaP;
-double mu;
-size_t noStage;
-double delta4Fac;
+double              alphaP;
+double              mu;
+size_t              noStage;
+double              delta4Fac;
 Rcpp::NumericMatrix deltaM;
 Rcpp::NumericVector tc;
-size_t nVar;
-size_t modelNoYears;
-double modelMinYear;
-double modelMaxYear;
+size_t              nVar;
+size_t              modelMinYear;
+size_t              modelMaxYear;
+Rcpp::CharacterVector modelResultsColNames;
 
 inline void SetCountModelParameters(
   const Rcpp::List& param,
@@ -40,9 +40,9 @@ inline void SetCountModelParameters(
   deltaM       = Rcpp::as<Rcpp::NumericMatrix>(param["DeltaM"]);
   tc           = param["Tc"];
   nVar         = param["NoEq"];
-  modelNoYears = Rcpp::as<size_t>(info["ModelNoYears"]) - 1;
   modelMinYear = info["ModelMinYear"];
   modelMaxYear = info["ModelMaxYear"];
+  modelResultsColNames = param["ModelResultsColNames"];
 }
 
 } // hivModelling

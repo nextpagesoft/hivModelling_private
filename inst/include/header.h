@@ -22,5 +22,6 @@
 #include "Swap.hpp"
 #include "FitLLNegBin.hpp"
 #include "FitLLPoisson.hpp"
+#include "Seq.hpp"
 
-#endif
+#endif // _hivModelling_header_

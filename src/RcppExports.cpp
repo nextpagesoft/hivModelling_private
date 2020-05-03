@@ -78,13 +78,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // CountOdeintLoop
-Rcpp::List CountOdeintLoop(const Rcpp::NumericVector& modelYears);
-RcppExport SEXP _hivModelling_CountOdeintLoop(SEXP modelYearsSEXP) {
+Rcpp::List CountOdeintLoop();
+RcppExport SEXP _hivModelling_CountOdeintLoop() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type modelYears(modelYearsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CountOdeintLoop(modelYears));
+    rcpp_result_gen = Rcpp::wrap(CountOdeintLoop());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -174,6 +173,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Seq
+Rcpp::IntegerVector Seq(const int& start, const int& end);
+RcppExport SEXP _hivModelling_Seq(SEXP startSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const int& >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(Seq(start, end));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 5},
@@ -181,13 +192,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
     {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
-    {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 1},
+    {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 0},
     {"_hivModelling_CountOdeintReturn", (DL_FUNC) &_hivModelling_CountOdeintReturn, 6},
     {"_hivModelling_SetCountModelParameters", (DL_FUNC) &_hivModelling_SetCountModelParameters, 2},
     {"_hivModelling_TimeOdeintReturn", (DL_FUNC) &_hivModelling_TimeOdeintReturn, 9},
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
     {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
     {"_hivModelling_Zbrent", (DL_FUNC) &_hivModelling_Zbrent, 5},
+    {"_hivModelling_Seq", (DL_FUNC) &_hivModelling_Seq, 2},
     {NULL, NULL, 0}
 };
 

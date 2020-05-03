@@ -68,7 +68,18 @@ GetParamList <- function(
   param[['Beta']] <- beta
   param[['ThetaF']] <- thetaF
   param[['NoStageTot']] <- param$NoStage + 1
-
+  param[['ModelResultsColNames']] <- c(
+    'Year',
+    'PrimInf',
+    paste0('Undiagnosed_', seq_len(param$NoStage)),
+    paste0('Diagnosed_', seq_len(param$NoStage)),
+    paste0('C_HIV_Stage_', seq_len(param$NoStage)),
+    'C_AIDS',
+    'C_Dead_D',
+    'C_Dead_U',
+    'C_Inf',
+    'CumulIncD2Total'
+  )
 
   return(param)
 }

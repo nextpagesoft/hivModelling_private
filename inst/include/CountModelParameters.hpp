@@ -18,9 +18,10 @@ extern Rcpp::NumericMatrix deltaM;
 extern Rcpp::NumericVector tc;
 
 extern size_t              nVar;
-extern size_t              modelNoYears;
-extern double              modelMinYear;
-extern double              modelMaxYear;
+extern size_t              modelMinYear;
+extern size_t              modelMaxYear;
+extern Rcpp::CharacterVector modelResultsColNames;
+
 
 } // hivModelling
 
