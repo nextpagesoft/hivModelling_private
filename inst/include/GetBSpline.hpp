@@ -81,9 +81,7 @@ inline double GetBSpline(
     }
   }
 
-  double val = d[p];
-
-  return val;
+  return d[p];
 }
 
 } // namespace

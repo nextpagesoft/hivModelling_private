@@ -52,6 +52,8 @@ amoeba <- function(
 
   seqMpts <- seq_len(mpts)
   seqNDim <- seq_len(ndim)
+  ytry <- y
+
   while (
     nfunk < NMAX
   ) {
