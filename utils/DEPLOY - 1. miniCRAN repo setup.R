@@ -14,3 +14,6 @@ repoPath <- 'd:/_DEPLOYMENT/hivModelling/repo'
 dir.create(repoPath, showWarnings = FALSE, recursive = TRUE)
 
 makeRepo(pkgList, path = repoPath, repos = repoCRAN, type = c('source', 'win.binary'))
+oldPackages(path = repoPath)
+updatePackages(path = repoPath, repos = repoCRAN, type = 'win.binary', ask = FALSE)
+updatePackages(path = repoPath, repos = repoCRAN, type = 'source', ask = FALSE)
