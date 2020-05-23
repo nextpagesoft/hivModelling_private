@@ -1,4 +1,4 @@
-external.libraries: C:/SoftDevel/R/R-4.0.0/library
+external.libraries: D:/Documents/R/win-library/4.0
 ignored.packages:
 snapshot.type: packrat
 use.cache: TRUE
