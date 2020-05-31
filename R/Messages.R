@@ -3,19 +3,23 @@
 #' @param ... Text to be printed
 #' @param collapse String to be used for concatenating texts
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
 #' @examples
+#' \dontrun{
 #' PrintH1('Test')
-#'
-#' @export
+#' }
 PrintH1 <- function(
   ...,
   collapse = ' ',
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
-  cli::cli_h1(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  if (verbose) {
+    cli::cli_h1(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  }
 
   invisible(NULL)
 }
@@ -25,19 +29,23 @@ PrintH1 <- function(
 #' @param ... Text to be printed
 #' @param collapse String to be used for concatenating texts
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
 #' @examples
+#' \dontrun{
 #' PrintH2('Test')
-#'
-#' @export
+#' }
 PrintH2 <- function(
   ...,
   collapse = ' ',
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
-  cli::cli_h2(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  if (verbose) {
+    cli::cli_h2(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  }
 
   invisible(NULL)
 }
@@ -48,34 +56,37 @@ PrintH2 <- function(
 #' @param collapse String to be used for concatenating texts
 #' @param type Type of alert
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
 #' @examples
+#' \dontrun{
 #' PrintAlert('Test')
 #' PrintAlert('Test', type = 'success')
 #' PrintAlert('Test', type = 'danger')
 #' PrintAlert('Test', type = 'warning')
 #' PrintAlert('Test', type = 'info')
-#'
-#' @export
+#' }
 PrintAlert <- function(
   ...,
   collapse = ' ',
   type = 'info',
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
+  if (verbose) {
+    alertFunc <- switch(
+      tolower(type),
+      'danger'  = cli::cli_alert_danger,
+      'warning' = cli::cli_alert_warning,
+      'info'    = cli::cli_alert_info,
+      'success' = cli::cli_alert_success,
+      cli::cli_alert
+    )
 
-  alertFunc <- switch(
-    tolower(type),
-    'danger'  = cli::cli_alert_danger,
-    'warning' = cli::cli_alert_warning,
-    'info'    = cli::cli_alert_info,
-    'success' = cli::cli_alert_success,
-    cli::cli_alert
-  )
-
-  alertFunc(CollapseTexts(..., collapse = collapse), .envir = .envir)
+    alertFunc(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  }
 
   invisible(NULL)
 }
@@ -85,6 +96,7 @@ PrintAlert <- function(
 #' @param ... Text to be printed
 #' @param collapse String to be used for concatenating texts
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
@@ -92,15 +104,18 @@ PrintAlert <- function(
 #' \dontrun{
 #' processId <- StartProcess('Test')
 #' }
-#'
-#' @export
 StartProcess <- function(
   ...,
   collapse = ' ',
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
   try(cli::cli_status_clear(NULL), silent = TRUE)
-  processId <- cli::cli_process_start(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  if (verbose) {
+    processId <- cli::cli_process_start(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  } else {
+    processId <- NULL
+  }
 
   invisible(processId)
 }
@@ -111,6 +126,7 @@ StartProcess <- function(
 #' @param ... Text to be printed
 #' @param collapse String to be used for concatenating texts
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
@@ -118,15 +134,16 @@ StartProcess <- function(
 #' \dontrun{
 #' EndProcess(processId, 'Test')
 #' }
-#'
-#' @export
 EndProcess <- function(
   processId = NULL,
   ...,
   collapse = ' ',
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
-  cli::cli_process_done(id = processId, CollapseTexts(..., collapse = collapse), .envir = .envir)
+  if (verbose) {
+    cli::cli_process_done(id = processId, CollapseTexts(..., collapse = collapse), .envir = .envir)
+  }
 
   invisible(NULL)
 }
@@ -135,20 +152,24 @@ EndProcess <- function(
 #'
 #' @param items Vector of text items
 #' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return NULL
 #'
 #' @examples
+#' \dontrun{
 #' PrintBullets(c('Item 1', 'Item 2'))
-#'
-#' @export
+#' }
 PrintBullets <- function(
   items = c(),
-  .envir = parent.frame()
+  .envir = parent.frame(),
+  verbose = TRUE
 ) {
-  cli::cli_ul()
-  sapply(items, cli::cli_li)
-  cli::cli_end()
+  if (verbose) {
+    cli::cli_ul()
+    sapply(items, cli::cli_li)
+    cli::cli_end()
+  }
 
   invisible(NULL)
 }
@@ -161,9 +182,9 @@ PrintBullets <- function(
 #' @return NULL
 #'
 #' @examples
+#' \dontrun{
 #' CollapseTexts('Item 1', 'Item 2')
-#'
-#' @export
+#' }
 CollapseTexts <- function(
   ...,
   collapse = ' '

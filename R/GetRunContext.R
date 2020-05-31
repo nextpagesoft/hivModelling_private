@@ -14,8 +14,6 @@
 #' @export
 GetRunContext <- function(...)
 {
-  PrintH1('1. Context')
-
   # Prepare provided arguments
   args <- list(...)
   if (length(names(args)) > 0) {
@@ -31,6 +29,12 @@ GetRunContext <- function(...)
     PreprocessedData = NULL
   )
 
+  verbose <- context$Settings$Verbose
+  if (!is.null(args$Settings$Verbose)) {
+    verbose <- args$Settings$Verbose
+  }
+  PrintH1('1. Context', verbose = verbose)
+
   # Extract paths from arguments
   modelFilePath <- context$Settings$ModelFilePath
   if (!is.null(args$Settings$ModelFilePath)) {
@@ -41,7 +45,7 @@ GetRunContext <- function(...)
     inputDataPath <- normalizePath(args$Settings$InputDataPath)
   }
   # Override default context with parameters from the model file (average priority)
-  modelIncidenceParams <- ReadModelFile(modelFilePath, inputDataPath)
+  modelIncidenceParams <- ReadModelFile(modelFilePath, inputDataPath, verbose)
   modelIntervals <- NULL
   if (!is.null(modelIncidenceParams)) {
     # Intervals are merged manually due to a problem with merging data.table objects by modifyList

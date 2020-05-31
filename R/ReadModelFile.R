@@ -4,6 +4,7 @@
 #'
 #' @param modelFilePath Model file path. Optional. Default = NULL.
 #' @param inputDataPath Input data path. Optional. Default = NULL
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return
 #' NULL (invisibly)
@@ -16,9 +17,10 @@
 #' @export
 ReadModelFile <- function(
   modelFilePath = NULL,
-  inputDataPath = NULL
+  inputDataPath = NULL,
+  verbose = TRUE
 ) {
-  PrintH2('1.1. Model file')
+  PrintH2('1.1. Model file', verbose = verbose)
 
   model <- NULL
 
@@ -54,7 +56,7 @@ ReadModelFile <- function(
     return(NULL)
   }
 
-  PrintAlert('Model file {.file {modelFilePath}} loaded', type = 'info')
+  PrintAlert('Model file {.file {modelFilePath}} loaded', type = 'info', verbose = verbose)
 
   modelVersion <- as.integer(model$Model$FileVersion[[1]])
   if (modelVersion != 2) {

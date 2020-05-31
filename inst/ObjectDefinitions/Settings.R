@@ -5,5 +5,7 @@ list(
 
   InputDataPath = NULL,
 
-  RiskGroups = NULL
+  RiskGroups = NULL,
+
+  Verbose = TRUE
 )

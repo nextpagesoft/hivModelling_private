@@ -10,7 +10,8 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_1.zip')
+    InputDataPath = GetFilePath('Test_1.zip'),
+    Verbose = FALSE
   )
 )
 
@@ -43,8 +44,8 @@ compareDT[, DifferencePerc := Difference / C]
 compareDT[, DifferencePercStr := sprintf('%.2f%%', DifferencePerc * 100)]
 errors <- compareDT[abs(DifferencePerc) > 1e-3]
 if (nrow(errors) > 0) {
-  PrintAlert('Reconciliation failed:', type = 'danger')
+  hivModelling:::PrintAlert('Reconciliation failed:', type = 'danger')
   print(errors)
 } else {
-  PrintAlert('Reconciliation successful', type = 'success')
+  hivModelling:::PrintAlert('Reconciliation successful', type = 'success')
 }

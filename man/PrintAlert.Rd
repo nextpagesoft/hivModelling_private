@@ -4,7 +4,13 @@
 \alias{PrintAlert}
 \title{PrintAlert}
 \usage{
-PrintAlert(..., collapse = " ", type = "info", .envir = parent.frame())
+PrintAlert(
+  ...,
+  collapse = " ",
+  type = "info",
+  .envir = parent.frame(),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{...}{Text to be printed}
@@ -14,15 +20,18 @@ PrintAlert(..., collapse = " ", type = "info", .envir = parent.frame())
 \item{type}{Type of alert}
 
 \item{.envir}{Environment for lookup of variables referenced in the text}
+
+\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \description{
 PrintAlert
 }
 \examples{
+\dontrun{
 PrintAlert('Test')
 PrintAlert('Test', type = 'success')
 PrintAlert('Test', type = 'danger')
 PrintAlert('Test', type = 'warning')
 PrintAlert('Test', type = 'info')
-
+}
 }

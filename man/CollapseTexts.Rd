@@ -15,6 +15,7 @@ CollapseTexts(..., collapse = " ")
 CollapseTexts
 }
 \examples{
+\dontrun{
 CollapseTexts('Item 1', 'Item 2')
-
+}
 }

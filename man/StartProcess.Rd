@@ -4,7 +4,7 @@
 \alias{StartProcess}
 \title{StartProcess}
 \usage{
-StartProcess(..., collapse = " ", .envir = parent.frame())
+StartProcess(..., collapse = " ", .envir = parent.frame(), verbose = TRUE)
 }
 \arguments{
 \item{...}{Text to be printed}
@@ -12,6 +12,8 @@ StartProcess(..., collapse = " ", .envir = parent.frame())
 \item{collapse}{String to be used for concatenating texts}
 
 \item{.envir}{Environment for lookup of variables referenced in the text}
+
+\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \description{
 StartProcess
@@ -20,5 +22,4 @@ StartProcess
 \dontrun{
 processId <- StartProcess('Test')
 }
-
 }
