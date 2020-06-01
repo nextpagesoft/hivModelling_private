@@ -157,7 +157,11 @@ EstimateParameters <- function(
           fitRes
         )
       }
-    }, error = function(e) cli::cli_process_failed())
+    }, error = function(e) {
+      if (verbose) {
+        cli::cli_process_failed()
+      }
+    })
 
     EndProcess(
       processId,
