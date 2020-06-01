@@ -4,12 +4,14 @@
 \alias{ReadModelFile}
 \title{ReadModelFile}
 \usage{
-ReadModelFile(modelFilePath = NULL, inputDataPath = NULL)
+ReadModelFile(modelFilePath = NULL, inputDataPath = NULL, verbose = TRUE)
 }
 \arguments{
 \item{modelFilePath}{Model file path. Optional. Default = NULL.}
 
 \item{inputDataPath}{Input data path. Optional. Default = NULL}
+
+\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \value{
 NULL (invisibly)

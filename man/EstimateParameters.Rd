@@ -14,7 +14,7 @@ EstimateParameters(
   ctol = 1e-06,
   ftol = 1e-05,
   algorithm = "NLOPT_LN_BOBYQA",
-  verbose = FALSE
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,7 +40,7 @@ Default = 1e-5.}
 iterations. Default = 'NLOPT_LN_BOBYQA'}
 
 \item{verbose}{Logical indicating to print detailed info during fitting. Optional.
-Default = \code{FALSE}}
+Default = \code{TRUE}}
 }
 \value{
 NULL (invisibly)

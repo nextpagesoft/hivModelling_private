@@ -4,10 +4,12 @@
 \alias{ReadInputData}
 \title{ReadInputData}
 \usage{
-ReadInputData(inputDataPath)
+ReadInputData(inputDataPath, verbose = TRUE)
 }
 \arguments{
 \item{inputDataPath}{Input data path}
+
+\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \value{
 Input data as list

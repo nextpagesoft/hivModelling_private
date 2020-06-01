@@ -4,7 +4,12 @@
 \alias{PreprocessInputData}
 \title{PreprocessInputData}
 \usage{
-PreprocessInputData(inputData, minYear = 1980L, maxYear = year(Sys.time()))
+PreprocessInputData(
+  inputData,
+  minYear = 1980L,
+  maxYear = year(Sys.time()),
+  verbose = verbose
+)
 }
 \arguments{
 \item{inputData}{List of input data. Required.}
@@ -12,6 +17,8 @@ PreprocessInputData(inputData, minYear = 1980L, maxYear = year(Sys.time()))
 \item{minYear}{Model start year.}
 
 \item{maxYear}{Model end year.}
+
+\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \value{
 Input data as data.table
