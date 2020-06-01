@@ -158,7 +158,7 @@ EstimateParameters <- function(
         )
       }
     }, error = function(e) {
-      if (verbose) {
+      if (!is.null(processId)) {
         cli::cli_process_failed()
       }
     })
