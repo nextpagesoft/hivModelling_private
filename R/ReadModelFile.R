@@ -52,7 +52,7 @@ ReadModelFile <- function(
   }
 
   if (is.null(model)) {
-    PrintAlert('No model file found. Parameters will be determined from data')
+    PrintAlert('No model file found. Parameters will be determined from data', verbose = verbose)
     return(NULL)
   }
 
