@@ -15,7 +15,7 @@
 #' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param verbose Logical indicating to print detailed info during fitting. Optional.
-#'   Default = \code{FALSE}
+#'   Default = \code{TRUE}
 #'
 #' @return
 #' NULL (invisibly)
@@ -36,7 +36,7 @@ EstimateParameters <- function(
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
-  verbose = FALSE
+  verbose = TRUE
 ) {
   OptimFunc <- function(p) {
     return(FitLLTotal(p, probSurv1996, param, info, data, detailedResults = FALSE))
@@ -56,7 +56,7 @@ EstimateParameters <- function(
 
   totalStartTime <- Sys.time()
   algType <- 'SCALE'
-  processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}')
+  processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}', verbose = verbose)
   tryCatch({
     if (runType == 'MAIN') {
       # Step 1 : determine the scale of the parameters
@@ -106,7 +106,8 @@ EstimateParameters <- function(
   EndProcess(
     processId,
     'Iteration {.val {iter}}: {.val {algType}} ',
-    '| Run time: {.timestamp {format(Sys.time() - totalStartTime)}}'
+    '| Run time: {.timestamp {format(Sys.time() - totalStartTime)}}',
+    verbose = verbose
   )
 
   # Stop fitting when the change in deviance is smaller than ctol.
@@ -119,11 +120,14 @@ EstimateParameters <- function(
     iter <- iter + 1
 
     startTime <- Sys.time()
-    processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}')
+    processId <- StartProcess(
+      'Iteration {.val {iter}}: {.emph {.val {algType}}}',
+      verbose = verbose
+    )
 
     tryCatch({
       if (algType == 'AMOEBA') {
-        res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data, verbose)
+        res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data)
       } else {
         # Algorithms checked:
         # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
@@ -157,14 +161,19 @@ EstimateParameters <- function(
 
     EndProcess(
       processId,
-      'Iteration {.val {iter}}: {.val {algType}} | Run time: {.timestamp {format(Sys.time() - startTime)}}'
+      'Iteration {.val {iter}}: {.val {algType}} | ',
+      'Run time: {.timestamp {format(Sys.time() - startTime)}}',
+      verbose = verbose
     )
 
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
-  PrintAlert('Total run time: {.timestamp {format(Sys.time() - totalStartTime)}}')
+  PrintAlert(
+    'Total run time: {.timestamp {format(Sys.time() - totalStartTime)}}',
+    verbose = verbose
+  )
 
   lastResults <- iterResults[[iter]]
 

@@ -10,14 +10,13 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_1.zip'),
-    Verbose = FALSE
+    InputDataPath = GetFilePath('Test_1.zip')
   )
 )
 
 data <- GetPopulationData(context)
-
 mainResults <- PerformMainFit(context, data)
+
 # saveRDS(mainResults, GetFilePath('Test_1_-_full_run_results.RDS'))
 # mainResults <- readRDS(url('http://nextpagesoft.net/hivModelling/Test_1_-_full_run_results.RDS'))
 

@@ -5,6 +5,7 @@
 #' @param inputData List of input data. Required.
 #' @param minYear Model start year.
 #' @param maxYear Model end year.
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return
 #' Input data as data.table
@@ -18,13 +19,10 @@
 PreprocessInputData <- function(
   inputData,
   minYear = 1980L,
-  maxYear = year(Sys.time())
+  maxYear = year(Sys.time()),
+  verbose= verbose
 ) {
-  cli::cli_h2('1.3. Data preprocessing')
-  cli::cli_div(theme = list(span.orange = list(color = 'orange')))
-  on.exit({
-    cli::cli_end()
-  })
+  PrintH2('1.3. Data preprocessing', verbose = verbose)
 
   # CRAN checks
   `.` <- NULL
@@ -63,17 +61,17 @@ PreprocessInputData <- function(
   allColNamesEqual <- all(sapply(inputData, CompareColNames, populationNames = populationNames))
 
   if (!allColNamesEqual) {
-    cli::cli_alert_warning(
+    PrintAlert(
       paste(
         'Input data files have misaligned names of populations.',
-        'All data files will be adjusted to include these populations:\n',
-        sprintf('{.orange %s}', paste(populationNames, collapse = ', '))
-      )
+        'All data files will be adjusted to include\n',
+        '{.val {populationNames}} populations.'
+      ),
+      type = 'warning'
     )
   }
 
   # Complete missing populations
-  # dt <- inputData[[1]]
   lapply(inputData, function(dt) {
     missingPopulations <- setdiff(populationNames, colnames(dt))
     if (length(missingPopulations) > 0) {

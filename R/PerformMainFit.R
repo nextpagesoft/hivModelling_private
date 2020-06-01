@@ -13,8 +13,8 @@
 #'   Default = 1e-5.
 #' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
-#' @param verbose Logical indicating to print detailed info during fitting. Optional.
-#'   Default = \code{FALSE}
+#' @param verbose Logical indicating to print detailed info during fitting. Optional. If missing
+#'   then the value of \code{context$Settings$Verbose} is used.
 #'
 #' @return
 #' Results list object
@@ -36,25 +36,31 @@ PerformMainFit <- function(
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
-  verbose = FALSE
+  verbose
 ) {
-  PrintH1('2. Main fit')
+  if (missing(verbose)) {
+    verbose <- context$Settings$Verbose
+  }
 
-  PrintH2('2.1. Info')
+  PrintH1('2. Main fit', verbose = verbose)
+
+  PrintH2('2.1. Info', verbose = verbose)
   if (is.null(info) || is.null(param)) {
     runType <- 'MAIN'
     info <- GetInfoList(context)
     param <- GetParamList(context, info)
     PrintAlert(
       'Run type: {.val {runType}}',
-      '- all initial parameters will be determined from object {.var context}'
+      '- all initial parameters will be determined from object {.var context}',
+      verbose = verbose
     )
   } else {
     runType <- 'MAIN_WITH_INIT'
     PrintAlert(
       'Run type: {.val {runType}}',
       '- all initial parameters will be determined from objects',
-      '{.var info} and {.var param}'
+      '{.var info} and {.var param}',
+      verbose = verbose
     )
   }
   probSurv1996 <- GetProvSurv96(param, info)
@@ -65,11 +71,12 @@ PerformMainFit <- function(
   if (tmpModelFitDist != info$ModelFitDist) {
     PrintAlert(
       'Input distribution was set to {.val {tmpModelFitDist}}.',
-      'This is overridden to {.val {info$ModelFitDist}} for the main fit.'
+      'This is overridden to {.val {info$ModelFitDist}} for the main fit.',
+      verbose = verbose
     )
   }
 
-  PrintH2('2.2. Iterations')
+  PrintH2('2.2. Iterations', verbose = verbose)
 
   # AutoThetaFix -----------------------------------------------------------------------------------
   if (!info$FullData && info$SplineType == 'B-SPLINE') {
@@ -89,7 +96,7 @@ PerformMainFit <- function(
     res <- EstimateParameters(
       runType = runType,
       probSurv1996, param, info, dataMatrix,
-      maxNoFit, ctol, ftol, verbose
+      maxNoFit, ctol, ftol, verbose = verbose
     )
 
     res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
@@ -111,7 +118,7 @@ PerformMainFit <- function(
       res <- EstimateParameters(
         runType = runType,
         probSurv1996, param, info, dataMatrix,
-        maxNoFit, ctol, ftol, verbose
+        maxNoFit, ctol, ftol, verbose = verbose
       )
 
       res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
@@ -135,13 +142,13 @@ PerformMainFit <- function(
   while (!converged) {
     nTheta <- 100
     while (nTheta != param$NoTheta) {
-      PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
+      PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}', verbose = verbose)
       nTheta <- param$NoTheta
 
       res <- EstimateParameters(
         runType = runType,
         probSurv1996, param, info, dataMatrix,
-        maxNoFit, ctol, ftol, verbose
+        maxNoFit, ctol, ftol, verbose = verbose
       )
 
       p <- res$P
@@ -161,7 +168,8 @@ PerformMainFit <- function(
     if (!converged) {
       PrintAlert(
         'Fit did NOT converge, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'danger'
+        type = 'danger',
+        verbose = verbose
       )
       context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
       info <- GetInfoList(context)
@@ -170,25 +178,32 @@ PerformMainFit <- function(
     } else {
       PrintAlert(
         'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'success'
+        type = 'success',
+        verbose = verbose
       )
     }
   }
 
-  PrintH2('2.3. Results')
+  PrintH2('2.3. Results', verbose = verbose)
 
-  PrintBullets(c(
-    sprintf('beta[%d]: {.val %f}', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]),
-    sprintf(
-      'theta[%d]: {.val %f} - %s', seq_along(param$Theta), param$Theta,
-      ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
-    )
-  ))
+  PrintBullets(
+    c(
+      sprintf('beta[%d]: {.val %f}', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]),
+      sprintf(
+        'theta[%d]: {.val %f} - %s', seq_along(param$Theta), param$Theta,
+        ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
+      )
+    ),
+    verbose = verbose
+  )
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial
   if (info$ModelFitDist == 'NEGATIVE_BINOMIAL') {
-    PrintAlert('Estimating overdispersion type {.val {info$OverdisperionType}}')
+    PrintAlert(
+      'Estimating overdispersion type {.val {info$OverdisperionType}}',
+      verbose = verbose
+    )
 
     rMin <- 1.0
     rMax <- 100000
@@ -208,7 +223,8 @@ PerformMainFit <- function(
       param$RDispRest <- Zbrent(FitLLrRest, rMin, rMax, ftol, extraArgs)
 
       PrintAlert(
-        'Overdispersion: AIDS = {.val {param$RDispAIDS}}, Rest = {.val {param$RDispRest}}'
+        'Overdispersion: AIDS = {.val {param$RDispAIDS}}, Rest = {.val {param$RDispRest}}',
+        verbose = verbose
       )
     }
   }

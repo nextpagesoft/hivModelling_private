@@ -23,6 +23,7 @@ GetPopulationData <- function(
   Year <- NULL
 
   data <- context$PreprocessedData
+  verbose <- context$Settings$Verbose
 
   if (is.null(populationSet)) {
     populationSet <-
@@ -36,7 +37,8 @@ GetPopulationData <- function(
     populationSet <- names(data)
   }
   PrintAlert(
-    'Data set is being prepared for a combination of the following populations: {.val {populationSet}}'
+    'Data set is being prepared for a combination of populations: {.val {populationSet}}',
+    verbose = verbose
   )
 
   if (!all(populationSet %in% names(data))) {

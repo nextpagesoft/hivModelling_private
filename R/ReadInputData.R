@@ -3,6 +3,7 @@
 #' Description
 #'
 #' @param inputDataPath Input data path
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
 #'
 #' @return
 #' Input data as list
@@ -13,10 +14,12 @@
 #' }
 #'
 #' @export
-ReadInputData <- function(inputDataPath)
-{
+ReadInputData <- function(
+  inputDataPath,
+  verbose = TRUE
+) {
   inputData <- NULL
-  PrintH2('1.2. Data files')
+  PrintH2('1.2. Data files', verbose = verbose)
 
   if (is.null(inputDataPath)) {
     return(NULL)
@@ -52,7 +55,7 @@ ReadInputData <- function(inputDataPath)
         lapply(fileNames, function(fileName) {
           dt <- fread(fileName)
           setnames(dt, 1, 'Year')
-          PrintAlert('Data file {.file {fileName}} loaded')
+          PrintAlert('Data file {.file {fileName}} loaded', verbose = verbose)
           return(dt)
         }),
         tools::file_path_sans_ext(basename(fileNames))

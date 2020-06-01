@@ -6,8 +6,7 @@ FitAmoeba <- function(
   probSurv1996,
   param,
   info,
-  data,
-  verbose = FALSE
+  data
 ) {
   pFit <- c(rep(0.1, param$NoDelta), rep(200, param$NoTheta))
 
@@ -25,7 +24,7 @@ FitAmoeba <- function(
   }
 
   res <- amoeba(
-    p = amoebaP, y = amoebaY, ndim = nParam, ftol, probSurv1996, param, info, data, verbose
+    p = amoebaP, y = amoebaY, ndim = nParam, ftol, probSurv1996, param, info, data
   )
 
   return(res)

@@ -64,7 +64,7 @@ GetRunContext <- function(...)
     context$Data <- args$Data
     context$Settings$InputDataPath <- NULL
   } else if (!is.null(context$Settings$InputDataPath)) {
-    context$Data <- ReadInputData(context$Settings$InputDataPath)
+    context$Data <- ReadInputData(context$Settings$InputDataPath, verbose = verbose)
   }
 
   # Determine settings from data
@@ -120,7 +120,8 @@ GetRunContext <- function(...)
   context$PreprocessedData <- PreprocessInputData(
     inputData = context$Data,
     minYear = context$Parameters$INCIDENCE$ModelMinYear,
-    maxYear = context$Parameters$INCIDENCE$ModelMaxYear
+    maxYear = context$Parameters$INCIDENCE$ModelMaxYear,
+    verbose = verbose
   )
 
   return(context)
