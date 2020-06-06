@@ -14,6 +14,7 @@
 #include "TimeRkqs.hpp"
 #include "TimeRkck.hpp"
 #include "TimeModel.hpp"
+#include "ModelTimeToDiagMedian.hpp"
 
 #include "GetDelta.hpp"
 #include "GetBSpline.hpp"

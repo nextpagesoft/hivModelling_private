@@ -93,18 +93,23 @@ void SetCountModelParameters(
 // [[Rcpp::export]]
 Rcpp::NumericVector TimeOdeintReturn(
   Rcpp::NumericVector& ystart,
-  const size_t& nVar,
   const double& x1,
   const double& x2,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
   const double& minYear,
   const double& maxYear,
   const double& tmpYear
 ) {
-  hivModelling::TimeOdeint(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear);
+  hivModelling::TimeOdeint(ystart, x1, x2, minYear, maxYear, tmpYear);
   return ystart;
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericVector ModelTimeToDiagMedian(
+  const double& time
+) {
+  return hivModelling::ModelTimeToDiagMedian(time);
+}
+
 
 // [[Rcpp::export]]
 Rcpp::NumericVector FitLLNegBin(

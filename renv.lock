@@ -368,10 +368,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.0",
+      "Version": "0.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "fbf7ee297936697ec8404a22859da129"
+      "Hash": "1739235995f08583db4095a28c357207"
     },
     "viridisLite": {
       "Package": "viridisLite",

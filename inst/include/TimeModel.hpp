@@ -8,19 +8,17 @@ namespace hivModelling {
 inline Rcpp::NumericVector TimeModel(
   const double& x,
   const Rcpp::NumericVector& y,
-  const Rcpp::List& param,
+  const Rcpp::NumericVector& qoppa,
+  const Rcpp::NumericVector& fInit,
+  const double& alphaP,
+  const double& mu,
+  const size_t& noStage,
+  const double& delta4Fac,
+  const Rcpp::NumericMatrix& deltaM,
+  const Rcpp::NumericVector& tc,
   const double& year,
   Rcpp::NumericVector& dydx
 ) {
-  const Rcpp::NumericVector& qoppa  = param["Qoppa"];
-  const Rcpp::NumericVector& fInit  = param["FInit"];
-  const double& alphaP              = param["AlphaP"];
-  const double& mu                  = param["Mu"];
-  const size_t& noStage             = param["NoStage"];
-  const double& delta4Fac           = param["Delta4Fac"];
-  const Rcpp::NumericMatrix& deltaM = param["DeltaM"];
-  const Rcpp::NumericVector& tc     = param["Tc"];
-
   const Rcpp::NumericVector delta = GetDelta(year, delta4Fac, deltaM, tc, noStage);
 
   size_t j = 0;

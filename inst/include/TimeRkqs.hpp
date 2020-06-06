@@ -14,8 +14,14 @@ inline void TimeRkqs(
   const double& htry,
   const double& eps,
   const Rcpp::NumericVector& yscal,
-  const Rcpp::List& param,
-  const Rcpp::List& info,
+  const Rcpp::NumericVector& qoppa,
+  const Rcpp::NumericVector& fInit,
+  const double& alphaP,
+  const double& mu,
+  const size_t& noStage,
+  const double& delta4Fac,
+  const Rcpp::NumericMatrix& deltaM,
+  const Rcpp::NumericVector& tc,
   const double& minYear,
   const double& maxYear,
   const double& tmpYear,
@@ -30,7 +36,10 @@ inline void TimeRkqs(
   double h = htry;
 
   for (;;) {
-    TimeRkck(x, y, dydx, nVar, h, param, info, minYear, maxYear, tmpYear, rkckRes);
+    TimeRkck(
+      x, y, dydx, nVar, h,  qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, minYear,
+      maxYear, tmpYear, rkckRes
+    );
 
     const Rcpp::NumericVector& yOut = rkckRes["YOut"];
     const Rcpp::NumericVector& yErr = rkckRes["YErr"];

@@ -128,21 +128,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // TimeOdeintReturn
-Rcpp::NumericVector TimeOdeintReturn(Rcpp::NumericVector& ystart, const size_t& nVar, const double& x1, const double& x2, const Rcpp::List& param, const Rcpp::List& info, const double& minYear, const double& maxYear, const double& tmpYear);
-RcppExport SEXP _hivModelling_TimeOdeintReturn(SEXP ystartSEXP, SEXP nVarSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP paramSEXP, SEXP infoSEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP tmpYearSEXP) {
+Rcpp::NumericVector TimeOdeintReturn(Rcpp::NumericVector& ystart, const double& x1, const double& x2, const double& minYear, const double& maxYear, const double& tmpYear);
+RcppExport SEXP _hivModelling_TimeOdeintReturn(SEXP ystartSEXP, SEXP x1SEXP, SEXP x2SEXP, SEXP minYearSEXP, SEXP maxYearSEXP, SEXP tmpYearSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type ystart(ystartSEXP);
-    Rcpp::traits::input_parameter< const size_t& >::type nVar(nVarSEXP);
     Rcpp::traits::input_parameter< const double& >::type x1(x1SEXP);
     Rcpp::traits::input_parameter< const double& >::type x2(x2SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type info(infoSEXP);
     Rcpp::traits::input_parameter< const double& >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type maxYear(maxYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type tmpYear(tmpYearSEXP);
-    rcpp_result_gen = Rcpp::wrap(TimeOdeintReturn(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear));
+    rcpp_result_gen = Rcpp::wrap(TimeOdeintReturn(ystart, x1, x2, minYear, maxYear, tmpYear));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ModelTimeToDiagMedian
+Rcpp::NumericVector ModelTimeToDiagMedian(const double& time);
+RcppExport SEXP _hivModelling_ModelTimeToDiagMedian(SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(ModelTimeToDiagMedian(time));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -209,7 +217,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 0},
     {"_hivModelling_CountOdeintReturn", (DL_FUNC) &_hivModelling_CountOdeintReturn, 6},
     {"_hivModelling_SetCountModelParameters", (DL_FUNC) &_hivModelling_SetCountModelParameters, 2},
-    {"_hivModelling_TimeOdeintReturn", (DL_FUNC) &_hivModelling_TimeOdeintReturn, 9},
+    {"_hivModelling_TimeOdeintReturn", (DL_FUNC) &_hivModelling_TimeOdeintReturn, 6},
+    {"_hivModelling_ModelTimeToDiagMedian", (DL_FUNC) &_hivModelling_ModelTimeToDiagMedian, 1},
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},
     {"_hivModelling_FitLLPoisson", (DL_FUNC) &_hivModelling_FitLLPoisson, 2},
     {"_hivModelling_Zbrent", (DL_FUNC) &_hivModelling_Zbrent, 5},

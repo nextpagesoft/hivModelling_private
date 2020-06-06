@@ -4,24 +4,23 @@
 namespace hivModelling {
 
 // Global model parameters
-extern Rcpp::NumericVector myKnots;
-extern size_t              kOrder;
-extern size_t              modelSplineN;
-extern Rcpp::NumericVector theta;
-extern Rcpp::NumericVector qoppa;
-extern Rcpp::NumericVector fInit;
-extern double              alphaP;
-extern double              mu;
-extern size_t              noStage;
-extern double              delta4Fac;
-extern Rcpp::NumericMatrix deltaM;
-extern Rcpp::NumericVector tc;
+extern Rcpp::NumericVector   myKnots;
+extern size_t                kOrder;
+extern size_t                modelSplineN;
+extern Rcpp::NumericVector   theta;
+extern Rcpp::NumericVector   qoppa;
+extern Rcpp::NumericVector   fInit;
+extern double                alphaP;
+extern double                mu;
+extern size_t                noStage;
+extern double                delta4Fac;
+extern Rcpp::NumericMatrix   deltaM;
+extern Rcpp::NumericVector   tc;
 
-extern size_t              nVar;
-extern size_t              modelMinYear;
-extern size_t              modelMaxYear;
+extern size_t                nVar;
+extern size_t                modelMinYear;
+extern size_t                modelMaxYear;
 extern Rcpp::CharacterVector modelResultsColNames;
-
 
 } // hivModelling
 

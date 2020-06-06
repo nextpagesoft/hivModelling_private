@@ -37,8 +37,12 @@ SetCountModelParameters <- function(param, info) {
     invisible(.Call(`_hivModelling_SetCountModelParameters`, param, info))
 }
 
-TimeOdeintReturn <- function(ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear) {
-    .Call(`_hivModelling_TimeOdeintReturn`, ystart, nVar, x1, x2, param, info, minYear, maxYear, tmpYear)
+TimeOdeintReturn <- function(ystart, x1, x2, minYear, maxYear, tmpYear) {
+    .Call(`_hivModelling_TimeOdeintReturn`, ystart, x1, x2, minYear, maxYear, tmpYear)
+}
+
+ModelTimeToDiagMedian <- function(time) {
+    .Call(`_hivModelling_ModelTimeToDiagMedian`, time)
 }
 
 FitLLNegBin <- function(y_m, y_d, r) {

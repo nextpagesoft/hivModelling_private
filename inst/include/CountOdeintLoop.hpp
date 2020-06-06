@@ -9,7 +9,7 @@
 namespace hivModelling {
 
 inline Rcpp::List CountOdeintLoop() {
-  const Rcpp::IntegerVector modelYears = Seq(modelMinYear, modelMaxYear - 1);
+  const Rcpp::IntegerVector modelYears  = Seq(modelMinYear, modelMaxYear - 1);
   const size_t modelNoYears = modelYears.size();
 
   double minLambda = VERY_LRG;
