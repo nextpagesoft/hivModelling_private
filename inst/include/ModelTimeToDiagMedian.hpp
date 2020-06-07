@@ -7,7 +7,7 @@
 
 namespace hivModelling {
 
-inline Rcpp::NumericVector ModelTimeToDiagMedian(
+inline Rcpp::NumericVector ModelTimeToDiagMedianWorker(
   const double& time
 ) {
   const size_t nEq = 1 + 2 * noStage;
@@ -63,6 +63,20 @@ inline Rcpp::NumericVector ModelTimeToDiagMedian(
 
   return(Rcpp::NumericVector::create(t25, t50, t75));
 }
+
+inline Rcpp::NumericMatrix ModelTimeToDiagMedian(
+  const Rcpp::NumericVector& years
+) {
+  size_t nrow = years.length();
+  Rcpp::NumericMatrix result = Rcpp::NumericMatrix(nrow, 3);
+
+  for (size_t i = 0; i < nrow; i++) {
+    result(i, Rcpp::_) = ModelTimeToDiagMedianWorker(years[i]);
+  }
+
+  return(result);
+}
+
 
 } // hivModelling
 

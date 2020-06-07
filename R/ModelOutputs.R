@@ -45,9 +45,6 @@ ModelOutputs <- function(
   VERY_SML <- 1.0e-20
   noCD4 <- param$NoStage - 1
 
-  deltasDT <- as.data.table(t(simplify2array(timeResults$DeltasList)))
-  timeToDiagMedianDT <- as.data.table(t(simplify2array(timeResults$TimeToDiagMedian)))
-
   # Initialize from modelResults
   outputs <- modelResults[, .(
     Run = runId,
@@ -114,13 +111,13 @@ ModelOutputs <- function(
 
   # Compute Delta
   mOutputColNames <- sprintf('delta%d', seq_len(noCD4))
-  outputs[, (mOutputColNames) := deltasDT[, seq_len(noCD4), with = FALSE]]
+  outputs[, (mOutputColNames) := timeResults$Deltas[, seq_len(noCD4), with = FALSE]]
 
   # Compute Time to diagnosis
   outputs[, t_diag := timeResults$TimeToDiag]
 
   mOutputColNames <- c('t_diag_p50', 't_diag_p25', 't_diag_p75')
-  outputs[, (mOutputColNames) := timeToDiagMedianDT[, c(2, 1, 3), with = FALSE]]
+  outputs[, (mOutputColNames) :=  timeResults$TimeToDiagMedian[, c(2, 1, 3), with = FALSE]]
 
   # Compute Average diagnosis time
   outputs[, D_Avg_Time := countResults$D_Avg_Time]

@@ -116,14 +116,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SetCountModelParameters
-void SetCountModelParameters(const Rcpp::List& param, const Rcpp::List& info);
-RcppExport SEXP _hivModelling_SetCountModelParameters(SEXP paramSEXP, SEXP infoSEXP) {
+// ExportParametersToCpp
+void ExportParametersToCpp(const Rcpp::List& param, const Rcpp::List& info);
+RcppExport SEXP _hivModelling_ExportParametersToCpp(SEXP paramSEXP, SEXP infoSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type param(paramSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type info(infoSEXP);
-    SetCountModelParameters(param, info);
+    ExportParametersToCpp(param, info);
     return R_NilValue;
 END_RCPP
 }
@@ -144,13 +144,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // ModelTimeToDiagMedian
-Rcpp::NumericVector ModelTimeToDiagMedian(const double& time);
-RcppExport SEXP _hivModelling_ModelTimeToDiagMedian(SEXP timeSEXP) {
+Rcpp::NumericMatrix ModelTimeToDiagMedian(const Rcpp::NumericVector& years);
+RcppExport SEXP _hivModelling_ModelTimeToDiagMedian(SEXP yearsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(ModelTimeToDiagMedian(time));
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type years(yearsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ModelTimeToDiagMedian(years));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -216,7 +216,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_DetermineIloIhi", (DL_FUNC) &_hivModelling_DetermineIloIhi, 4},
     {"_hivModelling_CountOdeintLoop", (DL_FUNC) &_hivModelling_CountOdeintLoop, 0},
     {"_hivModelling_CountOdeintReturn", (DL_FUNC) &_hivModelling_CountOdeintReturn, 6},
-    {"_hivModelling_SetCountModelParameters", (DL_FUNC) &_hivModelling_SetCountModelParameters, 2},
+    {"_hivModelling_ExportParametersToCpp", (DL_FUNC) &_hivModelling_ExportParametersToCpp, 2},
     {"_hivModelling_TimeOdeintReturn", (DL_FUNC) &_hivModelling_TimeOdeintReturn, 6},
     {"_hivModelling_ModelTimeToDiagMedian", (DL_FUNC) &_hivModelling_ModelTimeToDiagMedian, 1},
     {"_hivModelling_FitLLNegBin", (DL_FUNC) &_hivModelling_FitLLNegBin, 3},

@@ -234,7 +234,7 @@ PerformMainFit <- function(
   statRes <- FitStatistics(modelResults, info, data, param)
 
   countResults <- ModelCountResults(modelResults, info, param)
-  timeResults <- ModelTimeResults(modelResults, info, param)
+  timeResults <- ModelTimeResults(modelResults$Year, info, param)
   mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
 
   invisible(list(

@@ -1,12 +1,11 @@
 ModelTimeToDiagDist <- function(
-  modelResults,
   info,
   param
 ) {
   nEq <- 1 + 2 * param$NoStage
 
   BIT_SML <- 1e-6
-  numYears <- nrow(modelResults)
+  numYears <- info$ModelNoYears - 1
 
   Dist_TimeToDiag <- matrix(0, param$DefNoDiagTime, numYears)
   Dist_ProbDiag <- matrix(0, param$DefNoDiagTime, numYears)

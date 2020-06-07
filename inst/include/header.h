@@ -8,7 +8,7 @@
 #include "CountRkqs.hpp"
 #include "CountRkck.hpp"
 #include "CountModel.hpp"
-#include "SetCountModelParameters.hpp"
+#include "ExportParametersToCpp.hpp"
 
 #include "TimeOdeint.hpp"
 #include "TimeRkqs.hpp"

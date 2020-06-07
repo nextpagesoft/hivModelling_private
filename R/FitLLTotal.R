@@ -14,7 +14,7 @@ FitLLTotal <- function(
   param$DeltaM <- GetParamDeltaM(p, param)
   param$Theta <- GetParamTheta(p, param, info)
 
-  SetCountModelParameters(param, info)
+  ExportParametersToCpp(param, info)
   res <- CountOdeintLoop()
 
   modelResults <- res[['ModelResults']]

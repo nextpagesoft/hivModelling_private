@@ -102,11 +102,14 @@ EstimateParameters <- function(
     } else {
       stop('EstimateParameters: Unsupported estimation run type')
     }
-  }, error = function(e) cli::cli_process_failed())
+  }, error = function(e) {
+    cli::cli_process_failed(processId, 'Fitting failed')
+  })
+
   EndProcess(
     processId,
-    'Iteration {.val {iter}}: {.val {algType}} ',
-    '| Run time: {.timestamp {format(Sys.time() - totalStartTime)}}',
+    'Iteration {.val {iter}}: {.val {algType}}  |',
+    'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - totalStartTime)}}',
     verbose = verbose
   )
 
@@ -159,14 +162,14 @@ EstimateParameters <- function(
       }
     }, error = function(e) {
       if (!is.null(processId)) {
-        cli::cli_process_failed()
+        cli::cli_process_failed(processId, 'Fitting failed')
       }
     })
 
     EndProcess(
       processId,
-      'Iteration {.val {iter}}: {.val {algType}} | ',
-      'Run time: {.timestamp {format(Sys.time() - startTime)}}',
+      'Iteration {.val {iter}}: {.val {algType}} |',
+      'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - startTime)}}',
       verbose = verbose
     )
 
@@ -175,7 +178,7 @@ EstimateParameters <- function(
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
   PrintAlert(
-    'Total run time: {.timestamp {format(Sys.time() - totalStartTime)}}',
+    'Total run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - totalStartTime)}}',
     verbose = verbose
   )
 

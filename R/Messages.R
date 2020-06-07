@@ -113,8 +113,6 @@ StartProcess <- function(
   try(cli::cli_status_clear(NULL), silent = TRUE)
   if (verbose) {
     processId <- cli::cli_process_start(CollapseTexts(..., collapse = collapse), .envir = .envir)
-  } else {
-    processId <- NULL
   }
 
   invisible(processId)
@@ -141,7 +139,7 @@ EndProcess <- function(
   .envir = parent.frame(),
   verbose = TRUE
 ) {
-  if (verbose) {
+  if (verbose & !is.null(processId)) {
     cli::cli_process_done(id = processId, CollapseTexts(..., collapse = collapse), .envir = .envir)
   }
 
@@ -189,5 +187,11 @@ CollapseTexts <- function(
   ...,
   collapse = ' '
 ) {
-  return(paste(list(...), collapse = collapse))
+  texts <- list(...)
+  if (length(texts) > 0) {
+    result <- paste(texts, collapse = collapse)
+  } else {
+    result <- ''
+  }
+  return(result)
 }

@@ -22,7 +22,7 @@ size_t                modelMinYear;
 size_t                modelMaxYear;
 Rcpp::CharacterVector modelResultsColNames;
 
-inline void SetCountModelParameters(
+inline void ExportParametersToCpp(
   const Rcpp::List& param,
   const Rcpp::List& info
 ) {

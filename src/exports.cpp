@@ -83,11 +83,11 @@ Rcpp::NumericVector CountOdeintReturn(
 }
 
 // [[Rcpp::export]]
-void SetCountModelParameters(
+void ExportParametersToCpp(
   const Rcpp::List& param,
   const Rcpp::List& info
 ) {
-  hivModelling::SetCountModelParameters(param, info);
+  hivModelling::ExportParametersToCpp(param, info);
 }
 
 // [[Rcpp::export]]
@@ -104,12 +104,11 @@ Rcpp::NumericVector TimeOdeintReturn(
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector ModelTimeToDiagMedian(
-  const double& time
+Rcpp::NumericMatrix ModelTimeToDiagMedian(
+  const Rcpp::NumericVector& years
 ) {
-  return hivModelling::ModelTimeToDiagMedian(time);
+  return hivModelling::ModelTimeToDiagMedian(years);
 }
-
 
 // [[Rcpp::export]]
 Rcpp::NumericVector FitLLNegBin(

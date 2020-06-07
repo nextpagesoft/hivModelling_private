@@ -1,23 +1,24 @@
 ModelTimeResults <- function(
-  modelResults,
+  years,
   info,
   param
 ) {
-  SetCountModelParameters(param, info)
+  ExportParametersToCpp(param, info)
 
   deltasList <- lapply(
-    modelResults$Year,
+    years,
     GetDelta,
     param$Delta4Fac, param$DeltaM, param$Tc, param$NoStage
   )
+
   timeToDiag <- sapply(deltasList, ModelTimeToDiag, param)
-  timeToDiagMedian <- lapply(modelResults$Year, ModelTimeToDiagMedian)
-  timeToDiagDist <- ModelTimeToDiagDist(modelResults, info, param)
+  timeToDiagMedian <- ModelTimeToDiagMedian(years)
+  timeToDiagDist <- ModelTimeToDiagDist(info, param)
 
   return(list(
-    DeltasList = deltasList,
+    Deltas = as.data.table(t(simplify2array(deltasList))),
     TimeToDiag = timeToDiag,
-    TimeToDiagMedian = timeToDiagMedian,
+    TimeToDiagMedian = as.data.table(timeToDiagMedian),
     TimeToDiagDist = timeToDiagDist
   ))
 }
