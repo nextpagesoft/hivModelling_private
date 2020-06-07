@@ -70,7 +70,7 @@ PerformMainFit <- function(
   info$ModelFitDist <- 'POISSON'
   if (tmpModelFitDist != info$ModelFitDist) {
     PrintAlert(
-      'Input distribution was set to {.val {tmpModelFitDist}}.',
+      'Input distribution is set to {.val {tmpModelFitDist}}.',
       'This is overridden to {.val {info$ModelFitDist}} for the main fit.',
       verbose = verbose
     )

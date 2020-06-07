@@ -56,59 +56,58 @@ EstimateParameters <- function(
 
   totalStartTime <- Sys.time()
   algType <- 'SCALE'
-  processId <- StartProcess('Iteration {.val {iter}}: {.emph {.val {algType}}}', verbose = verbose)
-  tryCatch({
-    if (runType == 'MAIN') {
-      # Step 1 : determine the scale of the parameters
-      defNoCD4 <- param$NoStage - 1
-      iMax <- 5
-      jMax <- 10
-      for (i in seq_len(iMax)) {
-        # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
-        beta <- rep(i * 0.05, defNoCD4)
-        # Extra contribution to delta4
-        beta[defNoCD4] <- beta[defNoCD4] + 0.4
-        # Keep delta's constant over time
-        if (param$NoDelta > defNoCD4) {
-          beta[(defNoCD4 + 1):param$NoDelta] <- 0
-        }
-        beta <- beta[seq_len(param$NoDelta)]
+  processId <- StartProcess(
+    'Iteration {.val {sprintf("%02d", iter)}}: {.emph {.val {algType}}}',
+    verbose = verbose
+  )
+  if (runType == 'MAIN') {
+    # Step 1 : determine the scale of the parameters
+    defNoCD4 <- param$NoStage - 1
+    iMax <- 5
+    jMax <- 10
+    for (i in seq_len(iMax)) {
+      # Set delta1 to delta4 in the first time interval (range: 0.05 to 0.05*iMax)
+      beta <- rep(i * 0.05, defNoCD4)
+      # Extra contribution to delta4
+      beta[defNoCD4] <- beta[defNoCD4] + 0.4
+      # Keep delta's constant over time
+      if (param$NoDelta > defNoCD4) {
+        beta[(defNoCD4 + 1):param$NoDelta] <- 0
+      }
+      beta <- beta[seq_len(param$NoDelta)]
 
-        for (j in seq_len(jMax + 1) - 1) {
-          # Assume all theta's the same (range: 1 to 10^j_max)
-          thetaF <- rep((j + 1) * 10^j, param$NoTheta)
-          p <- GetParameterVector(beta, thetaF)
-          llTotal <- OptimFunc(p)
+      for (j in seq_len(jMax + 1) - 1) {
+        # Assume all theta's the same (range: 1 to 10^j_max)
+        thetaF <- rep((j + 1) * 10^j, param$NoTheta)
+        p <- GetParameterVector(beta, thetaF)
+        llTotal <- OptimFunc(p)
 
-          if (llTotal < llMin) {
-            llMin <- llTotal
-            pParam <- p
-          }
+        if (llTotal < llMin) {
+          llMin <- llTotal
+          pParam <- p
         }
       }
-      iterResults[[iter]] <- list(
-        LLTotal = llMin,
-        P = pParam
-      )
-    } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
-      beta <- param$Beta
-      thetaF <- param$ThetaF
-      pParam <- GetParameterVector(beta, thetaF)
-      llTotal <- OptimFunc(pParam)
-      iterResults[[iter]] <- list(
-        P = pParam,
-        LLTotal = llTotal
-      )
-    } else {
-      stop('EstimateParameters: Unsupported estimation run type')
     }
-  }, error = function(e) {
-    cli::cli_process_failed(processId, 'Fitting failed')
-  })
+    iterResults[[iter]] <- list(
+      LLTotal = llMin,
+      P = pParam
+    )
+  } else if (runType %in% c('MAIN_WITH_INIT', 'BOOTSTRAP')) {
+    beta <- param$Beta
+    thetaF <- param$ThetaF
+    pParam <- GetParameterVector(beta, thetaF)
+    llTotal <- OptimFunc(pParam)
+    iterResults[[iter]] <- list(
+      P = pParam,
+      LLTotal = llTotal
+    )
+  } else {
+    stop('EstimateParameters: Unsupported estimation run type')
+  }
 
   EndProcess(
     processId,
-    'Iteration {.val {iter}}: {.val {algType}}  |',
+    'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}}  |',
     'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - totalStartTime)}}',
     verbose = verbose
   )
@@ -124,51 +123,45 @@ EstimateParameters <- function(
 
     startTime <- Sys.time()
     processId <- StartProcess(
-      'Iteration {.val {iter}}: {.emph {.val {algType}}}',
+      'Iteration {.val {sprintf("%02d", iter)}}: {.emph {.val {algType}}}',
       verbose = verbose
     )
 
-    tryCatch({
-      if (algType == 'AMOEBA') {
-        res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data)
-      } else {
-        # Algorithms checked:
-        # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
-        # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
-        # NLOPT_LN_SBPLX        - very slow, interrupted
-        # NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
-        # NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
-        # NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
-        # NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
-        optimRes <- nloptr::nloptr(
-          pParam,
-          OptimFunc,
-          lb = c(rep(0, param$NoDelta), rep(-1e+4, param$NoTheta)),
-          ub = c(rep(1, param$NoDelta), rep(1e+4, param$NoTheta)),
-          opts = list(
-            algorithm = algorithm,
-            ftol_abs = ftol,
-            maxeval = 50000
-          )
+    if (algType == 'AMOEBA') {
+      res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data)
+    } else {
+      # Algorithms checked:
+      # NLOPT_LN_NELDERMEAD   - 55.5 sec, LLTotal = 239.5948
+      # NLOPT_LN_BOBYQA       - 34.7 sec, LLTotal = 239.4752
+      # NLOPT_LN_SBPLX        - very slow, interrupted
+      # NLOPT_LN_COBYLA       - not converged, LLTotal = 20000000232.6356
+      # NLOPT_LN_NEWUOA_BOUND - slow, reached maxNoFit, 1.977 mins, LLTotal = 244.279
+      # NLOPT_LN_PRAXIS       - slow, reached maxNoFit, 6.144 mins, LLTotal = 238.501
+      # NLOPT_LN_SBPLX        - 2.778879 mins, LLTotal = 235.5132
+      optimRes <- nloptr::nloptr(
+        pParam,
+        OptimFunc,
+        lb = c(rep(0, param$NoDelta), rep(-1e+4, param$NoTheta)),
+        ub = c(rep(1, param$NoDelta), rep(1e+4, param$NoTheta)),
+        opts = list(
+          algorithm = algorithm,
+          ftol_abs = ftol,
+          maxeval = 50000
         )
+      )
 
-        p <- optimRes$solution
-        fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
+      p <- optimRes$solution
+      fitRes <- FitLLTotal(p, probSurv1996, param, info, data)
 
-        res <- modifyList(
-          list(P = p),
-          fitRes
-        )
-      }
-    }, error = function(e) {
-      if (!is.null(processId)) {
-        cli::cli_process_failed(processId, 'Fitting failed')
-      }
-    })
+      res <- modifyList(
+        list(P = p),
+        fitRes
+      )
+    }
 
     EndProcess(
       processId,
-      'Iteration {.val {iter}}: {.val {algType}} |',
+      'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}} |',
       'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - startTime)}}',
       verbose = verbose
     )

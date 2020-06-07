@@ -113,6 +113,8 @@ StartProcess <- function(
   try(cli::cli_status_clear(NULL), silent = TRUE)
   if (verbose) {
     processId <- cli::cli_process_start(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  } else {
+    processId <- NULL
   }
 
   invisible(processId)
