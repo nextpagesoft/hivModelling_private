@@ -13,6 +13,9 @@
 #'   Default = 1e-5.
 #' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
+#' @param attemptSimplify Logical indicating to attempting simplifying the model to fit it a more
+#'   complex model did not converge. The simplifiction is achieved by reducing the number of knots
+#'   in the spline. Optional. Default = TRUE.
 #' @param verbose Logical indicating to print detailed info during fitting. Optional. If missing
 #'   then the value of \code{context$Settings$Verbose} is used.
 #'
@@ -36,6 +39,7 @@ PerformMainFit <- function(
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
+  attemptSimplify = TRUE,
   verbose
 ) {
   if (missing(verbose)) {
@@ -45,6 +49,9 @@ PerformMainFit <- function(
   PrintH1('2. Main fit', verbose = verbose)
 
   PrintH2('2.1. Info', verbose = verbose)
+
+  dataMatrix <- as.matrix(data)
+
   if (is.null(info) || is.null(param)) {
     runType <- 'MAIN'
     info <- GetInfoList(context)
@@ -64,7 +71,6 @@ PerformMainFit <- function(
     )
   }
   probSurv1996 <- GetProvSurv96(param, info)
-  dataMatrix <- as.matrix(data)
 
   tmpModelFitDist <- info$ModelFitDist
   info$ModelFitDist <- 'POISSON'
@@ -78,41 +84,24 @@ PerformMainFit <- function(
 
   PrintH2('2.2. Iterations', verbose = verbose)
 
-  # AutoThetaFix -----------------------------------------------------------------------------------
-  if (!info$FullData && info$SplineType == 'B-SPLINE') {
-    # Set initial number of splines with theta = 0 when doing automated search;
-    # loop starts at the first knot not equal to the start year of calculations
-    idxs <- seq(info$ModelNoKnots) + info$SplineOrder
-    sel <- info$MyKnots[idxs] + 5 < info$FitMinYear
-    if (any(sel)) {
-      param$NoThetaFixInit <- max(idxs[sel]) - info$SplineOrder
-    }
+  # ------------------------------------------------------------------------------------------------
+  converged <- FALSE
+  maxAttempts <- ifelse(attemptSimplify, Inf, 1)
+  attempt <- 0L
+  while (!converged && info$ModelNoKnots > 0 && attempt < maxAttempts) {
+    # AutoThetaFix ---------------------------------------------------------------------------------
+    if (!info$FullData && info$SplineType == 'B-SPLINE') {
+      # Set initial number of splines with theta = 0 when doing automated search;
+      # loop starts at the first knot not equal to the start year of calculations
+      idxs <- seq(info$ModelNoKnots) + info$SplineOrder
+      sel <- info$MyKnots[idxs] + 5 < info$FitMinYear
+      if (any(sel)) {
+        param$NoThetaFixInit <- max(idxs[sel]) - info$SplineOrder
+      }
 
-    # Search starts by holding the first theta fixed
-    param$NoThetaFix <- as.integer(info$StartIncZero)
+      # Search starts by holding the first theta fixed
+      param$NoThetaFix <- as.integer(info$StartIncZero)
 
-    param <- UpdateThetaParams(info, param)
-
-    res <- EstimateParameters(
-      runType = runType,
-      probSurv1996, param, info, dataMatrix,
-      maxNoFit, ctol, ftol, verbose = verbose
-    )
-
-    res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
-    modelResults <- as.data.table(res$ModelResults)
-    statRes <- FitStatistics(modelResults, info, data, param)
-    llNew <- statRes$LL_Poisson
-    llBest <- statRes$LL_Poisson
-    llOld <- 1e+7
-
-    nThetaFixBest <- param$NoThetaFix
-    nThetaFixMax <- info$ModelSplineN - (as.integer(info$MaxIncCorr) + 1)
-    # Increase the number of fixed spline weights until the fit gets too bad
-
-    while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax)
-    {
-      param$NoThetaFix <- param$NoThetaFix + 1
       param <- UpdateThetaParams(info, param)
 
       res <- EstimateParameters(
@@ -125,21 +114,40 @@ PerformMainFit <- function(
       modelResults <- as.data.table(res$ModelResults)
       statRes <- FitStatistics(modelResults, info, data, param)
       llNew <- statRes$LL_Poisson
+      llBest <- statRes$LL_Poisson
+      llOld <- 1e+7
 
-      if (llNew < (llOld + param$ChiSqDiff)) {
-        nThetaFixBest <- param$NoThetaFix
-        llBest <- llNew
-        llOld <- llNew
+      nThetaFixBest <- param$NoThetaFix
+      nThetaFixMax <- info$ModelSplineN - (as.integer(info$MaxIncCorr) + 1)
+      # Increase the number of fixed spline weights until the fit gets too bad
+
+      while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax)
+      {
+        param$NoThetaFix <- param$NoThetaFix + 1
+        param <- UpdateThetaParams(info, param)
+
+        res <- EstimateParameters(
+          runType = runType,
+          probSurv1996, param, info, dataMatrix,
+          maxNoFit, ctol, ftol, verbose = verbose
+        )
+
+        res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
+        modelResults <- as.data.table(res$ModelResults)
+        statRes <- FitStatistics(modelResults, info, data, param)
+        llNew <- statRes$LL_Poisson
+
+        if (llNew < (llOld + param$ChiSqDiff)) {
+          nThetaFixBest <- param$NoThetaFix
+          llBest <- llNew
+          llOld <- llNew
+        }
       }
+
+      param$NoThetaFix <- nThetaFixBest
+      param <- UpdateThetaParams(info, param)
     }
 
-    param$NoThetaFix <- nThetaFixBest
-    param <- UpdateThetaParams(info, param)
-  }
-
-  # ------------------------------------------------------------------------------------------------
-  converged <- FALSE
-  while (!converged) {
     nTheta <- 100
     while (nTheta != param$NoTheta) {
       PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}', verbose = verbose)
@@ -171,7 +179,7 @@ PerformMainFit <- function(
         type = 'danger',
         verbose = verbose
       )
-      context$Parameters$Models$INCIDENCE$ModelNoKnots <- info$ModelNoKnots - 1
+      context$Parameters$INCIDENCE$ModelNoKnots <- context$Parameters$INCIDENCE$ModelNoKnots - 1
       info <- GetInfoList(context)
       param <- GetParamList(context, info)
       probSurv1996 <- GetProvSurv96(param, info)
