@@ -42,6 +42,8 @@ PerformMainFit <- function(
   attemptSimplify = TRUE,
   verbose
 ) {
+  startTime <- Sys.time()
+
   if (missing(verbose)) {
     verbose <- context$Settings$Verbose
   }
@@ -245,6 +247,8 @@ PerformMainFit <- function(
   timeResults <- ModelTimeResults(modelResults$Year, info, param)
   mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
 
+  runTime <- Sys.time() - startTime
+
   invisible(list(
     Converged = converged,
     P = p,
@@ -255,6 +259,7 @@ PerformMainFit <- function(
     ModelResults = modelResults,
     CountResults = countResults,
     TimeResults = timeResults,
-    MainOutputs = mainOutputs
+    MainOutputs = mainOutputs,
+    RunTime = runTime
   ))
 }

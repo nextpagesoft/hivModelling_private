@@ -170,8 +170,9 @@ EstimateParameters <- function(
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
   }
+  runTime <- Sys.time() - totalStartTime
   PrintAlert(
-    'Total run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - totalStartTime)}}',
+    'Total run time: {.timestamp {prettyunits::pretty_dt(runTime)}}',
     verbose = verbose
   )
 
@@ -191,6 +192,7 @@ EstimateParameters <- function(
     Info = info,
     Param = param,
     Data = data,
-    IterResults = iterResults
+    IterResults = iterResults,
+    RunTime = runTime
   ))
 }
