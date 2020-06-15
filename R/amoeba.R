@@ -9,7 +9,7 @@ amoeba <- function(
   data,
   verbose = FALSE
 ) {
-  if (verbose) {
+  if (verbose || ndim == 8) {
     DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) {
       strs <- formatC(
         c(rtol, nfunk, ytry, fac, y9),
@@ -24,11 +24,10 @@ amoeba <- function(
       message(msg)
     }
   } else {
-    DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) NULL
+    DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) { return(NULL) }
   }
 
-  AmoebaTry <- function(fac)
-  {
+  AmoebaTry <- function(fac) {
     fac1 <- (1.0 - fac) / ndim
     fac2 <- fac1 - fac
     ptry <- psum * fac1 - p[ihi, ] * fac2
@@ -43,7 +42,7 @@ amoeba <- function(
     DisplayMessage(rtol, nfunk, ytry, fac, y[9])
   }
 
-  # Code -----------------------------------------------------------------------
+  # Code -------------------------------------------------------------------------------------------
 
   NMAX <- 50000
   mpts <- ndim + 1
@@ -53,6 +52,8 @@ amoeba <- function(
   seqMpts <- seq_len(mpts)
   seqNDim <- seq_len(ndim)
   ytry <- y
+
+  print(length(y))
 
   while (
     nfunk < NMAX
@@ -67,7 +68,17 @@ amoeba <- function(
       ihi <- 2L
     }
 
+    if (mpts == 9) {
+      print(ilo)
+      print(ihi)
+      print(inhi)
+    }
     DetermineIloIhi(y, ilo, ihi, inhi)
+    if (mpts == 9) {
+      print(ilo)
+      print(ihi)
+      print(inhi)
+    }
 
     rtol <- 2.0 * abs(y[ihi] - y[ilo]) / (abs(y[ihi]) + abs(y[ilo]))
 

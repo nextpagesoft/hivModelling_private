@@ -7,6 +7,9 @@
 #' @param param List of parameters. Optional. Default = NULL.
 #' @param info List of parameters. Optional. Default = NULL.
 #' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
+#' @param maxRunTime Maximum allowed run time as \code{difftime} object. Fit will be assumed to not
+#'   converging when exceeding this time. If NULL then no time out. Optional.
+#'   Default = as.difftime(Inf, units = 'secs').
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
@@ -14,7 +17,7 @@
 #' @param algorithm Name of optimization algorithm from package \code{nloptr} to use for bootstrap
 #'   iterations. Default = 'NLOPT_LN_BOBYQA'
 #' @param attemptSimplify Logical indicating to attempting simplifying the model to fit it a more
-#'   complex model did not converge. The simplifiction is achieved by reducing the number of knots
+#'   complex model did not converge. The simplification is achieved by reducing the number of knots
 #'   in the spline. Optional. Default = TRUE.
 #' @param verbose Logical indicating to print detailed info during fitting. Optional. If missing
 #'   then the value of \code{context$Settings$Verbose} is used.
@@ -36,6 +39,7 @@ PerformMainFit <- function(
   param = NULL,
   info = NULL,
   maxNoFit = 30L,
+  maxRunTime = as.difftime(Inf, units = 'secs'),
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
@@ -91,6 +95,8 @@ PerformMainFit <- function(
   maxAttempts <- ifelse(attemptSimplify, Inf, 1)
   attempt <- 0L
   while (!converged && info$ModelNoKnots > 0 && attempt < maxAttempts) {
+    attempt <- attempt + 1
+
     # AutoThetaFix ---------------------------------------------------------------------------------
     if (!info$FullData && info$SplineType == 'B-SPLINE') {
       # Set initial number of splines with theta = 0 when doing automated search;
@@ -109,7 +115,7 @@ PerformMainFit <- function(
       res <- EstimateParameters(
         runType = runType,
         probSurv1996, param, info, dataMatrix,
-        maxNoFit, ctol, ftol, verbose = verbose
+        maxNoFit, maxRunTime, ctol, ftol, verbose = verbose
       )
 
       res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
@@ -123,15 +129,14 @@ PerformMainFit <- function(
       nThetaFixMax <- info$ModelSplineN - (as.integer(info$MaxIncCorr) + 1)
       # Increase the number of fixed spline weights until the fit gets too bad
 
-      while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax)
-      {
+      while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax) {
         param$NoThetaFix <- param$NoThetaFix + 1
         param <- UpdateThetaParams(info, param)
 
         res <- EstimateParameters(
           runType = runType,
           probSurv1996, param, info, dataMatrix,
-          maxNoFit, ctol, ftol, verbose = verbose
+          maxNoFit, maxRunTime, ctol, ftol, verbose = verbose
         )
 
         res <- FitLLTotal(res$P, probSurv1996, param, info, dataMatrix)
@@ -150,30 +155,26 @@ PerformMainFit <- function(
       param <- UpdateThetaParams(info, param)
     }
 
-    nTheta <- 100
-    while (nTheta != param$NoTheta) {
-      PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}', verbose = verbose)
-      nTheta <- param$NoTheta
+    PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}', verbose = verbose)
 
-      res <- EstimateParameters(
-        runType = runType,
-        probSurv1996, param, info, dataMatrix,
-        maxNoFit, ctol, ftol, verbose = verbose
-      )
+    res <- EstimateParameters(
+      runType = runType,
+      probSurv1996, param, info, dataMatrix,
+      maxNoFit, maxRunTime, ctol, ftol, verbose = verbose
+    )
 
-      p <- res$P
-      converged <- res$Converged
-      param <- res$Param
-      info <- res$Info
+    p <- res$P
+    converged <- res$Converged
+    param <- res$Param
+    info <- res$Info
 
-      selSmallTheta <- abs(param$Theta) < 1
-      param$ThetaP[selSmallTheta] <- 0
-      param$Theta[selSmallTheta] <- 0
-      param$NoTheta <- sum(param$ThetaP)
+    selSmallTheta <- abs(param$Theta) < 1
+    param$ThetaP[selSmallTheta] <- 0
+    param$Theta[selSmallTheta] <- 0
+    param$NoTheta <- sum(param$ThetaP)
 
-      iterResults <- res$IterResults
-      lastResults <- res$IterResults[[length(res$IterResults)]]
-    }
+    iterResults <- res$IterResults
+    lastResults <- res$IterResults[[length(res$IterResults)]]
 
     if (!converged) {
       PrintAlert(

@@ -8,6 +8,9 @@
 #' @param info List of parameters. Required.#'
 #' @param data Input data as data.table. Required.
 #' @param maxNoFit Maximum number of amoeba iterations. Optional. Default = 30.
+#' @param maxRunTime Maximum allowed run time as \code{difftime} object. Fit will be assumed to not
+#'   converging when exceeding this time. If NULL then no time out. Optional.
+#'   Default = as.difftime(Inf, units = 'secs').
 #' @param ctol Minium required deviance in consecutive lambda estimations.
 #'   Optional. Default = 1e-6.
 #' @param ftol Minium required deviance in amoeba calculations. Optional.
@@ -33,6 +36,7 @@ EstimateParameters <- function(
   info,
   data,
   maxNoFit = 30,
+  maxRunTime = as.difftime(Inf, units = 'secs'),
   ctol = 1e-6,
   ftol = 1e-5,
   algorithm = 'NLOPT_LN_BOBYQA',
@@ -105,10 +109,12 @@ EstimateParameters <- function(
     stop('EstimateParameters: Unsupported estimation run type')
   }
 
+  totalRunTime <- Sys.time() - totalStartTime
+
   EndProcess(
     processId,
     'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}}  |',
-    'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - totalStartTime)}}',
+    'Run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
     verbose = verbose
   )
 
@@ -117,7 +123,8 @@ EstimateParameters <- function(
   llOld <- iterResults[[iter]]$LLTotal + ctol + 1
   while (
     abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&
-    iter < maxNoFit + 1
+    iter < maxNoFit + 1 &&
+    totalRunTime < maxRunTime
   ) {
     iter <- iter + 1
 
@@ -169,10 +176,11 @@ EstimateParameters <- function(
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
+    totalRunTime <- Sys.time() - totalStartTime
   }
-  runTime <- Sys.time() - totalStartTime
+
   PrintAlert(
-    'Total run time: {.timestamp {prettyunits::pretty_dt(runTime)}}',
+    'Total run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
     verbose = verbose
   )
 
@@ -193,6 +201,6 @@ EstimateParameters <- function(
     Param = param,
     Data = data,
     IterResults = iterResults,
-    RunTime = runTime
+    RunTime = totalRunTime
   ))
 }

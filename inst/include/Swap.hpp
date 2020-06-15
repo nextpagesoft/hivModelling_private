@@ -53,7 +53,6 @@ inline void DetermineIloIhi(
       inhi[0] = i + 1;
     }
   }
-  ilo = 6;
 }
 
 } // hivModelling

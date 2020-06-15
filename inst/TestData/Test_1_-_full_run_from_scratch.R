@@ -15,7 +15,7 @@ context <- GetRunContext(
 )
 
 data <- GetPopulationData(context)
-mainResults <- PerformMainFit(context, data)
+mainResults <- PerformMainFit(context, data, maxRunTime = as.difftime(3, units = 'secs'))
 
 # saveRDS(mainResults, GetFilePath('Test_1_-_full_run_results.RDS'))
 # mainResults <- readRDS(url('http://nextpagesoft.net/hivModelling/Test_1_-_full_run_results.RDS'))
@@ -48,3 +48,6 @@ if (nrow(errors) > 0) {
 } else {
   hivModelling:::PrintAlert('Reconciliation successful', type = 'success')
 }
+
+
+data <- readRDS('../hivEstimatesAccuracy2/Server/bootAggregatedData.RDS')

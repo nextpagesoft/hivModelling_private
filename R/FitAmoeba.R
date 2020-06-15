@@ -23,9 +23,7 @@ FitAmoeba <- function(
     amoebaY[i] <- FitLLTotal(p, probSurv1996, param, info, data, detailedResults = FALSE)
   }
 
-  res <- amoeba(
-    p = amoebaP, y = amoebaY, ndim = nParam, ftol, probSurv1996, param, info, data
-  )
+  res <- amoeba(p = amoebaP, y = amoebaY, ndim = nParam, ftol, probSurv1996, param, info, data)
 
   return(res)
 }
