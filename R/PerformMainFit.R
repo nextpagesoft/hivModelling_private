@@ -83,7 +83,7 @@ PerformMainFit <- function(
   if (tmpModelFitDist != info$ModelFitDist) {
     PrintAlert(
       'Input distribution is set to {.val {tmpModelFitDist}}.',
-      'This is overridden to {.val {info$ModelFitDist}} for the main fit.',
+      'This is overridden to {.val {info$ModelFitDist}} for the fit.',
       verbose = verbose
     )
   }
@@ -186,6 +186,7 @@ PerformMainFit <- function(
       info <- GetInfoList(context)
       param <- GetParamList(context, info)
       probSurv1996 <- GetProvSurv96(param, info)
+      info$ModelFitDist <- 'POISSON'
     } else {
       PrintAlert(
         'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',

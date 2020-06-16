@@ -41,16 +41,19 @@ inline void DetermineIloIhi(
   Rcpp::IntegerVector& ihi,
   Rcpp::IntegerVector& inhi
 ) {
-  for (int i = 0; i != y.size(); ++i) {
+  const int n = y.length();
+  for (int i = 0; i != n; ++i) {
+    const int i1 = i + 1;
+
     if (y[i] <= y[ilo[0] - 1]) {
-      ilo[0] = i + 1;
+      ilo[0] = i1;
     }
 
     if (y[i] > y[ihi[0] - 1]) {
       inhi[0] = ihi[0];
-      ihi[0] = i + 1;
-    } else if (y[i] > y[inhi[0] - 1] && i != (ihi[0] - 1)) {
-      inhi[0] = i + 1;
+      ihi[0] = i1;
+    } else if (y[i] > y[inhi[0] - 1] && i1 != ihi[0]) {
+      inhi[0] = i1;
     }
   }
 }

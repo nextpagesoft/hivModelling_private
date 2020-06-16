@@ -9,7 +9,7 @@ amoeba <- function(
   data,
   verbose = FALSE
 ) {
-  if (verbose || ndim == 8) {
+  if (verbose) {
     DisplayMessage <- function(rtol, nfunk, ytry, fac, y9) {
       strs <- formatC(
         c(rtol, nfunk, ytry, fac, y9),
@@ -53,31 +53,29 @@ amoeba <- function(
   seqNDim <- seq_len(ndim)
   ytry <- y
 
-  print(length(y))
-
   while (
     nfunk < NMAX
   ) {
-    inhi <- 0L
+
     ilo <- 1L
+    ihi <- 2L
+    inhi <- 1L
     if (y[1] > y[2]) {
-      inhi <- 2L
       ihi <- 1L
-    } else {
-      inhi <- 1L
-      ihi <- 2L
+      inhi <- 2L
     }
 
-    if (mpts == 9) {
-      print(ilo)
-      print(ihi)
-      print(inhi)
-    }
-    DetermineIloIhi(y, ilo, ihi, inhi)
-    if (mpts == 9) {
-      print(ilo)
-      print(ihi)
-      print(inhi)
+    for (i in seqMpts) {
+      if (y[i] <= y[ilo]) {
+        ilo <- i
+      }
+
+      if (y[i] > y[ihi]) {
+        inhi <- ihi
+        ihi <- i
+      } else if (y[i] > y[inhi] && i != ihi) {
+        inhi <- i
+      }
     }
 
     rtol <- 2.0 * abs(y[ihi] - y[ilo]) / (abs(y[ihi]) + abs(y[ilo]))

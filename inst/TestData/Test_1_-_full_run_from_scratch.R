@@ -11,11 +11,21 @@ GetFilePath <- function(fileName) {
 context <- GetRunContext(
   settings = list(
     InputDataPath = GetFilePath('Test_1.zip')
+  ),
+  parameters = list(
+    INCIDENCE = list(
+      ModelNoKnots = 6
+    )
   )
 )
 
 data <- GetPopulationData(context)
-mainResults <- PerformMainFit(context, data, maxRunTime = as.difftime(3, units = 'secs'))
+mainResults <- PerformMainFit(
+  context,
+  data,
+  maxRunTime = as.difftime(60, units = 'secs'),
+  attemptSimplify = FALSE
+)
 
 # saveRDS(mainResults, GetFilePath('Test_1_-_full_run_results.RDS'))
 # mainResults <- readRDS(url('http://nextpagesoft.net/hivModelling/Test_1_-_full_run_results.RDS'))
