@@ -182,11 +182,14 @@ PerformMainFit <- function(
         type = 'danger',
         verbose = verbose
       )
-      context$Parameters$INCIDENCE$ModelNoKnots <- context$Parameters$INCIDENCE$ModelNoKnots - 1
-      info <- GetInfoList(context)
-      param <- GetParamList(context, info)
-      probSurv1996 <- GetProvSurv96(param, info)
-      info$ModelFitDist <- 'POISSON'
+
+      if (attempt < maxAttempts) {
+        context$Parameters$INCIDENCE$ModelNoKnots <- context$Parameters$INCIDENCE$ModelNoKnots - 1
+        info <- GetInfoList(context)
+        param <- GetParamList(context, info)
+        probSurv1996 <- GetProvSurv96(param, info)
+        info$ModelFitDist <- 'POISSON'
+      }
     } else {
       PrintAlert(
         'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',

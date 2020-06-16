@@ -23,7 +23,7 @@ data <- GetPopulationData(context)
 mainResults <- PerformMainFit(
   context,
   data,
-  maxRunTime = as.difftime(60, units = 'secs'),
+  maxRunTime = as.difftime(6, units = 'secs'),
   attemptSimplify = FALSE
 )
 
