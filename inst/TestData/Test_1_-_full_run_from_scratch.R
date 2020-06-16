@@ -58,6 +58,3 @@ if (nrow(errors) > 0) {
 } else {
   hivModelling:::PrintAlert('Reconciliation successful', type = 'success')
 }
-
-
-data <- readRDS('../hivEstimatesAccuracy2/Server/bootAggregatedData.RDS')

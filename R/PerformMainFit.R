@@ -254,6 +254,8 @@ PerformMainFit <- function(
   invisible(list(
     Converged = converged,
     P = p,
+    Context = context,
+    Data = data,
     Info = info,
     Param = param,
     Statistics = statRes,
