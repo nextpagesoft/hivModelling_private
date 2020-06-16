@@ -1,7 +1,9 @@
 Version 0.9.15 (2020/06/01)
 
 * Support silencing messages
-* UNDER DEVELOPMENT
+* Support run timeout
+* Improve performance
+* Fix problems with automatic rerunning of simplified models
 
 
 Version 0.9.14 (2020/04/19)
