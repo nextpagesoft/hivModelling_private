@@ -11,6 +11,7 @@ EstimateParameters(
   info,
   data,
   maxNoFit = 30,
+  maxRunTime = as.difftime(Inf, units = "secs"),
   ctol = 1e-06,
   ftol = 1e-05,
   algorithm = "NLOPT_LN_BOBYQA",
@@ -29,6 +30,10 @@ EstimateParameters(
 \item{data}{Input data as data.table. Required.}
 
 \item{maxNoFit}{Maximum number of amoeba iterations. Optional. Default = 30.}
+
+\item{maxRunTime}{Maximum allowed run time as \code{difftime} object. Fit will be assumed to not
+converging when exceeding this time. If NULL then no time out. Optional.
+Default = as.difftime(Inf, units = 'secs').}
 
 \item{ctol}{Minium required deviance in consecutive lambda estimations.
 Optional. Default = 1e-6.}
