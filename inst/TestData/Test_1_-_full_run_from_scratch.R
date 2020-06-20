@@ -23,12 +23,9 @@ data <- GetPopulationData(context)
 mainResults <- PerformMainFit(
   context,
   data,
-  maxRunTime = as.difftime(6, units = 'secs'),
+  maxRunTime = as.difftime(Inf, units = 'secs'),
   attemptSimplify = FALSE
 )
-
-# saveRDS(mainResults, GetFilePath('Test_1_-_full_run_results.RDS'))
-# mainResults <- readRDS(url('http://nextpagesoft.net/hivModelling/Test_1_-_full_run_results.RDS'))
 
 plots <- CreateOutputPlots(mainResults)
 
