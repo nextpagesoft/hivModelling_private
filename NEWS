@@ -1,6 +1,6 @@
-Version 0.9.16 (2020/06/16)
+Version 0.9.16 (2020/10/05)
 
-* UNDER DEVELOPMENT
+* Do not use cli processes (they interfere with shiny app)
 
 
 Version 0.9.15 (2020/06/16)

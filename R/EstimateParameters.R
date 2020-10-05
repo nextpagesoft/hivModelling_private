@@ -60,10 +60,6 @@ EstimateParameters <- function(
 
   totalStartTime <- Sys.time()
   algType <- 'SCALE'
-  processId <- StartProcess(
-    'Iteration {.val {sprintf("%02d", iter)}}: {.emph {.val {algType}}}',
-    verbose = verbose
-  )
   if (runType == 'MAIN') {
     # Step 1 : determine the scale of the parameters
     defNoCD4 <- param$NoStage - 1
@@ -111,10 +107,10 @@ EstimateParameters <- function(
 
   totalRunTime <- Sys.time() - totalStartTime
 
-  EndProcess(
-    processId,
+  PrintAlert(
     'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}}  |',
     'Run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
+    type = 'success',
     verbose = verbose
   )
 
@@ -129,10 +125,6 @@ EstimateParameters <- function(
     iter <- iter + 1
 
     startTime <- Sys.time()
-    processId <- StartProcess(
-      'Iteration {.val {sprintf("%02d", iter)}}: {.emph {.val {algType}}}',
-      verbose = verbose
-    )
 
     if (algType == 'AMOEBA') {
       res <- FitAmoeba(iter, ftol, nParam, pParam, probSurv1996, param, info, data)
@@ -166,10 +158,10 @@ EstimateParameters <- function(
       )
     }
 
-    EndProcess(
-      processId,
+    PrintAlert(
       'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}} |',
       'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - startTime)}}',
+      type = 'success',
       verbose = verbose
     )
 
