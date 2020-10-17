@@ -60,24 +60,24 @@
     },
     "callr": {
       "Package": "callr",
-      "Version": "3.5.0",
+      "Version": "3.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dea3322c701bbb5dd31c353a72a1ebf9"
+      "Hash": "b7d7f1e926dfcd57c74ce93f5c048e80"
     },
     "cli": {
       "Package": "cli",
-      "Version": "2.0.2",
+      "Version": "2.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ff0becff7bfdfe3f75d29aff8f3172dd"
+      "Hash": "0b316487b21d21f99ebf98abe179b1ea"
     },
     "codetools": {
       "Package": "codetools",
-      "Version": "0.2-16",
+      "Version": "0.2-17",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "89cf4b8207269ccf82fbeb6473fd662b"
+      "Hash": "61155079bcb2b07b4465d791a331a7de"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -165,10 +165,10 @@
     },
     "globals": {
       "Package": "globals",
-      "Version": "0.13.0",
+      "Version": "0.13.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0195566df9ebe00c615c097a778fe943"
+      "Hash": "3eb799a11cf9d28314691e44a2eaaa14"
     },
     "glue": {
       "Package": "glue",
@@ -354,10 +354,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.0.3",
+      "Version": "3.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "08bd36bd34b20d4f7971d49e81deaab0"
+      "Hash": "71dffd8544691c520dd8e41ed2d7e070"
     },
     "utf8": {
       "Package": "utf8",
