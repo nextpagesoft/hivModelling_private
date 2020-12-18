@@ -29,7 +29,7 @@ RunModels <- function(
   })
 
   # Collect results from jobs
-  results <- future::values(jobs)
+  results <- future::value(jobs)
 
   return(results)
 }
