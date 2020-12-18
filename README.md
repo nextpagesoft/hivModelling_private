@@ -1,6 +1,6 @@
 # Status
 
-[![Travis-CI Build Status](https://travis-ci.org/nextpagesoft/hivModelling.svg?branch=master)](https://travis-ci.org/nextpagesoft/hivModelling.svg?branch=master)
+[![R-CMD-check](https://github.com/nextpagesoft/hivModelling/workflows/R-CMD-check/badge.svg)](https://github.com/nextpagesoft/hivModelling/actions)
 
 # License
 
