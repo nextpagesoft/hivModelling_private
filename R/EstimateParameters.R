@@ -115,7 +115,7 @@ EstimateParameters <- function(
   )
 
   # Stop fitting when the change in deviance is smaller than ctol.
-  algType <- ifelse(runType %in% c('MAIN', 'MAIN_WITH_INIT'), 'AMOEBA', algorithm)
+  algType <- ifelse(runType %in% c('MAIN', 'MAIN_WITH_INIT', 'BOOTSTRAP'), 'AMOEBA', algorithm)
   llOld <- iterResults[[iter]]$LLTotal + ctol + 1
   while (
     abs(iterResults[[iter]]$LLTotal - llOld) > ctol &&

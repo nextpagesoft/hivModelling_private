@@ -13,7 +13,7 @@ PerformBootstrapFits(
   ctol = 1e-06,
   ftol = 1e-05,
   executionPlan = future::sequential,
-  statusRefreshRate = 2,
+  statusRefreshRate = 5,
   algorithm = "NLOPT_LN_BOBYQA",
   verbose = FALSE
 )

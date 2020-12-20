@@ -8,3 +8,4 @@
 ^renv\.lock$
 .renvignore
 ^\.github$
+^workspace\.code-workspace$

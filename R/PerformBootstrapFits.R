@@ -37,7 +37,7 @@ PerformBootstrapFits <- function(
   ctol = 1e-6,
   ftol = 1e-5,
   executionPlan = future::sequential,
-  statusRefreshRate = 2,
+  statusRefreshRate = 5,
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
@@ -49,7 +49,7 @@ PerformBootstrapFits <- function(
     PrintAlert('Performing iteration {.val {idx}}')
     future::future({
       PerformBootstrapFit(idx, context, data, mainResults, maxNoFit, ctol, ftol, algorithm, verbose)
-    })
+    }, seed = TRUE)
   })
 
   # Monitor jobs and check results.

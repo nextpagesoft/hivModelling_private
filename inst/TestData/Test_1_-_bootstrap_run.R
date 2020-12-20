@@ -22,8 +22,9 @@ boostrapResults <- PerformBootstrapFits(
   context,
   data,
   mainResults,
-  bsCount = 20,
-  executionPlan = future::multiprocess
+  bsCount = 2,
+  maxNoFit = 50,
+  executionPlan = future::multisession
 )
 
 plots <- CreateOutputPlots(mainResults, boostrapResults)

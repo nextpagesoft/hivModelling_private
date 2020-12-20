@@ -36,6 +36,7 @@ PerformBootstrapFit <- function(
   algorithm = 'NLOPT_LN_BOBYQA',
   verbose = FALSE
 ) {
+  startTime <- Sys.time()
 
   # CRAN checks workaround
   Year <- NULL
@@ -48,8 +49,6 @@ PerformBootstrapFit <- function(
   N_Emig <- NULL
   C_Emig <- NULL
   Prob_HIVAIDS <- NULL
-  N_HIV_Stage_S_Obs_5 <- NULL
-  N_HIV_S_Obs <- NULL
   N_AIDS <- NULL
   N_HIV <- NULL
   Prob <- NULL
@@ -111,8 +110,8 @@ PerformBootstrapFit <- function(
 
   # Perform fit on the generated data
   res <- EstimateParameters(
-    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBSMatrix, maxNoFit, ctol, ftol,
-    algorithm, verbose
+    runType = 'BOOTSTRAP', probSurv1996, param, info, dataBSMatrix, maxNoFit,
+    maxRunTime = as.difftime(Inf, units = 'secs'), ctol, ftol, algorithm, verbose
   )
 
   p <- res$P
@@ -126,8 +125,10 @@ PerformBootstrapFit <- function(
   statRes <- FitStatistics(modelResults, info, dataBS, param)
 
   countResults <- ModelCountResults(modelResults, info, param)
-  timeResults <- ModelTimeResults(modelResults, info, param)
+  timeResults <- ModelTimeResults(modelResults$Year, info, param)
   mainOutputs <- ModelOutputs(modelResults, countResults, timeResults, info, param, dataBS, runId)
+
+  runTime <- Sys.time() - startTime
 
   return(list(
     Converged = converged,
@@ -139,6 +140,7 @@ PerformBootstrapFit <- function(
     ModelResults = modelResults,
     CountResults = countResults,
     TimeResults = timeResults,
-    MainOutputs = mainOutputs
+    MainOutputs = mainOutputs,
+    RunTime = runTime
   ))
 }
