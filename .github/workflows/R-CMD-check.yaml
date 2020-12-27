@@ -37,7 +37,6 @@ jobs:
           install.packages('remotes')
           install.packages('rcmdcheck')
         shell: Rscript {0}
-        working-directory: Server
 
       - name: Setup Linux R cache
         uses: actions/cache@v2
@@ -81,7 +80,6 @@ jobs:
           if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')
           renv::restore()
         shell: Rscript {0}
-        working-directory: Server
 
       - name: Check
         env:
@@ -91,7 +89,6 @@ jobs:
           _R_CHECK_CODETOOLS_PROFILE_: 'suppressUndefined=TRUE'
         run: rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')
         shell: Rscript {0}
-        working-directory: Server
 
       - name: Upload check results
         if: failure()
