@@ -73,7 +73,6 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements('ubuntu', '20.04'))')
           sudo apt-get install -y libcurl4-openssl-dev
-        working-directory: Server
 
       - name: Install R production packages
         run: |
