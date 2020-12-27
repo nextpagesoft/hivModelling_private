@@ -1,7 +1,5 @@
 on:
-  push:
-    paths:
-    - 'Server/**'
+  push
 
 name: R-CMD-check
 
