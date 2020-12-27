@@ -1,6 +1,6 @@
 external.libraries: D:/Documents/R/win-library/4.0/
 ignored.packages:
-package.dependency.fields: Imports
+package.dependency.fields: Imports, LinkingTo, Depends
 r.version:
 snapshot.type: packrat
 use.cache: TRUE
