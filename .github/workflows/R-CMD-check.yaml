@@ -36,6 +36,7 @@ jobs:
         run: |
           install.packages('remotes')
           install.packages('rcmdcheck')
+          install.packages('renv')
         shell: Rscript {0}
 
       - name: Setup Linux R cache
@@ -76,7 +77,6 @@ jobs:
 
       - name: Install R production packages
         run: |
-          if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')
           renv::restore()
         shell: Rscript {0}
 
