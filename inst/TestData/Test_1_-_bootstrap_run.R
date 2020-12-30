@@ -24,7 +24,7 @@ boostrapResults <- PerformBootstrapFits(
   mainResults,
   bsCount = 2,
   maxNoFit = 50,
-  executionPlan = future::multisession
+  executionPlan = future::sequential
 )
 
 plots <- CreateOutputPlots(mainResults, boostrapResults)
