@@ -22,8 +22,6 @@ PreprocessInputData <- function(
   maxYear = year(Sys.time()),
   verbose= verbose
 ) {
-  PrintH2('1.3. Data preprocessing', verbose = verbose)
-
   # CRAN checks
   `.` <- NULL
   Year <- NULL

@@ -50,6 +50,31 @@ PrintH2 <- function(
   invisible(NULL)
 }
 
+#' PrintH3
+#'
+#' @param ... Text to be printed
+#' @param collapse String to be used for concatenating texts
+#' @param .envir Environment for lookup of variables referenced in the text
+#' @param verbose Logical indicating to print out messages (TRUE) or not (FALSE)
+#'
+#' @return NULL
+#'
+#' @examples
+#' \dontrun{
+#' PrintH3('Test')
+#' }
+PrintH3 <- function(
+                    ...,
+                    collapse = ' ',
+                    .envir = parent.frame(),
+                    verbose = TRUE) {
+  if (verbose) {
+    cli::cli_h3(CollapseTexts(..., collapse = collapse), .envir = .envir)
+  }
+
+  invisible(NULL)
+}
+
 #' PrintAlert
 #'
 #' @param ... Text to be printed

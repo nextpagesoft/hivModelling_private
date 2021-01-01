@@ -4,19 +4,8 @@ library(hivModelling)
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = system.file('TestData/Test NL.zip', package = 'hivModelling')
-  )
-)
-
-context <- GetRunContext(
-  settings = list(
-    InputDataPath = '~/share/_HIV_MODELLING/test NL - 2 populations.zip'
-  )
-)
-
-context <- GetRunContext(
-  settings = list(
-    InputDataPath = '~/share/HIV Bootstrap/1/'
+    InputDataPath = system.file('TestData/Test_1.zip', package = 'hivModelling'),
+    Verbose = FALSE
   )
 )
 

@@ -23,7 +23,7 @@ GetRunContext <- function(...)
 
   # Define default context (lowest priority)
   context <- list(
-    Settings   = GetObjectDefinition('Settings'),
+    Settings = GetObjectDefinition('Settings'),
     Parameters = GetObjectDefinition('Parameters'),
     Data = NULL,
     PreprocessedData = NULL
@@ -33,7 +33,6 @@ GetRunContext <- function(...)
   if (!is.null(args$Settings$Verbose)) {
     verbose <- args$Settings$Verbose
   }
-  PrintH1('1. Context', verbose = verbose)
 
   # Extract paths from arguments
   modelFilePath <- context$Settings$ModelFilePath

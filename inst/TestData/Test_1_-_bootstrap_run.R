@@ -10,7 +10,8 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_1.zip')
+    InputDataPath = GetFilePath('Test_1.zip'),
+    Verbose = FALSE
   )
 )
 

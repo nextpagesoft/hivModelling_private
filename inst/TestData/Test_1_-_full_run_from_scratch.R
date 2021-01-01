@@ -10,7 +10,8 @@ GetFilePath <- function(fileName) {
 # RUN ----------------------------------------------------------------------------------------------
 context <- GetRunContext(
   settings = list(
-    InputDataPath = GetFilePath('Test_1.zip')
+    InputDataPath = GetFilePath('Test_1.zip'),
+    Verbose = FALSE
   ),
   parameters = list(
     INCIDENCE = list(
@@ -24,8 +25,7 @@ mainResults <- PerformMainFit(
   context,
   data,
   maxRunTime = as.difftime(Inf, units = 'secs'),
-  attemptSimplify = FALSE,
-  verbose = FALSE
+  attemptSimplify = FALSE
 )
 
 plots <- CreateOutputPlots(mainResults)

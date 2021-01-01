@@ -19,8 +19,6 @@ ReadInputData <- function(
   verbose = TRUE
 ) {
   inputData <- NULL
-  PrintH2('1.2. Data files', verbose = verbose)
-
   if (is.null(inputDataPath)) {
     return(NULL)
   }

@@ -52,10 +52,6 @@ PerformMainFit <- function(
     verbose <- context$Settings$Verbose
   }
 
-  PrintH1('2. Main fit', verbose = verbose)
-
-  PrintH2('2.1. Info', verbose = verbose)
-
   dataMatrix <- as.matrix(data)
 
   if (is.null(info) || is.null(param)) {
@@ -87,8 +83,6 @@ PerformMainFit <- function(
       verbose = verbose
     )
   }
-
-  PrintH2('2.2. Iterations', verbose = verbose)
 
   # ------------------------------------------------------------------------------------------------
   converged <- FALSE
@@ -155,7 +149,7 @@ PerformMainFit <- function(
       param <- UpdateThetaParams(info, param)
     }
 
-    PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}', verbose = verbose)
+    PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
 
     res <- EstimateParameters(
       runType = runType,
@@ -179,8 +173,7 @@ PerformMainFit <- function(
     if (!converged) {
       PrintAlert(
         'Fit did NOT converge, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'danger',
-        verbose = verbose
+        type = 'danger'
       )
 
       if (attempt < maxAttempts) {
@@ -193,13 +186,10 @@ PerformMainFit <- function(
     } else {
       PrintAlert(
         'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'success',
-        verbose = verbose
+        type = 'success'
       )
     }
   }
-
-  PrintH2('2.3. Results', verbose = verbose)
 
   PrintBullets(
     c(

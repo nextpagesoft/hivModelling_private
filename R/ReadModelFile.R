@@ -20,8 +20,6 @@ ReadModelFile <- function(
   inputDataPath = NULL,
   verbose = TRUE
 ) {
-  PrintH2('1.1. Model file', verbose = verbose)
-
   model <- NULL
 
   if (!is.null(modelFilePath)) {
@@ -71,7 +69,8 @@ ReadModelFile <- function(
     }
     if (!dir.exists(inputDataPath)) {
       PrintAlert(
-        'Input data path {.path {model$Model$Meta$InputDataPath[[1]]}} specified in the model file does not exist.',
+        'Input data path {.path {model$Model$Meta$InputDataPath[[1]]}}
+        specified in the model file does not exist.',
         'It will not be incorporated in to the run context.'
       )
       inputDataPath <- NULL
@@ -85,7 +84,8 @@ ReadModelFile <- function(
     riskGroupNames <- unname(sapply(sapply(model$Model$Meta$RiskGroups, '[[', 'Name'), '[[', 1))
     riskGroups$PopulationSets <- setNames(lapply(model$Model$Meta$RiskGroups, function(riskGroup) {
       populations <- unname(sapply(sapply(riskGroup$RiskCategories, '[[', 'Name'), '[[', 1))
-      selected <- as.logical(unname(sapply(sapply(riskGroup$RiskCategories, '[[', 'IsSelected'), '[[', 1)))
+      selected <-
+        as.logical(unname(sapply(sapply(riskGroup$RiskCategories, '[[', 'IsSelected'), '[[', 1)))
       populations[selected]
     }), riskGroupNames)
     riskGroups$Selected <- riskGroupNames[length(riskGroupNames)]

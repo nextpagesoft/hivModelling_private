@@ -15,6 +15,7 @@ PerformMainFit(
   ftol = 1e-05,
   algorithm = "NLOPT_LN_BOBYQA",
   attemptSimplify = TRUE,
+  logLevel = 1,
   verbose
 )
 }
@@ -45,6 +46,9 @@ iterations. Default = 'NLOPT_LN_BOBYQA'}
 \item{attemptSimplify}{Logical indicating to attempting simplifying the model to fit it a more
 complex model did not converge. The simplification is achieved by reducing the number of knots
 in the spline. Optional. Default = TRUE.}
+
+\item{logLevel}{Integer denoting the logging level: 0 - nothing, 1 - major info, 2 - all.
+Default = 1.}
 
 \item{verbose}{Logical indicating to print detailed info during fitting. Optional. If missing
 then the value of \code{context$Settings$Verbose} is used.}
