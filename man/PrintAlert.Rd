@@ -8,30 +8,28 @@ PrintAlert(
   ...,
   collapse = " ",
   type = "info",
-  .envir = parent.frame(),
-  verbose = TRUE
+  verbose = TRUE,
+  .envir = parent.frame()
 )
 }
 \arguments{
 \item{...}{Text to be printed}
 
-\item{collapse}{String to be used for concatenating texts}
+\item{collapse}{String to be used for concatenating texts. Default = ' '}
 
 \item{type}{Type of alert}
 
-\item{.envir}{Environment for lookup of variables referenced in the text}
+\item{verbose}{Logical indicating to print the message. Default = TRUE.}
 
-\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
+\item{.envir}{Environment for lookup of variables referenced in the text}
 }
 \description{
 PrintAlert
 }
 \examples{
-\dontrun{
 PrintAlert('Test')
 PrintAlert('Test', type = 'success')
 PrintAlert('Test', type = 'danger')
 PrintAlert('Test', type = 'warning')
 PrintAlert('Test', type = 'info')
-}
 }

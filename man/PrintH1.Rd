@@ -4,22 +4,20 @@
 \alias{PrintH1}
 \title{PrintH1}
 \usage{
-PrintH1(..., collapse = " ", .envir = parent.frame(), verbose = TRUE)
+PrintH1(..., collapse = " ", verbose = TRUE, .envir = parent.frame())
 }
 \arguments{
 \item{...}{Text to be printed}
 
-\item{collapse}{String to be used for concatenating texts}
+\item{collapse}{String to be used for concatenating texts. Default = ' '}
+
+\item{verbose}{Logical indicating to print the message. Default = TRUE.}
 
 \item{.envir}{Environment for lookup of variables referenced in the text}
-
-\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
 }
 \description{
 PrintH1
 }
 \examples{
-\dontrun{
 PrintH1('Test')
-}
 }

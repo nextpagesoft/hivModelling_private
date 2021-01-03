@@ -4,20 +4,18 @@
 \alias{PrintBullets}
 \title{PrintBullets}
 \usage{
-PrintBullets(items = c(), .envir = parent.frame(), verbose = TRUE)
+PrintBullets(items = c(), verbose = TRUE, .envir = parent.frame())
 }
 \arguments{
 \item{items}{Vector of text items}
 
-\item{.envir}{Environment for lookup of variables referenced in the text}
+\item{verbose}{Logical indicating to print the message. Default = TRUE.}
 
-\item{verbose}{Logical indicating to print out messages (TRUE) or not (FALSE)}
+\item{.envir}{Environment for lookup of variables referenced in the text}
 }
 \description{
 PrintBullets
 }
 \examples{
-\dontrun{
 PrintBullets(c('Item 1', 'Item 2'))
-}
 }
