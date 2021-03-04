@@ -58,19 +58,8 @@ PerformMainFit <- function(
     runType <- 'MAIN'
     info <- GetInfoList(context)
     param <- GetParamList(context, info)
-    PrintAlert(
-      'Run type: {.val {runType}}',
-      '- all initial parameters will be determined from object {.var context}',
-      verbose = verbose
-    )
   } else {
     runType <- 'MAIN_WITH_INIT'
-    PrintAlert(
-      'Run type: {.val {runType}}',
-      '- all initial parameters will be determined from objects',
-      '{.var info} and {.var param}',
-      verbose = verbose
-    )
   }
   probSurv1996 <- GetProvSurv96(param, info)
 

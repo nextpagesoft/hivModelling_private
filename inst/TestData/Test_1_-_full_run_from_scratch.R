@@ -25,7 +25,8 @@ mainResults <- PerformMainFit(
   context,
   data,
   maxRunTime = as.difftime(Inf, units = 'secs'),
-  attemptSimplify = FALSE
+  attemptSimplify = FALSE,
+  verbose = TRUE
 )
 
 plots <- CreateOutputPlots(mainResults)
