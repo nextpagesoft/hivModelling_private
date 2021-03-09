@@ -23,7 +23,7 @@ boostrapResults <- PerformBootstrapFits(
   context,
   data,
   mainResults,
-  bsCount = 2,
+  bsCount = 20,
   maxNoFit = 50,
   executionPlan = future::sequential
 )
