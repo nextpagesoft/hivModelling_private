@@ -47,7 +47,10 @@ GetAllowedYearRanges <- function(
     endYear <- max(cd4MaxYears)
 
     # Adjust years if needed
-    if ((startYear <= allowedEndYear && allowedStartYear <= endYear) && !(allowedStartYear > allowedEndYear)) {
+    if (
+      (startYear <= allowedEndYear && allowedStartYear <= endYear) &&
+      !(allowedStartYear > allowedEndYear)
+    ) {
       startYear <- max(startYear, allowedStartYear)
       endYear <- min(endYear, allowedEndYear)
       allowedEndYear <- startYear - 1
@@ -61,7 +64,10 @@ GetAllowedYearRanges <- function(
     # Get time interval for HIV diagnoses, total
     startYear <- incidencePreMinMaxYears[['HIV']][[1]]
     endYear <- incidencePreMinMaxYears[['HIV']][[2]]
-    if ((startYear <= allowedEndYear && allowedStartYear <= endYear) && !(allowedStartYear > allowedEndYear)) {
+    if (
+      (startYear <= allowedEndYear && allowedStartYear <= endYear) &&
+      !(allowedStartYear > allowedEndYear)
+    ) {
       startYear <- max(startYear, allowedStartYear)
       endYear <- min(endYear, allowedEndYear)
       allowedEndYear <- startYear - 1
@@ -80,7 +86,10 @@ GetAllowedYearRanges <- function(
     # Get time interval for HIV diagnoses, total
     startYear <- incidencePreMinMaxYears[['HIV']][[1]]
     endYear <- incidencePreMinMaxYears[['HIV']][[2]]
-    if ((startYear <= allowedEndYear && allowedStartYear <= endYear) && !(allowedStartYear > allowedEndYear)) {
+    if (
+      (startYear <= allowedEndYear && allowedStartYear <= endYear) &&
+      !(allowedStartYear > allowedEndYear)
+    ) {
       startYear <- max(startYear, allowedStartYear)
       endYear <- min(endYear, allowedEndYear)
       allowedEndYear <- startYear - 1
@@ -97,8 +106,8 @@ GetAllowedYearRanges <- function(
   aidsStartYear <- allMinYear - 1
   aidsEndYear <- allMinYear - 1
   if ('AIDS' %in% names(incidencePreMinMaxYears)) {
-    aidsStartYear <- incidencePreMinMaxYears[['AIDS']][[1]]
     aidsEndYear <- min(incidencePreMinMaxYears[['AIDS']][[2]], 1995)
+    aidsStartYear <- min(incidencePreMinMaxYears[['AIDS']][[1]], aidsEndYear)
   }
   incidenceFinalMinMaxYears[['AIDS']] <- c(aidsStartYear, aidsEndYear)
 
