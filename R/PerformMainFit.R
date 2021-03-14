@@ -82,7 +82,7 @@ PerformMainFit <- function(
 
     # AutoThetaFix ---------------------------------------------------------------------------------
     if (!info$FullData && info$SplineType == 'B-SPLINE') {
-      PrintAlert('Searching for optimal number of fixed theta parameters')
+      PrintAlert('Searching for optimal number of fixed theta parameters started')
 
       # Set initial number of splines with theta = 0 when doing automated search;
       # loop starts at the first knot not equal to the start year of calculations
@@ -94,6 +94,8 @@ PerformMainFit <- function(
 
       # Search starts by holding the first theta fixed
       param$NoThetaFix <- as.integer(info$StartIncZero)
+      cat('\n')
+      PrintAlert('Number of fixed theta parameters: {.val {param$NoThetaFix}}')
 
       param <- UpdateThetaParams(info, param)
 
@@ -116,6 +118,7 @@ PerformMainFit <- function(
 
       while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax) {
         param$NoThetaFix <- param$NoThetaFix + 1
+        cat('\n')
         PrintAlert('Number of fixed theta parameters: {.val {param$NoThetaFix}}')
 
         param <- UpdateThetaParams(info, param)
@@ -140,8 +143,11 @@ PerformMainFit <- function(
 
       param$NoThetaFix <- nThetaFixBest
       param <- UpdateThetaParams(info, param)
+
+      PrintAlert('Searching for optimal number of fixed theta parameters finished')
     }
 
+    cat('\n')
     PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
 
     res <- EstimateParameters(
