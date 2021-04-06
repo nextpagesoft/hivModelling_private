@@ -165,6 +165,7 @@ PerformMainFit <- function(
     param$ThetaP[selSmallTheta] <- 0
     param$Theta[selSmallTheta] <- 0
     param$NoTheta <- sum(param$ThetaP)
+    param$ThetaF <- param$Theta[!selSmallTheta]
 
     iterResults <- res$IterResults
     lastResults <- res$IterResults[[length(res$IterResults)]]
