@@ -1,8 +1,8 @@
 Package: hivModelling
 Type: Package
 Title: Evidence-Based Methods to Calculate HIV Incidence in a Given Population
-Version: 0.9.20
-Date: 2021-03-04
+Version: 0.9.21
+Date: 2021-04-12
 Authors@R: c(person('Ard', 'van Sighem', email = 'a.i.vansighem@amc.uva.nl', role = c('aut')),
     person('Chantal', 'Quinten', email = 'chantal.quinten@ecdc.europa.eu', role = c('aut', 'ctb')),
     person('Daniel', 'Lewandowski', email = 'daniel@nextpagesoft.net', role = c('aut', 'cre')))

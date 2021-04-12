@@ -151,9 +151,8 @@ PerformMainFit <- function(
     PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
 
     res <- EstimateParameters(
-      runType = runType,
-      probSurv1996, param, info, dataMatrix,
-      maxNoFit, maxRunTime, ctol, ftol, verbose = verbose
+      runType = runType, probSurv1996, param, info, dataMatrix, maxNoFit, maxRunTime, ctol, ftol,
+      verbose = verbose
     )
 
     p <- res$P
@@ -167,6 +166,10 @@ PerformMainFit <- function(
     param$NoTheta <- sum(param$ThetaP)
     param$ThetaF <- param$Theta[!selSmallTheta]
 
+    PrintAlert(
+      'Number of spline weights estimated after fixing small thetas to 0: {.val {param$NoTheta}}'
+    )
+
     iterResults <- res$IterResults
     lastResults <- res$IterResults[[length(res$IterResults)]]
 
@@ -179,9 +182,9 @@ PerformMainFit <- function(
       if (attempt < maxAttempts) {
         context$Parameters$INCIDENCE$ModelNoKnots <- context$Parameters$INCIDENCE$ModelNoKnots - 1
         info <- GetInfoList(context)
+        info$ModelFitDist <- 'POISSON'
         param <- GetParamList(context, info)
         probSurv1996 <- GetProvSurv96(param, info)
-        info$ModelFitDist <- 'POISSON'
       }
     } else {
       PrintAlert(
