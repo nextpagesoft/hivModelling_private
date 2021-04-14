@@ -164,7 +164,7 @@ PerformMainFit <- function(
     param$ThetaP[selSmallTheta] <- 0
     param$Theta[selSmallTheta] <- 0
     param$NoTheta <- sum(param$ThetaP)
-    param$ThetaF <- param$Theta[!selSmallTheta]
+    param$ThetaF <- param$Theta[param$ThetaP != 0]
 
     PrintAlert(
       'Number of spline weights estimated after fixing small thetas to 0: {.val {param$NoTheta}}'
