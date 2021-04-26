@@ -82,7 +82,7 @@ PerformMainFit <- function(
 
     # AutoThetaFix ---------------------------------------------------------------------------------
     if (!info$FullData && info$SplineType == 'B-SPLINE') {
-      PrintAlert('Searching for optimal number of fixed theta parameters started')
+      PrintAlert('Searching for optimal number of fixed theta parameters started.')
 
       # Set initial number of splines with theta = 0 when doing automated search;
       # loop starts at the first knot not equal to the start year of calculations
@@ -114,8 +114,8 @@ PerformMainFit <- function(
 
       nThetaFixBest <- param$NoThetaFix
       nThetaFixMax <- info$ModelSplineN - (as.integer(info$MaxIncCorr) + 1)
-      # Increase the number of fixed spline weights until the fit gets too bad
 
+      # Increase the number of fixed spline weights until the fit gets too bad
       while (llNew < (llOld + param$ChiSqDiff) && param$NoThetaFix <= nThetaFixMax) {
         param$NoThetaFix <- param$NoThetaFix + 1
         cat('\n')
@@ -144,7 +144,9 @@ PerformMainFit <- function(
       param$NoThetaFix <- nThetaFixBest
       param <- UpdateThetaParams(info, param)
 
-      PrintAlert('Searching for optimal number of fixed theta parameters finished')
+      PrintAlert(
+        'Searching for optimal number of fixed theta parameters finished: {.val {param$NoThetaFix}}'
+      )
     }
 
     cat('\n')
@@ -174,10 +176,7 @@ PerformMainFit <- function(
     lastResults <- res$IterResults[[length(res$IterResults)]]
 
     if (!converged) {
-      PrintAlert(
-        'Fit did NOT converge, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'danger'
-      )
+      PrintAlert('Fit did NOT converge', type = 'danger')
 
       if (attempt < maxAttempts) {
         context$Parameters$INCIDENCE$ModelNoKnots <- context$Parameters$INCIDENCE$ModelNoKnots - 1
@@ -187,10 +186,7 @@ PerformMainFit <- function(
         probSurv1996 <- GetProvSurv96(param, info)
       }
     } else {
-      PrintAlert(
-        'Fit converged, goodness-of-fit: {.val {lastResults$LLTotal}}',
-        type = 'success'
-      )
+      PrintAlert('Fit converged', type = 'success')
     }
   }
 

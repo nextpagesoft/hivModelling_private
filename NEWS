@@ -1,3 +1,8 @@
+Version 0.9.22 (2021/04/26)
+
+* Print goodness of fit with running auto-Theta fix
+
+
 Version 0.9.21 (2021/04/12)
 
 * Update param Theta after fixing small thetas to 0

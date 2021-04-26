@@ -171,11 +171,6 @@ EstimateParameters <- function(
     totalRunTime <- Sys.time() - totalStartTime
   }
 
-  PrintAlert(
-    'Total run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
-    verbose = verbose
-  )
-
   lastResults <- iterResults[[iter]]
 
   converged <- abs(lastResults$LLTotal - llOld) <= ctol
@@ -186,7 +181,14 @@ EstimateParameters <- function(
   param$ThetaF <- thetaF
   param$Beta <- beta
 
-  invisible(list(
+  PrintAlert('Goodness-of-fit: {.val {lastResults$LLTotal}}', verbose = verbose)
+
+  PrintAlert(
+    'Total run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
+    verbose = verbose
+  )
+
+  return(invisible(list(
     Converged = converged,
     P = lastResults$P,
     Info = info,
@@ -194,5 +196,5 @@ EstimateParameters <- function(
     Data = data,
     IterResults = iterResults,
     RunTime = totalRunTime
-  ))
+  )))
 }

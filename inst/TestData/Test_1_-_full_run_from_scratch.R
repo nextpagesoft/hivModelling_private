@@ -11,11 +11,12 @@ GetFilePath <- function(fileName) {
 context <- GetRunContext(
   settings = list(
     InputDataPath = GetFilePath('Test_1.zip'),
-    Verbose = FALSE
+    Verbose = TRUE
   ),
   parameters = list(
     INCIDENCE = list(
-      ModelNoKnots = 6
+      ModelNoKnots = 6,
+      FullData = FALSE
     )
   )
 )

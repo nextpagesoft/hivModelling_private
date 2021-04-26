@@ -46,17 +46,17 @@
     },
     "brio": {
       "Package": "brio",
-      "Version": "1.1.1",
+      "Version": "1.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "36758510e65a457efeefa50e1e7f0576"
+      "Hash": "2f01e16ff9571fe70381c7b9ae560dc4"
     },
     "callr": {
       "Package": "callr",
-      "Version": "3.6.0",
+      "Version": "3.7.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "25da2c6fba6a13b5da94e37acdb3f532"
+      "Hash": "461aa75a11ce2400245190ef5d3995df"
     },
     "cli": {
       "Package": "cli",
@@ -235,10 +235,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-34",
+      "Version": "1.8-35",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "bd4a6c4b600f58651d60d381b0e9a397"
+      "Hash": "89fd8b2ad4a6cb4979b78cf2a77ab503"
     },
     "munsell": {
       "Package": "munsell",
@@ -368,10 +368,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.1.0",
+      "Version": "3.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4d894a114dbd4ecafeda5074e7c538e6"
+      "Hash": "fbbca141541ee9242233ba50b0fcb843"
     },
     "utf8": {
       "Package": "utf8",
@@ -403,10 +403,10 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "2.4.1",
+      "Version": "2.4.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "caf4781c674ffa549a4676d2d77b13cc"
+      "Hash": "ad03909b44677f930fa156d47d7a3aeb"
     },
     "xml2": {
       "Package": "xml2",
