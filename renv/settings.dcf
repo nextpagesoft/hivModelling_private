@@ -1,4 +1,4 @@
-external.libraries: D:/Documents/R/win-library/4.0/
+external.libraries: D:/Documents/R/win-library/4.1/
 ignored.packages:
 package.dependency.fields: Imports, LinkingTo, Depends
 r.version:
