@@ -24,7 +24,10 @@ GetAllowedYearRanges <- function(
   }
 
   incidenceFinalMinMaxYears <- list()
-  incidencePreMinMaxYears <- lapply(data, function(dt) dt[, c(min(Year), max(Year))])
+  incidencePreMinMaxYears <- suppressWarnings(
+    lapply(data, function(dt) dt[, c(min(Year), max(Year))])
+  )
+  incidencePreMinMaxYears <- Filter(Negate(is.null), incidencePreMinMaxYears)
 
   # Get range of calculations
   allSearchNamesSet <- grepl('^(HIV|AIDS)', names(incidencePreMinMaxYears))
