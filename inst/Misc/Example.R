@@ -5,7 +5,7 @@ library(hivModelling)
 context <- GetRunContext(
   settings = list(
     InputDataPath = system.file('TestData/Test_1.zip', package = 'hivModelling'),
-    Verbose = FALSE
+    Verbose = TRUE
   )
 )
 
