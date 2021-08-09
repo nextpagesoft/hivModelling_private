@@ -106,11 +106,10 @@ PrintBullets <- function(
   verbose = TRUE,
   .envir = parent.frame()
 ) {
+  items <- setNames(items, rep('*', length(items)))
   if (verbose) {
     formattedText <- capt0({
-      cli::cli_ul()
-      sapply(items, cli::cli_li)
-      cli::cli_end()
+      cli::cli_bullets(items)
     })
     cat(formattedText)
   }

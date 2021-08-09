@@ -108,8 +108,9 @@ EstimateParameters <- function(
   totalRunTime <- Sys.time() - totalStartTime
 
   PrintAlert(
-    'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}}  |',
-    'Run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
+    'Iteration {sprintf("%02d", iter)}: {sprintf("%6s", algType)} |',
+    'LL = {sprintf("%15.6f", iterResults[[iter]]$LLTotal)} |',
+    '{.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
     type = 'success',
     verbose = verbose
   )
@@ -158,17 +159,18 @@ EstimateParameters <- function(
       )
     }
 
-    PrintAlert(
-      'Iteration {.val {sprintf("%02d", iter)}}: {.val {algType}} |',
-      'Run time: {.timestamp {prettyunits::pretty_dt(Sys.time() - startTime)}}',
-      type = 'success',
-      verbose = verbose
-    )
-
     pParam <- res$P
     iterResults[[iter]] <- res
     llOld <- iterResults[[iter - 1]]$LLTotal
     totalRunTime <- Sys.time() - totalStartTime
+
+    PrintAlert(
+      'Iteration {sprintf("%02d", iter)}: {sprintf("%6s", algType)} |',
+      'LL = {sprintf("%15.6f", iterResults[[iter]]$LLTotal)} |',
+      '{.timestamp {prettyunits::pretty_dt(Sys.time() - startTime)}}',
+      type = 'success',
+      verbose = verbose
+    )
   }
 
   lastResults <- iterResults[[iter]]
