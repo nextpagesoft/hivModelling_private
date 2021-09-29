@@ -16,7 +16,7 @@ context <- GetRunContext(
   parameters = list(
     INCIDENCE = list(
       ModelNoKnots = 6,
-      FullData = FALSE
+      FullData = TRUE
     )
   )
 )
