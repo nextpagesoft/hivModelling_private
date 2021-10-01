@@ -1,6 +1,5 @@
-.Rproj.user
-.Rhistory
-.Rprofile
-inst
-utils
-tests
+/.github/
+/inst/
+/utils/
+/tests/
+/src/
