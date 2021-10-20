@@ -188,7 +188,7 @@ EstimateParameters <- function(
     verbose = verbose
   )
   PrintAlert(
-    'Total run time = {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
+    'Total run time = {prettyunits::pretty_dt(totalRunTime)}',
     verbose = verbose
   )
 

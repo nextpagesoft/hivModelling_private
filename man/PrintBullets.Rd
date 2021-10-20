@@ -17,5 +17,5 @@ PrintBullets(items = c(), verbose = TRUE, .envir = parent.frame())
 PrintBullets
 }
 \examples{
-PrintBullets(c('Item 1', 'Item 2'))
+PrintBullets(items = c('Item 1', 'Item 2', 'Item  3', 'beta[ 1] =  0.4'))
 }

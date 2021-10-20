@@ -67,11 +67,13 @@ PrintH2 <- function(
 #' PrintAlert('Test', type = 'warning')
 #' PrintAlert('Test', type = 'info')
 #' @export
-PrintAlert <- function(...,
-                       collapse = ' ',
-                       type = 'info',
-                       verbose = TRUE,
-                       .envir = parent.frame()) {
+PrintAlert <- function(
+  ...,
+  collapse = ' ',
+  type = 'info',
+  verbose = TRUE,
+  .envir = parent.frame()
+) {
   if (verbose) {
     alertFunc <- switch(tolower(type),
       'danger'  = cli::cli_alert_danger,
@@ -103,10 +105,9 @@ PrintBullets <- function(
   verbose = TRUE,
   .envir = parent.frame()
 ) {
-  # items <- setNames(items, rep('*', length(items)))
   if (verbose) {
     formattedText <- capt0({
-      cli::cli_li(items)
+      cli::cat_bullet(items, bullet = 'dot', bullet_col = 'green')
     })
     cat(formattedText)
   }

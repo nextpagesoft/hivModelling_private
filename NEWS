@@ -1,3 +1,8 @@
+Version 0.9.27 (2021/10/20)
+
+* Fix performing main fit when fixing thetas
+
+
 Version 0.9.26 (2021/09/29)
 
 * Update dependencies

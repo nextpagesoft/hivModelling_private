@@ -198,30 +198,32 @@ PerformMainFit <- function(
     }
   }
 
-  if (verbose) {
-    cat(paste(sprintf(
-      '*  beta[%02d]: %s',
-      seq_along(param$NoDelta),
-      formatC(
-        param$Beta[seq_len(param$NoDelta)],
-        format = 'f',
-        width = 15,
-        digits = 6
-      )
-    ), collapse = '\n'))
-    cat('\n')
-    cat(paste(sprintf(
-      '* theta[%02d]: %s %s',
-      seq_along(param$Theta),
-      formatC(
-        param$Theta,
-        format = 'f',
-        width = 15,
-        digits = 6
+  PrintBullets(
+    c(
+      sprintf(
+        ' beta[%2s]: %s',
+        as.character(seq_len(param$NoDelta)),
+        formatC(
+          param$Beta[seq_len(param$NoDelta)],
+          format = 'f',
+          width = 15,
+          digits = 6
+        )
       ),
-      ifelse(param$ThetaP, '', '(FIXED)')
-    ), collapse = '\n'))
-  }
+      sprintf(
+        'theta[%2s]: %s %s',
+        as.character(seq_along(param$Theta)),
+        formatC(
+          param$Theta,
+          format = 'f',
+          width = 15,
+          digits = 6
+        ),
+        ifelse(param$ThetaP, '', '(FIXED)')
+      )
+    ),
+    verbose = verbose
+  )
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial
