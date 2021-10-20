@@ -25,30 +25,29 @@ GetProvSurv96 <- function(param, info)
 
   if (info$Country == 'NL') {
     qbar <- matrix(0, noStage, noStage)
-    for (i in seq(noStage)) {
-      for (j in seq(noStage)) {
+    for (i in seq_len(noStage)) {
+      for (j in seq_len(noStage)) {
         qbar[i, j] <- -qoppa[i] / (qoppa[j] - qoppa[i])
       }
     }
     qbar[is.infinite(qbar)] <- 1
 
-    qbarC <- lapply(seq(noStage), function(i) {
-      if (i != 5) {
-        apply(qbar[i:5, i:5], 2, prod)
+    qbarC <- lapply(seq_len(noStage), function(i) {
+      if (i != noStage) {
+        apply(qbar[i:noStage, i:noStage], 2, prod)
       } else {
         1
       }
     })
 
-    for (i in seq(modelNoYears)) {
+    for (i in seq_len(modelNoYears)) {
       year <- modelMinYear + i - 1
 
       if (year <= 1996) {
         at96 <- qoppa * (1996 - year)
         at96C <- exp(-at96)
-
-        for (j in seq(noStage)) {
-          probSurv1996[i, j] <- qbarC[[j]] %*% at96C[j:5]
+        for (j in seq_len(noStage)) {
+          probSurv1996[i, j] <- qbarC[[j]] %*% at96C[j:noStage]
         }
       }
     }
@@ -59,3 +58,6 @@ GetProvSurv96 <- function(param, info)
 
   return(probSurv1996)
 }
+
+
+?prod

@@ -183,10 +183,12 @@ EstimateParameters <- function(
   param$ThetaF <- thetaF
   param$Beta <- beta
 
-  PrintAlert('Goodness-of-fit: {.val {lastResults$LLTotal}}', verbose = verbose)
-
   PrintAlert(
-    'Total run time: {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
+    'Goodness-of-fit = {sprintf("%0.6f", iterResults[[iter]]$LLTotal)}',
+    verbose = verbose
+  )
+  PrintAlert(
+    'Total run time = {.timestamp {prettyunits::pretty_dt(totalRunTime)}}',
     verbose = verbose
   )
 

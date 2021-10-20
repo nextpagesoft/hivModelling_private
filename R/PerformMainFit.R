@@ -149,32 +149,40 @@ PerformMainFit <- function(
       )
     }
 
+    nTheta <- 100L
+    while (nTheta != param$NoTheta) {
+      cat('\n')
+      PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
+
+      nTheta <- param$NoTheta
+
+      res <- EstimateParameters(
+        runType = runType, probSurv1996, param, info, dataMatrix, maxNoFit, maxRunTime, ctol, ftol,
+        verbose = verbose
+      )
+
+      p <- res$P
+      param <- res$Param
+      info <- res$Info
+
+      selSmallTheta <- abs(param$Theta) < 1
+      param$ThetaP[selSmallTheta] <- 0
+      param$Theta[selSmallTheta] <- 0
+      param$NoTheta <- sum(param$ThetaP)
+      param$ThetaF <- param$Theta[param$ThetaP != 0]
+      PrintAlert(
+        'Number of spline weights estimated after fixing small thetas to 0: {.val {param$NoTheta}}'
+      )
+
+      iterResults <- res$IterResults
+      lastResults <- res$IterResults[[length(res$IterResults)]]
+
+      # Recalculate LLTotal after fixing small thetas
+      resNew <- FitLLTotal(p, probSurv1996, param, info, dataMatrix)
+      converged <- res$Converged && abs(resNew$LLTotal - lastResults$LLTotal) <= ctol
+    }
+
     cat('\n')
-    PrintAlert('Number of spline weights to estimate: {.val {param$NoTheta}}')
-
-    res <- EstimateParameters(
-      runType = runType, probSurv1996, param, info, dataMatrix, maxNoFit, maxRunTime, ctol, ftol,
-      verbose = verbose
-    )
-
-    p <- res$P
-    converged <- res$Converged
-    param <- res$Param
-    info <- res$Info
-
-    selSmallTheta <- abs(param$Theta) < 1
-    param$ThetaP[selSmallTheta] <- 0
-    param$Theta[selSmallTheta] <- 0
-    param$NoTheta <- sum(param$ThetaP)
-    param$ThetaF <- param$Theta[param$ThetaP != 0]
-
-    PrintAlert(
-      'Number of spline weights estimated after fixing small thetas to 0: {.val {param$NoTheta}}'
-    )
-
-    iterResults <- res$IterResults
-    lastResults <- res$IterResults[[length(res$IterResults)]]
-
     if (!converged) {
       PrintAlert('Fit did NOT converge', type = 'danger')
 
@@ -190,16 +198,30 @@ PerformMainFit <- function(
     }
   }
 
-  PrintBullets(
-    c(
-      sprintf('beta[%d]: {.val %f}', seq_len(param$NoDelta), param$Beta[seq_len(param$NoDelta)]),
-      sprintf(
-        'theta[%d]: {.val %f} - %s', seq_along(param$Theta), param$Theta,
-        ifelse(param$ThetaP, 'NOT FIXED', 'FIXED')
+  if (verbose) {
+    cat(paste(sprintf(
+      '*  beta[%02d]: %s',
+      seq_along(param$NoDelta),
+      formatC(
+        param$Beta[seq_len(param$NoDelta)],
+        format = 'f',
+        width = 15,
+        digits = 6
       )
-    ),
-    verbose = verbose
-  )
+    ), collapse = '\n'))
+    cat('\n')
+    cat(paste(sprintf(
+      '* theta[%02d]: %s %s',
+      seq_along(param$Theta),
+      formatC(
+        param$Theta,
+        format = 'f',
+        width = 15,
+        digits = 6
+      ),
+      ifelse(param$ThetaP, '', '(FIXED)')
+    ), collapse = '\n'))
+  }
 
   info$ModelFitDist <- tmpModelFitDist
   # Estimate overdispersion for negative binomial

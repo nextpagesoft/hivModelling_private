@@ -1,5 +1,7 @@
 /.github/
 /inst/
-/utils/
-/tests/
+/man/
+/renv/
 /src/
+/tests/
+/utils/

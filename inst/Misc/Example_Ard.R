@@ -23,10 +23,11 @@ data <- GetPopulationData(context)
 
 # Create output plots
 # plots <- CreateOutputPlots(modelOutputs)
-
+# sink('output.txt')
 mainResults <- PerformMainFit(context, data)
+# sink()
 
-PerformMainFit(context, data, mainResults$Param, mainResults$Info)
+# PerformMainFit(context, data, mainResults$Param, mainResults$Info)
 
 plots <- CreateOutputPlots(mainResults)
 plots$`Time to diagnosis, by year of diagnosis`
@@ -45,7 +46,7 @@ plots <- CreateOutputPlots(mainResults, bsResultsList)
 # Save results in csv file
 fwrite(
   mainResults$MainOutputs,
-  '~/share/HIV test files/Results/FUllData/Result_main.csv',
+  'D:/VirtualBox_Shared/Ard test/Result_main.csv',
   sep = ','
 )
 
