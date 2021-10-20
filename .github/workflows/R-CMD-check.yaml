@@ -19,14 +19,14 @@ jobs:
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
+      R_KEEP_PKG_SOURCE: no
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-pandoc@master
+      - uses: r-lib/actions/setup-pandoc@v1
 
-      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
@@ -34,11 +34,23 @@ jobs:
       - name: Install R development packages
         run: |
           install.packages('rcmdcheck')
+          install.packages('renv')
         shell: Rscript {0}
 
-      - uses: r-lib/actions/setup-renv@master
+      - name: Install R production packages
+        run: |
+          renv::restore()
+        shell: Rscript {0}
 
-      - uses: r-lib/actions/check-r-package@master
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+          _R_CHECK_FORCE_SUGGESTS_: false
+          _R_CHECK_LICENSE_: false
+          _R_CHECK_CODETOOLS_PROFILE_: 'suppressUndefined=TRUE'
+        run: |
+          rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')
+        shell: Rscript {0}
 
       - name: Upload check results
         if: failure()
