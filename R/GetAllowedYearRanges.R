@@ -127,7 +127,9 @@ GetAllowedYearRanges <- function(
   incidenceFinalMinMaxYears[['AIDS']] <- c(aidsStartYear, aidsEndYear)
 
   # Get time interval for HIV/AIDS diagnoses, total
-  incidenceFinalMinMaxYears[['HIVAIDS']] <- incidencePreMinMaxYears[['HIVAIDS']]
+  if (!is.null(incidencePreMinMaxYears[['HIVAIDS']])) {
+    incidenceFinalMinMaxYears[['HIVAIDS']] <- incidencePreMinMaxYears[['HIVAIDS']]
+  }
 
   return(incidenceFinalMinMaxYears)
 }
