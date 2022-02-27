@@ -24,11 +24,11 @@ GetAllowedYearRanges <- function(
   }
 
   incidenceFinalMinMaxYears <- list(
-    All = c(1980L, 1979L),
+    All = c(1979L, 1979L),
     HIV = c(1979L, 1979L),
     AIDS = c(1979L, 1979L),
     HIVAIDS = c(1979L, 1979L),
-    HIV_CD4 = c(1979L, 1979L),
+    HIVCD4 = c(1979L, 1979L),
     Dead = c(1979L, 1979L)
   )
   incidencePreMinMaxYears <- suppressWarnings(
