@@ -23,7 +23,14 @@ GetAllowedYearRanges <- function(
     return(NULL)
   }
 
-  incidenceFinalMinMaxYears <- list()
+  incidenceFinalMinMaxYears <- list(
+    All = c(1980L, 1979L),
+    HIV = c(1979L, 1979L),
+    AIDS = c(1979L, 1979L),
+    HIVAIDS = c(1979L, 1979L),
+    HIV_CD4 = c(1979L, 1979L),
+    Dead = c(1979L, 1979L)
+  )
   incidencePreMinMaxYears <- suppressWarnings(
     lapply(data, function(dt) dt[, c(min(Year), max(Year))])
   )
@@ -33,7 +40,11 @@ GetAllowedYearRanges <- function(
   allSearchNamesSet <- grepl('^(HIV|AIDS)', names(incidencePreMinMaxYears))
 
   allMinYear <- 1980
-  allMaxYear <- max(sapply(incidencePreMinMaxYears[allSearchNamesSet], '[[', 2))
+  if (any(allSearchNamesSet)) {
+    allMaxYear <- max(sapply(incidencePreMinMaxYears[allSearchNamesSet], '[[', 2))
+  } else {
+    allMaxYear <- allMinYear - 1
+  }
 
   incidenceFinalMinMaxYears[['All']] <- c(allMinYear, allMaxYear)
 
@@ -90,6 +101,7 @@ GetAllowedYearRanges <- function(
     startYear <- incidencePreMinMaxYears[['HIV']][[1]]
     endYear <- incidencePreMinMaxYears[['HIV']][[2]]
     if (
+      !is.null(startYear) && !is.null(endYear) &&
       (startYear <= allowedEndYear && allowedStartYear <= endYear) &&
       !(allowedStartYear > allowedEndYear)
     ) {

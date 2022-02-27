@@ -27,7 +27,7 @@ ReadInputData <- function(
 
   if (!is.na(pathInfo$mode)) {
     # Unzip zip file
-    if (!isTRUE(pathInfo$isdir)) {
+    if (!isTRUE(pathInfo$isdir) && tolower(tools::file_ext(inputDataPath)) == 'zip') {
       inDir <- tempfile()
       dir.create(inDir, recursive = TRUE)
       on.exit({
@@ -42,13 +42,20 @@ ReadInputData <- function(
 
     # All files should be present in a single folder
     if (length(inputDataPath) == 1L) {
-      # Read directory
-      fileNames <- list.files(
-        inputDataPath,
-        pattern = '(HIV|HIVAIDS|AIDS|Dead|HIV_CD4_[1-4])\\.csv$',
-        full.names = TRUE,
-        ignore.case = FALSE
-      )
+      pathInfo <- file.info(inputDataPath)
+      # Read a single file
+      if (!isTRUE(pathInfo$isdir)) {
+        fileNames <- inputDataPath
+      } else {
+        # Read directory
+        fileNames <- list.files(
+          inputDataPath,
+          pattern = '(HIV|HIVAIDS|AIDS|Dead|HIV_CD4_[1-4])\\.csv$',
+          full.names = TRUE,
+          ignore.case = FALSE
+        )
+      }
+
       inputData <- setNames(
         lapply(fileNames, function(fileName) {
           dt <- try(suppressWarnings(fread(fileName, fill = TRUE)), silent = TRUE)
