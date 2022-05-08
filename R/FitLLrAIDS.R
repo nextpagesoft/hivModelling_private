@@ -14,8 +14,8 @@ FitLLrAIDS <- function(
   for (year in seq_len(nrow(modelResults))) {
     if (
       totModels[year] > 0 &&
-      modelResults[, 'Year'] >= info$FitAIDSMinYear &&
-      modelResults[, 'Year'] <= info$FitAIDSMaxYear
+      modelResults[year, 'Year'] >= info$FitAIDSMinYear &&
+      modelResults[year, 'Year'] <= info$FitAIDSMaxYear
     ) {
       psiry <- psiry +
         digamma(r + totDatas[year]) -

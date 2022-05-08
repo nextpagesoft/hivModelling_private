@@ -26,7 +26,7 @@ data <- GetPopulationData(context)
 
 mainResults <- PerformMainFit(context, data)
 
-PerformMainFit(context, data, mainResults$Param, mainResults$Info)
+PerformMainFit(context, data, param = mainResults$Param, info = mainResults$Info)
 
 plots <- CreateOutputPlots(mainResults)
 # mainResults <- PerformMainFit(context, data, model$Param, model$Info)
