@@ -43,7 +43,7 @@ FitModel <- function(beta, theta, context, data)
   p <- GetParameterVector(param$Beta, param$ThetaF)
   param$DeltaM <- GetParamDeltaM(p, param)
 
-  fitResults <- FitLLTotal(p, probSurv1996, param, info, data)
+  fitResults <- FitLLTotal(p, probSurv1996, param, info, as.matrix(data))
 
   model <- modifyList(
     fitResults,

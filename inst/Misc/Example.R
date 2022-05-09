@@ -20,9 +20,24 @@ data <- GetPopulationData(context)
 #
 # # Get model outputs
 # modelOutputs <- GetModelOutputs(model, data)
-
+#
 # Create output plots
 # plots <- CreateOutputPlots(modelOutputs)
+
+years <- seq(model$Info$ModelMinYear, model$Info$ModelMaxYear)
+test <- sapply(
+  years,
+  GetBSpline,
+  theta = model$Param$Theta,
+  kOrder = model$Info$SplineOrder,
+  modelSplineN = model$Info$ModelSplineN,
+  myKnots = model$Info$MyKnots,
+  minYear = model$Info$ModelMinYear,
+  maxYear = model$Info$ModelMaxYear
+)
+plot(years, test)
+
+
 
 mainResults <- PerformMainFit(context, data)
 

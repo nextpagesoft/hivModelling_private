@@ -16,11 +16,12 @@
 GetModelOutputs <- function(model, data)
 {
   param <- model$Param
-  info  <- model$Info
-  statRes      <- FitStatistics(model$ModelResults, info, data, param)
-  countResults <- ModelCountResults(model$ModelResults, info, param)
-  timeResults  <- ModelTimeResults(model$ModelResults, info, param)
-  mainOutputs  <- ModelOutputs(model$ModelResults, countResults, timeResults, info, param, data)
+  info <- model$Info
+  modelResults <- as.data.table(model$ModelResults)
+  statRes      <- FitStatistics(modelResults, info, data, param)
+  countResults <- ModelCountResults(modelResults, info, param)
+  timeResults  <- ModelTimeResults(modelResults$Year, info, param)
+  mainOutputs  <- ModelOutputs(modelResults, countResults, timeResults, info, param, data)
 
   modelOutputs <- list(
     Statistics = statRes,
