@@ -23,7 +23,9 @@ inline void CountRkck(
   Rcpp::NumericVector ak2(nVar);
   double xtemp = x + a2 * h;
   Rcpp::NumericVector ytemp = y + b21 * h * dydx;
-  double lambda2 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  double lambda2 = GetBSpline(
+    xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+  );
   CountModel(
     xtemp, ytemp, lambda2, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, ak2
   );
@@ -31,7 +33,9 @@ inline void CountRkck(
   Rcpp::NumericVector ak3(nVar);
   xtemp = x + a3 * h;
   ytemp = y + h * (b31 * dydx + b32 * ak2);
-  double lambda3 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  double lambda3 = GetBSpline(
+    xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+  );
   CountModel(
     xtemp, ytemp, lambda3, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, ak3
   );
@@ -40,7 +44,9 @@ inline void CountRkck(
   Rcpp::NumericVector ak4(nVar);
   xtemp = x + a4 * h;
   ytemp = y + h * (b41 * dydx + b42 * ak2 + b43 * ak3);
-  double lambda4 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  double lambda4 = GetBSpline(
+    xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+  );
   CountModel(
     xtemp, ytemp, lambda4, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, ak4
   );
@@ -49,7 +55,9 @@ inline void CountRkck(
   Rcpp::NumericVector ak5(nVar);
   xtemp = x + a5 * h;
   ytemp = y + h * (b51 * dydx + b52 * ak2 + b53 * ak3 + b54 * ak4);
-  double lambda5 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  double lambda5 = GetBSpline(
+    xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+  );
   CountModel(
     xtemp, ytemp, lambda5, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, ak5
   );
@@ -58,7 +66,9 @@ inline void CountRkck(
   Rcpp::NumericVector ak6(nVar);
   xtemp = x + a6 * h;
   ytemp = y + h * (b61 * dydx + b62 * ak2 + b63 * ak3 + b64 * ak4 + b65 * ak5);
-  double lambda6 = GetBSpline(xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  double lambda6 = GetBSpline(
+    xtemp, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+  );
   CountModel(
     xtemp, ytemp, lambda6, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, ak6
   );

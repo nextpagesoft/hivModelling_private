@@ -22,6 +22,9 @@ extern size_t                modelMinYear;
 extern size_t                modelMaxYear;
 extern Rcpp::CharacterVector modelResultsColNames;
 
+extern bool                  usePreCompBSpline;
+extern Rcpp::NumericMatrix   preCompBSpline;
+
 } // hivModelling
 
 #endif // _hivModelling_CountModelParameters_

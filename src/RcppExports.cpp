@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // GetDelta
 Rcpp::NumericVector GetDelta(const double& time, const double& delta4Fac, const Rcpp::NumericMatrix& deltaM, const Rcpp::NumericVector& tc, const size_t& deadStageIdx);
 RcppExport SEXP _hivModelling_GetDelta(SEXP timeSEXP, SEXP delta4FacSEXP, SEXP deltaMSEXP, SEXP tcSEXP, SEXP deadStageIdxSEXP) {
@@ -48,6 +53,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double& >::type minYear(minYearSEXP);
     Rcpp::traits::input_parameter< const double& >::type maxYear(maxYearSEXP);
     rcpp_result_gen = Rcpp::wrap(GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetBSplinePreComp
+double GetBSplinePreComp(const double& time, const Rcpp::NumericMatrix& preCompBSpline);
+RcppExport SEXP _hivModelling_GetBSplinePreComp(SEXP timeSEXP, SEXP preCompBSplineSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type preCompBSpline(preCompBSplineSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetBSplinePreComp(time, preCompBSpline));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -211,6 +228,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hivModelling_GetDelta", (DL_FUNC) &_hivModelling_GetDelta, 5},
     {"_hivModelling_GetBSplineCubic", (DL_FUNC) &_hivModelling_GetBSplineCubic, 4},
     {"_hivModelling_GetBSpline", (DL_FUNC) &_hivModelling_GetBSpline, 7},
+    {"_hivModelling_GetBSplinePreComp", (DL_FUNC) &_hivModelling_GetBSplinePreComp, 2},
     {"_hivModelling_Swap1D", (DL_FUNC) &_hivModelling_Swap1D, 3},
     {"_hivModelling_Swap2D", (DL_FUNC) &_hivModelling_Swap2D, 5},
     {"_hivModelling_DetermineIloIhi", (DL_FUNC) &_hivModelling_DetermineIloIhi, 4},

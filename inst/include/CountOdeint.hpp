@@ -37,7 +37,9 @@ inline double CountOdeint(
 
   for (int nstp = 0; nstp != MAX_STP; ++nstp) {
 
-    derivLambda = GetBSpline(x, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+    derivLambda = GetBSpline(
+      x, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, usePreCompBSpline, preCompBSpline
+    );
     CountModel(
       x, y, derivLambda, nVar, qoppa, fInit, alphaP, mu, noStage, delta4Fac, deltaM, tc, dydx
     );

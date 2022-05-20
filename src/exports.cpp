@@ -31,7 +31,18 @@ double GetBSpline(
   const double& minYear,
   const double& maxYear
 )  {
-  return hivModelling::GetBSpline(time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear);
+  Rcpp::NumericMatrix preCompBSpline(0);
+  return hivModelling::GetBSpline(
+    time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear, false, preCompBSpline
+  );
+}
+
+// [[Rcpp::export]]
+double GetBSplinePreComp(
+  const double& time,
+  const Rcpp::NumericMatrix& preCompBSpline
+)  {
+  return hivModelling::GetBSplinePreComp(time, preCompBSpline);
 }
 
 // [[Rcpp::export]]

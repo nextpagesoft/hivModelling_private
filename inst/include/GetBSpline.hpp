@@ -3,6 +3,19 @@
 
 namespace hivModelling {
 
+inline double GetBSplinePreComp(
+  const double& time,
+  const Rcpp::NumericMatrix& preCompBSpline
+)  {
+  const Rcpp::NumericVector x = preCompBSpline(Rcpp::_, 0);
+  const Rcpp::NumericVector y = preCompBSpline(Rcpp::_, 1);
+
+  Rcpp::Function f("approx");
+  Rcpp::List result = f(x, y, time);
+
+  return result["y"];
+}
+
 inline double GetBSplineCubic(
   const double& time,
   const Rcpp::NumericVector& theta,
@@ -51,10 +64,16 @@ inline double GetBSpline(
   const size_t& modelSplineN,
   const Rcpp::NumericVector& myKnots,
   const double& minYear,
-  const double& maxYear
+  const double& maxYear,
+  const bool usePreCompBSpline,
+  const Rcpp::NumericMatrix& preCompBSpline
 ) {
   if (time <= minYear || time > maxYear + 1e-7) {
     return 0;
+  }
+
+  if (usePreCompBSpline) {
+    return GetBSplinePreComp(time, preCompBSpline);
   }
 
   size_t k = 0;

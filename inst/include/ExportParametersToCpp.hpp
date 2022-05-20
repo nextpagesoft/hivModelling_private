@@ -21,6 +21,8 @@ size_t                nVar;
 size_t                modelMinYear;
 size_t                modelMaxYear;
 Rcpp::CharacterVector modelResultsColNames;
+bool                  usePreCompBSpline;
+Rcpp::NumericMatrix   preCompBSpline;
 
 inline void ExportParametersToCpp(
   const Rcpp::List& param,
@@ -43,6 +45,15 @@ inline void ExportParametersToCpp(
   modelMinYear         = info["ModelMinYear"];
   modelMaxYear         = info["ModelMaxYear"];
   modelResultsColNames = param["ModelResultsColNames"];
+
+  if (
+    info.containsElementNamed("PreCompBSpline") && !Rf_isNull(info["PreCompBSpline"])
+  ) {
+    preCompBSpline = Rcpp::as<Rcpp::NumericMatrix>(info["PreCompBSpline"]);
+    usePreCompBSpline = true;
+  } else {
+    usePreCompBSpline = false;
+  }
 }
 
 } // hivModelling

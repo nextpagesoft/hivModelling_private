@@ -6,6 +6,7 @@
 #' @param theta theta
 #' @param context context
 #' @param data data
+#' @param preCompBSpline preCompBSpline
 #'
 #' @return list of outputs
 #'
@@ -15,7 +16,7 @@
 #' }
 #'
 #' @export
-FitModel <- function(beta, theta, context, data)
+FitModel <- function(beta, theta, context, data, preCompBSpline = NULL)
 {
   info <- GetInfoList(context)
   param <- GetParamList(context, info)
@@ -43,6 +44,7 @@ FitModel <- function(beta, theta, context, data)
   p <- GetParameterVector(param$Beta, param$ThetaF)
   param$DeltaM <- GetParamDeltaM(p, param)
 
+  info['PreCompBSpline'] <- list(preCompBSpline)
   fitResults <- FitLLTotal(p, probSurv1996, param, info, as.matrix(data))
 
   model <- modifyList(

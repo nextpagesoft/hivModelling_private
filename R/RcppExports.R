@@ -13,6 +13,10 @@ GetBSpline <- function(time, theta, kOrder, modelSplineN, myKnots, minYear, maxY
     .Call(`_hivModelling_GetBSpline`, time, theta, kOrder, modelSplineN, myKnots, minYear, maxYear)
 }
 
+GetBSplinePreComp <- function(time, preCompBSpline) {
+    .Call(`_hivModelling_GetBSplinePreComp`, time, preCompBSpline)
+}
+
 Swap1D <- function(y, a, b) {
     invisible(.Call(`_hivModelling_Swap1D`, y, a, b))
 }
