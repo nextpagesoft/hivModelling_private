@@ -6,6 +6,16 @@ context <- GetRunContext(
   settings = list(
     InputDataPath = system.file('TestData/Test_1.zip', package = 'hivModelling'),
     Verbose = TRUE
+  ),
+  parameters = list(
+    INCIDENCE = list(
+      Intervals = data.table(
+        StartYear = c(1980L, 1984L, 1996L, 2000L, 2005L, 2010L),
+        Jump = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
+        ChangeInInterval = c(FALSE, TRUE, TRUE, TRUE, TRUE, FALSE),
+        DiffByCD4 = c(FALSE, FALSE, TRUE, TRUE, TRUE, FALSE)
+      )
+    )
   )
 )
 
@@ -41,23 +51,32 @@ incidence <- sapply(
 )
 preCompBSpline <- cbind(
   X = years,
-  Y = incidence / 2
+  Y = incidence
 )
 plot(preCompBSpline)
-preCompBSpline[, 'X']
-preCompBSpline[, 'Y']
 
-Test <- function(
-  time = 1980.1,
-  x = years,
-  y = incidence
-) {
+Test <- function(time = 1980.1, x = years, y = incidence) {
   approx(x, y, time)$y
 }
 Test(1980.1, x, y)
 GetBSplinePreComp(time, preCompBSpline)
 
+sapply(
+  c(1980, 1990, 2000, 2010, 2017),
+  GetDelta,
+  delta4Fac = param$Delta4Fac,
+  deltaM = param$DeltaM,
+  tc = param$Tc,
+  deadStageIdx = param$NoStage
+)
+p[1]
+
 mainResults <- PerformMainFit(context, data)
+mainResults$Param$DeltaP
+mainResults$Param$NoDelta
+mainResults$P
+mainResults$Param$Beta
+mainResults$Param$DeltaM
 
 PerformMainFit(context, data, param = mainResults$Param, info = mainResults$Info)
 

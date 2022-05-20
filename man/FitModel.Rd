@@ -4,7 +4,7 @@
 \alias{FitModel}
 \title{FitModel}
 \usage{
-FitModel(beta, theta, context, data)
+FitModel(beta, theta, context, data, preCompBSpline = NULL)
 }
 \arguments{
 \item{beta}{beta}
@@ -14,6 +14,8 @@ FitModel(beta, theta, context, data)
 \item{context}{context}
 
 \item{data}{data}
+
+\item{preCompBSpline}{preCompBSpline}
 }
 \value{
 list of outputs
