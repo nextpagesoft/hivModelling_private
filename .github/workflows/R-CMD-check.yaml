@@ -32,38 +32,16 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - name: Install R development packages
-        run: |
-          install.packages('rcmdcheck')
-          install.packages('renv')
-        shell: Rscript {0}
-
-      - name: Cache production R packages
-        uses: actions/cache@v3
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.RENV_PATHS_ROOT }}
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-
+          extra-packages: any::rcmdcheck
 
-      - name: Install R production packages
-        run: |
-          renv::restore()
-        shell: Rscript {0}
-
-      - name: Check
+      - uses: r-lib/actions/check-r-package@v2
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
           _R_CHECK_FORCE_SUGGESTS_: false
           _R_CHECK_LICENSE_: false
           _R_CHECK_CODETOOLS_PROFILE_: 'suppressUndefined=TRUE'
-        run: |
-          rcmdcheck::rcmdcheck(args = c('--no-manual'), error_on = 'warning', check_dir = 'check')
-        shell: Rscript {0}
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          args: 'c("--no-manual")'
+          upload-snapshots: true
