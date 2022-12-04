@@ -1,11 +1,7 @@
 ^utils/
+^library/
 ^\.Rprofile$
-^.*\.Rproj$
-^\.Rproj\.user$
-^\.travis\.yml$
 ^\.lintr$
-^renv$
-^renv\.lock$
-.renvignore
 ^\.github$
 ^workspace\.code-workspace$
+^prod\.lock$
