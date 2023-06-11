@@ -1,3 +1,9 @@
+Version 0.9.34 (2023/06/11)
+
+* Update dependencies
+* Support R 4.3.0
+
+
 Version 0.9.33 (2022/12/04)
 
 * Change dependency management to pak
