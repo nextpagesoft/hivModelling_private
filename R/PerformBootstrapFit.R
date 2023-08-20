@@ -100,8 +100,8 @@ PerformBootstrapFit <- function(
 
   outColNames <- outColNames[-length(outColNames)]
   for (colName in outColNames) {
-    dataBS[Prob_CD4 >  0 & Prob_CD4 <  1, (colName) := rbinom(.N, get(colName), Prob_CD4)]
-    dataBS[Prob_CD4 <= 0 | Prob_CD4 >= 1, (colName) := 0]
+    dataBS[Prob_CD4 >= 0 & Prob_CD4 <= 1, (colName) := rbinom(.N, get(colName), Prob_CD4)]
+    dataBS[Prob_CD4  < 0 | Prob_CD4  > 1, (colName) := 0]
   }
 
   GetDataWeights(dataBS)

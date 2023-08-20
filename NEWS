@@ -1,3 +1,9 @@
+Version 0.9.35 (2023/08/20)
+
+* Update dependencies
+* Fix setting outputs dependent on probability of presence of CD4 count observations
+
+
 Version 0.9.34 (2023/06/11)
 
 * Update dependencies
