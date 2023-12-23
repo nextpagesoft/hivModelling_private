@@ -37,7 +37,7 @@ bsResultsList <- PerformBootstrapFits(
   data,
   mainResults,
   bsCount = 20,
-  executionPlan = future::multiprocess
+  executionPlan = future::multisession
 )
 plots <- CreateOutputPlots(mainResults, bsResultsList)
 
