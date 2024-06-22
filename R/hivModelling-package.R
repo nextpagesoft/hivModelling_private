@@ -1,5 +1,3 @@
-#' @docType package
-#'
 #' @name hivModelling
 #'
 #' @title
@@ -20,4 +18,4 @@
 #' @importFrom stats setNames rnbinom rbinom rpois quantile
 #' @useDynLib hivModelling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
-NULL
+"_PACKAGE"
