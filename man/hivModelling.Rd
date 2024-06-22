@@ -2,6 +2,7 @@
 % Please edit documentation in R/hivModelling-package.R
 \docType{package}
 \name{hivModelling}
+\alias{hivModelling-package}
 \alias{hivModelling}
 \title{Evidence-Based Methods to Calculate HIV Incidence in a Given Population}
 \description{
